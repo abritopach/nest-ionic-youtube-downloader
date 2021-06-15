@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormatType } from '../models/format.model';
 
 @Component({
     selector: 'app-home',
@@ -8,6 +9,7 @@ import { Component } from '@angular/core';
 export class HomePage {
 
     currentYear = new Date().getFullYear();
+    format: FormatType;
 
     constructor() {}
 

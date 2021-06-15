@@ -15,15 +15,24 @@
                         <img src="assets/logo.png" alt="Youtube downloader logo" />
                     </ion-item>
                     <ion-card-content>
-                        <!-- Searchbar with cancel button always shown -->
-                        <ion-searchbar showCancelButton="focus"></ion-searchbar>
+                        <ion-toolbar>
+                        <ion-row class="ion-align-items-center">
+                            <ion-col size="9">
+                                <!-- Searchbar with cancel button always shown -->
+                                <ion-searchbar showCancelButton="focus"></ion-searchbar>
+                            </ion-col>
+                            <ion-col size="3">
+                                <ion-button size="small">Convert</ion-button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-toolbar>
                         <ion-item lines="none">
-                            <ion-segment>
-                                <ion-segment-button layout="icon-start">
+                            <ion-segment value="format.MP3">
+                                <ion-segment-button layout="icon-start" value="format.MP3">
                                     <ion-label>MP3</ion-label>
                                     <ion-icon name="musical-notes"></ion-icon>
                                 </ion-segment-button>
-                                <ion-segment-button layout="icon-start">
+                                <ion-segment-button layout="icon-start" value="format.MP4">
                                     <ion-label>MP4</ion-label>
                                     <ion-icon name="videocam"></ion-icon>
                                 </ion-segment-button>
