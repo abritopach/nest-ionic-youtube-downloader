@@ -7,8 +7,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-grid fixed style="height: 100vh;">
-        <ion-row class="ion-align-items-center" style="height: 100vh;">
+    <ion-grid fixed style="height: 90vh;">
+        <ion-row class="ion-align-items-center" style="height: 90vh;">
             <ion-col size-lg="6" offset-lg="3" size-md="10" offset-md="1">
                 <ion-card>
                     <ion-item lines="none">
@@ -35,3 +35,13 @@
         </ion-row>
     </ion-grid>
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-title>© {{ currentYear }} Adrián Brito Pacheco</ion-title>
+        <ion-buttons slot="end">
+            <ntkme-github-button user="abritopach" repo="nest-ionic-youtube-downloader" target="_blank"></ntkme-github-button>
+            <ntkme-github-button user="abritopach" type="follow" target="_blank" style="margin-left: 5px;"></ntkme-github-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>

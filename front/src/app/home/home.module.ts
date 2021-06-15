@@ -6,13 +6,14 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 
-
+import { NtkmeButtonModule } from '@ctrl/ngx-github-buttons';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    HomePageRoutingModule,
+    NtkmeButtonModule
   ],
   declarations: [HomePage]
 })
