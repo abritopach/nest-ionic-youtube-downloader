@@ -10,6 +10,7 @@ export class HomePage {
 
     currentYear = new Date().getFullYear();
     format: FormatType;
+    isDownloadButtonClicked = false;
 
     constructor() {}
 

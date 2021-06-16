@@ -22,7 +22,10 @@
                                 <ion-searchbar showCancelButton="focus"></ion-searchbar>
                             </ion-col>
                             <ion-col size="3">
-                                <ion-button size="small">Convert</ion-button>
+                                <ion-button size="small" (click)="isDownloadButtonClicked = !isDownloadButtonClicked">
+                                    <ion-icon slot="start" [name]="isDownloadButtonClicked ? 'cloud-download' : 'film'"></ion-icon>
+                                    {{ isDownloadButtonClicked ? 'Download' : 'Convert'}}
+                                </ion-button>
                             </ion-col>
                         </ion-row>
                     </ion-toolbar>
