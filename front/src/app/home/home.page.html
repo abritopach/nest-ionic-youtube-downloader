@@ -22,7 +22,7 @@
                                 <ion-searchbar showCancelButton="focus"></ion-searchbar>
                             </ion-col>
                             <ion-col size="3">
-                                <ion-button size="small" (click)="isDownloadButtonClicked = !isDownloadButtonClicked">
+                                <ion-button size="small" (click)="isDownloadButtonClicked = !isDownloadButtonClicked; downloadYoutubeVideo()">
                                     <ion-icon slot="start" [name]="isDownloadButtonClicked ? 'cloud-download' : 'film'"></ion-icon>
                                     {{ isDownloadButtonClicked ? 'Download' : 'Convert'}}
                                 </ion-button>

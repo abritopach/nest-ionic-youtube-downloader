@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { VideoYoutubeDownloaderService } from './video-youtube-downloader.service';
+import { VideoYoutubeDownloaderService } from './youtube-video-downloader.service';
 
 describe('VideoYoutubeDownloaderService', () => {
   let service: VideoYoutubeDownloaderService;
@@ -9,9 +9,7 @@ describe('VideoYoutubeDownloaderService', () => {
       providers: [VideoYoutubeDownloaderService],
     }).compile();
 
-    service = module.get<VideoYoutubeDownloaderService>(
-      VideoYoutubeDownloaderService,
-    );
+    service = module.get<VideoYoutubeDownloaderService>(VideoYoutubeDownloaderService);
   });
 
   it('should be defined', () => {

@@ -50,7 +50,7 @@ export class ApiService {
     // TODO: Complete this code.
     downloadVideo(payload: any): Observable<any> {
         return this.http
-        .post<any>(`${this.API_URL_BASE}`, payload)
+        .get<any>(`${this.API_URL_BASE}/youtube-video-downloader/download`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),

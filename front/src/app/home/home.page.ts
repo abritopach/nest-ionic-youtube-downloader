@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormatType } from '../models/format.model';
+import { ApiService } from '../services/api/api.service';
 
 @Component({
     selector: 'app-home',
@@ -12,6 +13,13 @@ export class HomePage {
     format: FormatType;
     isDownloadButtonClicked = false;
 
-    constructor() {}
+    constructor(private apiService: ApiService) {}
+
+    downloadYoutubeVideo() {
+        console.log('HomePage::downloadYoutubeVideo method called');
+        this.apiService.downloadVideo({}).subscribe(result => {
+            console.log('result', result);
+        })
+    }
 
 }
