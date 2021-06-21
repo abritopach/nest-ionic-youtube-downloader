@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class YoutubeVideoDownloaderService {
-  downloadYoutubeVideo(): string {
-    return 'Get youtube video!';
+  downloadYoutubeVideo(): any { // TODO: Update response type
+    return { status: 'OK', message: 'Get youtube video!', data: null};
   }
 }
