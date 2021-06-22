@@ -1,5 +1,5 @@
-import { Get } from '@nestjs/common';
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { VideoInfoDto } from 'src/dtos/video-info.dto';
 import { YoutubeVideoDownloaderService } from 'src/services/youtube-video-downloader/youtube-video-downloader.service';
 
 @Controller('youtube-video-downloader')
@@ -8,8 +8,9 @@ export class YoutubeVideoDownloaderController {
     private readonly youtubeVideoDownloaderService: YoutubeVideoDownloaderService,
   ) {}
 
-  @Get('download')
-  downloadYoutubeVideo(): string {
-    return this.youtubeVideoDownloaderService.downloadYoutubeVideo();
+  @Post('download')
+  downloadYoutubeVideo(@Body() videoInfoDto: VideoInfoDto): string {
+    console.log('videoInfo', videoInfoDto);
+    return this.youtubeVideoDownloaderService.downloadYoutubeVideo(videoInfoDto);
   }
 }

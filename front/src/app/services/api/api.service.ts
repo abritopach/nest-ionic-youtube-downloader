@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { IVideoInfo } from 'src/app/models/video-infot.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -48,9 +49,9 @@ export class ApiService {
      */
 
     // TODO: Complete this code.
-    downloadVideo(payload: any): Observable<any> {
+    downloadVideo(payload: IVideoInfo): Observable<any> {
         return this.http
-        .get<any>(`${this.API_URL_BASE}/youtube-video-downloader/download`, payload)
+        .post<any>(`${this.API_URL_BASE}/youtube-video-downloader/download`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
