@@ -9,7 +9,7 @@ export class YoutubeVideoDownloaderController {
   ) {}
 
   @Post('download')
-  downloadYoutubeVideo(@Body() videoInfoDto: VideoInfoDto): string {
+  downloadYoutubeVideo(@Body() videoInfoDto: VideoInfoDto): any {
     console.log('videoInfo', videoInfoDto);
     return this.youtubeVideoDownloaderService.downloadYoutubeVideo(videoInfoDto);
   }
