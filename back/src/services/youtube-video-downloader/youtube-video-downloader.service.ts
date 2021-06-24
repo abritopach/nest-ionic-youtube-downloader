@@ -5,6 +5,22 @@ import { createWriteStream } from 'fs';
 
 @Injectable()
 export class YoutubeVideoDownloaderService {
+
+  async checkYoutubeVideo(URL: string) {
+    try {
+      const {
+        player_response: {
+          videoDetails: { title, author },
+        },
+      } = await ytdl.getBasicInfo(URL);
+      return { status: 'OK', message: 'Youtube video exists!', data: {title, author}};
+    } catch (error) {
+      console.log('Error', error);
+      return { status: 'KO', message: 'Error video does not exist :(', data: null};
+    }
+  }
+
+
   downloadYoutubeVideo(videoInfoDto: VideoInfoDto): any { // TODO: Update response type
     console.log('YoutubeVideoDownloaderService::downloadYoutubeVideo method called');
     try {

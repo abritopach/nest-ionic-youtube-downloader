@@ -22,6 +22,13 @@ export class HomePage {
 
     downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
+
+        /*
+        this.apiService.checkVideo({url: this.videoInfo.url}).subscribe(result => {
+            console.log('checkVideo result', result);
+        })
+        */
+
         this.apiService.downloadVideo(this.videoInfo).subscribe(result => {
             console.log('result', result);
         })

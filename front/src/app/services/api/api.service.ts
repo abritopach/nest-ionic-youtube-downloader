@@ -15,6 +15,27 @@ export class ApiService {
     constructor(private http: HttpClient) { }
 
     /**
+     * Description [This method call check youtube video api endpoint.]
+     *
+     * @author abrito
+     * @version 0.0.1
+     *
+     * @method
+     * @name checkVideo
+     * @param
+     * @returns {Observable}.
+     */
+
+    checkVideo(payload: {url: string}): Observable<any> {
+        return this.http
+        .post<any>(`${this.API_URL_BASE}/youtube-video-downloader/check-video`, payload)
+        .pipe(
+            retry(3),
+            catchError(this.handleError),
+        );
+    }
+
+    /**
      * Description [This method call convert video api endpoint.]
      *
      * @author abrito
