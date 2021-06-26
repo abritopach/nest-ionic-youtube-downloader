@@ -21,17 +21,34 @@ export class YoutubeVideoDownloaderService {
   }
 
 
-  downloadYoutubeVideo(videoInfoDto: VideoInfoDto): any { // TODO: Update response type
+  async downloadYoutubeVideo(videoInfoDto: VideoInfoDto) { // TODO: Update response type
     console.log('YoutubeVideoDownloaderService::downloadYoutubeVideo method called');
-    try {
-      ytdl(videoInfoDto.url)
-        .pipe(createWriteStream('video.flv'))
-        .on('finish', () => {
-          return { status: 'OK', message: 'Get youtube video!', data: null};
-      });
-    } catch (error) {
-      console.log('Error', error);
-      return { status: 'KO', message: 'Error getting youtube video :(', data: null};
-    }
+
+    return new Promise((resolve, reject) => {
+      try {
+        let stream = ytdl(videoInfoDto.url);
+        let aData = [];
+
+        stream.on('data', (data) => {
+          aData.push(data);
+        });
+
+        stream.on('end', () => {
+          const buffer = Buffer.concat(aData);
+          console.log('buffer', buffer);
+          resolve({ status: 'OK', message: 'Get youtube video!', data: buffer});
+        });
+        /*
+          .pipe(createWriteStream('video.mp4'))
+          .on('end', () => {
+            return { status: 'OK', message: 'Get youtube video!', data: null};
+          });
+        */
+      } catch (error) {
+        console.log('Error', error);
+        reject({ status: 'KO', message: error.message, data: null});
+        // return { status: 'KO', message: 'Error getting youtube video :(', data: null};
+      }
+    })
   }
 }
