@@ -2,7 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { IVideoInfo } from 'src/app/models/video-infot.model';
+import { IAPIResponse } from 'src/app/models/apiResponse.model';
+import { IVideoInfo } from 'src/app/models/video.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -26,31 +27,9 @@ export class ApiService {
      * @returns {Observable}.
      */
 
-    checkVideo(payload: {url: string}): Observable<any> {
+    checkVideo(payload: {url: string}): Observable<IAPIResponse> {
         return this.http
-        .post<any>(`${this.API_URL_BASE}/youtube-video-downloader/check-video`, payload)
-        .pipe(
-            retry(3),
-            catchError(this.handleError),
-        );
-    }
-
-    /**
-     * Description [This method call convert video api endpoint.]
-     *
-     * @author abrito
-     * @version 0.0.1
-     *
-     * @method
-     * @name convertVideo
-     * @param
-     * @returns {Observable}.
-     */
-
-    // TODO: Complete this code.
-    convertVideo(payload: any): Observable<any> {
-        return this.http
-        .post<any>(`${this.API_URL_BASE}`, payload)
+        .post<IAPIResponse>(`${this.API_URL_BASE}/youtube-video-downloader/check-video`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
@@ -69,10 +48,9 @@ export class ApiService {
      * @returns {Observable}.
      */
 
-    // TODO: Complete this code.
-    downloadVideo(payload: IVideoInfo): Observable<any> {
+    downloadVideo(payload: IVideoInfo): Observable<IAPIResponse> {
         return this.http
-        .post<any>(`${this.API_URL_BASE}/youtube-video-downloader/download`, payload)
+        .post<IAPIResponse>(`${this.API_URL_BASE}/youtube-video-downloader/download`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormatType } from '../models/format.model';
-import { IVideoInfo } from '../models/video-infot.model';
+import { IVideoInfo } from '../models/video.model';
 import { ApiService } from '../services/api/api.service';
 import { saveAs } from 'file-saver';
 import { LoadingController } from '@ionic/angular';
@@ -22,23 +22,18 @@ export class HomePage {
 
     constructor(private apiService: ApiService, private loadingCtrl: LoadingController) {}
 
-    downloadYoutubeVideo() {
+    async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
-
-        /*
-        this.apiService.checkVideo({url: this.videoInfo.url}).subscribe(result => {
-            console.log('checkVideo result', result);
-        })
-        */
-
         this.showLoading();
-        this.apiService.downloadVideo(this.videoInfo).subscribe(result => {
-            console.log('result', result);
-            // this.downloadFile(result.data.data, 'video/mp4');
-            let blob = new Blob([new Uint8Array(result.data.data)], { type: 'video/mp4'});
-            saveAs(blob, `video.mp4`);
-            this.hideLoading();
-        })
+        const checkVideoResult = await this.apiService.checkVideo({url: this.videoInfo.url}).toPromise();
+        console.log('checkVideoResult', checkVideoResult);
+        const { data: checkVideoData } = checkVideoResult;
+        const downloadVideoResult = await this.apiService.downloadVideo(this.videoInfo).toPromise();
+        console.log('downloadVideoResult', downloadVideoResult);
+        const { data: downloadVideoData} = downloadVideoResult;
+        const blob = new Blob([new Uint8Array(downloadVideoData['data'])], { type: 'video/mp4'});
+        saveAs(blob, `${checkVideoData.title}.mp4`);
+        this.hideLoading();
     }
 
     videoFormatChanged(event: any) {
