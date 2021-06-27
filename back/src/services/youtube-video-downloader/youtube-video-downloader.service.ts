@@ -25,7 +25,10 @@ export class YoutubeVideoDownloaderService {
     console.log('YoutubeVideoDownloaderService::downloadYoutubeVideo method called');
     return new Promise((resolve, reject) => {
       try {
-        let stream = ytdl(videoInfoDto.url);
+        let stream = ytdl(videoInfoDto.url, {
+          filter: videoInfoDto.format.toLocaleLowerCase() === 'mp3' ? 'audioonly' : 'audioandvideo',
+          quality: videoInfoDto.format.toLocaleLowerCase() === 'mp3' ? 'highest' : 'highestvideo',
+        });
         let aData = [];
 
         stream.on('data', (data) => {

@@ -12,6 +12,7 @@ import { FormatType } from "./format.model";
 export interface IVideoInfo {
     url: string;
     format: FormatType;
+    quality?: string;
 }
 
 /**
