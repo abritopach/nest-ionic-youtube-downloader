@@ -21,9 +21,8 @@ export class YoutubeVideoDownloaderService {
   }
 
 
-  async downloadYoutubeVideo(videoInfoDto: VideoInfoDto) { // TODO: Update response type
+  async downloadYoutubeVideo(videoInfoDto: VideoInfoDto) {
     console.log('YoutubeVideoDownloaderService::downloadYoutubeVideo method called');
-
     return new Promise((resolve, reject) => {
       try {
         let stream = ytdl(videoInfoDto.url);
@@ -38,16 +37,9 @@ export class YoutubeVideoDownloaderService {
           console.log('buffer', buffer);
           resolve({ status: 'OK', message: 'Get youtube video!', data: buffer});
         });
-        /*
-          .pipe(createWriteStream('video.mp4'))
-          .on('end', () => {
-            return { status: 'OK', message: 'Get youtube video!', data: null};
-          });
-        */
       } catch (error) {
         console.log('Error', error);
         reject({ status: 'KO', message: error.message, data: null});
-        // return { status: 'KO', message: 'Error getting youtube video :(', data: null};
       }
     })
   }

@@ -1,6 +1,4 @@
-import { Get, Header, Param, Res } from '@nestjs/common';
 import { Body, Controller, Post } from '@nestjs/common';
-import { Response } from 'express';
 import { VideoInfoDto } from 'src/dtos/video-info.dto';
 import { YoutubeVideoDownloaderService } from 'src/services/youtube-video-downloader/youtube-video-downloader.service';
 
@@ -17,10 +15,8 @@ export class YoutubeVideoDownloaderController {
   }
 
   @Post('download')
-  @Header('Content-Disposition', `attachment; filename=video.mp4`)
-  async downloadYoutubeVideo(@Body() videoInfoDto: VideoInfoDto, @Res() res: Response) {
+  async downloadYoutubeVideo(@Body() videoInfoDto: VideoInfoDto) {
     console.log('videoInfo', videoInfoDto);
-    // res.setHeader('Content-Disposition', `attachment; filename=video.mp4`);
     return await this.youtubeVideoDownloaderService.downloadYoutubeVideo(videoInfoDto);
   }
 }
