@@ -59,4 +59,14 @@ export class HomePage {
         this.loading.dismiss();
     }
 
+    isValidYouTubeVideoUrl(url: string) {
+        console.log('isValidYouTubeVideoUrl', url);
+        const youtubeRegExp = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        console.log(url.match(youtubeRegExp));
+        if (url.match(youtubeRegExp)) {
+            return true;
+        }
+        return false;
+    }
+
 }
