@@ -32,8 +32,8 @@ export class YoutubeVideoDownloaderService {
       try {
         let stream = ytdl(videoInfoDto.url, {
           //filter: format => format.audioCodec === 'mp4a.40.2',
-          filter: videoInfoDto.format.toLocaleLowerCase() === 'mp3' ? 'audioonly' : 'audioandvideo',
-          quality: videoInfoDto.format.toLocaleLowerCase() === 'mp3' ? 'highest' : 'highestvideo',
+          filter: videoInfoDto.format === 'MP3' ? 'audioonly' : 'audioandvideo',
+          quality: videoInfoDto.format === 'MP3' ? 'highestaudio' : 'highestvideo',
         });
         let aData = [];
 
