@@ -26,7 +26,7 @@
                                 </ion-item>
                             </ion-col>
                             <ion-col size="3">
-                                <ion-button size="small" (click)="downloadYoutubeVideo()">
+                                <ion-button size="small" (click)="downloadYoutubeVideo()" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url)">
                                     <ion-icon slot="start" name="cloud-download"></ion-icon>
                                     Download
                                 </ion-button>

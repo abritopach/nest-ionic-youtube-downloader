@@ -16,6 +16,7 @@ import { IVideoInfo } from '../models/video.model';
 // Services
 import { ApiService } from '../services/api/api.service';
 import { ConvertToMp3Service } from '../services/mp3/convert-to-mp3.service';
+import { isValidYouTubeVideoUrl } from '../utils/utils';
 
 @Component({
     selector: 'app-home',
@@ -31,6 +32,7 @@ export class HomePage {
         format: FormatType.MP3
     };
     loading: HTMLIonLoadingElement;
+    isValidYouTubeVideoUrl = isValidYouTubeVideoUrl;
 
     constructor(private apiService: ApiService, private loadingCtrl: LoadingController,
                 private convertToMp3Service: ConvertToMp3Service) {}
@@ -76,14 +78,6 @@ export class HomePage {
 
     hideLoading() {
         this.loading.dismiss();
-    }
-
-    isValidYouTubeVideoUrl(url: string) {
-        const youtubeRegExp = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-        if (url.match(youtubeRegExp)) {
-            return true;
-        }
-        return false;
     }
 
 }
