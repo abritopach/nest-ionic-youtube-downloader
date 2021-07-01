@@ -1,18 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { VideoInfoDto } from 'src/dtos/video-info.dto';
 import * as ytdl from 'ytdl-core';
-import { createWriteStream } from 'fs';
 
 @Injectable()
 export class YoutubeVideoDownloaderService {
 
   async checkYoutubeVideo(URL: string) {
     try {
+      /*
       const videoId = URL.split("v=")[1].substring(0, 11)
       const info = await ytdl.getInfo(videoId);
       const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
       console.log('Formats with only audio');
       console.log(audioFormats);
+      */
       const {
         player_response: {
           videoDetails: { title, author },
@@ -31,7 +32,6 @@ export class YoutubeVideoDownloaderService {
     return new Promise((resolve, reject) => {
       try {
         let stream = ytdl(videoInfoDto.url, {
-          //filter: format => format.audioCodec === 'mp4a.40.2',
           filter: videoInfoDto.format === 'MP3' ? 'audioonly' : 'audioandvideo',
           quality: videoInfoDto.format === 'MP3' ? 'highestaudio' : 'highestvideo',
         });

@@ -16,7 +16,7 @@ import { IVideoInfo } from '../models/video.model';
 // Services
 import { ApiService } from '../services/api/api.service';
 import { ConvertToMp3Service } from '../services/mp3/convert-to-mp3.service';
-import { isValidYouTubeVideoUrl } from '../utils/utils';
+import { handlePromise, isValidYouTubeVideoUrl } from '../utils/utils';
 
 @Component({
     selector: 'app-home',
@@ -40,10 +40,11 @@ export class HomePage {
     async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
         this.showLoading();
-        const checkVideoResult = await this.apiService.checkVideo({url: this.videoInfo.url}).toPromise();
+
+        const [checkVideoResult, checkVideoError] = await handlePromise(this.apiService.checkVideo({url: this.videoInfo.url}).toPromise());
         console.log('checkVideoResult', checkVideoResult);
         const { data: checkVideoData } = checkVideoResult;
-        const downloadVideoResult = await this.apiService.downloadVideo(this.videoInfo).toPromise();
+        const [downloadVideoResult, downloadVideoError] = await handlePromise(this.apiService.downloadVideo(this.videoInfo).toPromise());
         console.log('downloadVideoResult', downloadVideoResult);
         const { data: downloadVideoData} = downloadVideoResult;
         const blob = new Blob([new Uint8Array(downloadVideoData['data'])], { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
