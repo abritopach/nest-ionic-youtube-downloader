@@ -21,24 +21,35 @@ export class ConvertToMp3Service {
 
             // Convert array buffer into audio buffer.
             audioContext.decodeAudioData(arrayBuffer, (audioBuffer) => {
-                console.log(audioBuffer)
+                console.log(audioBuffer);
                 const mp3Blob = this.audioBufferToWav(audioBuffer);
-                resolve(mp3Blob)
-            })
-        }
+                resolve(mp3Blob);
+            });
+        };
         fileReader.onerror = reject;
         //Load blob
-        fileReader.readAsArrayBuffer(blob)
+        fileReader.readAsArrayBuffer(blob);
         });
     }
 
     private audioBufferToWav(aBuffer: AudioBuffer) {
-        const numOfChan = aBuffer.numberOfChannels,
-            btwLength = aBuffer.length * numOfChan * 2 + 44,
-            btwArrBuff = new ArrayBuffer(btwLength),
-            btwView = new DataView(btwArrBuff),
-            btwChnls = [];
-        let btwSample: number, btwPos = 0, btwOffset = 0;
+        const numOfChan = aBuffer.numberOfChannels;
+        const btwLength = aBuffer.length * numOfChan * 2 + 44;
+        const btwArrBuff = new ArrayBuffer(btwLength);
+        const btwView = new DataView(btwArrBuff);
+        const btwChnls = [];
+        let btwSample: number; let btwPos = 0; let btwOffset = 0;
+
+        const setUint16 = (value) => {
+            btwView.setUint16(btwPos, value, true);
+            btwPos += 2;
+        };
+
+        const setUint32 = (value) => {
+            btwView.setUint32(btwPos, value, true);
+            btwPos += 4;
+        };
+
         setUint32(0x46464952); // "RIFF"
         setUint32(btwLength - 8); // file length - 8
         setUint32(0x45564157); // "WAVE"
@@ -54,20 +65,20 @@ export class ConvertToMp3Service {
         setUint32(btwLength - btwPos - 4); // chunk length
 
         for (let btwIndex = 0; btwIndex < aBuffer.numberOfChannels; btwIndex++)
-            btwChnls.push(aBuffer.getChannelData(btwIndex));
+            {btwChnls.push(aBuffer.getChannelData(btwIndex));}
 
         while (btwPos < btwLength) {
             for (let btwIndex = 0; btwIndex < numOfChan; btwIndex++) {
                 // interleave btwChnls
                 btwSample = Math.max(-1, Math.min(1, btwChnls[btwIndex][btwOffset])); // clamp
-                btwSample = (0.5 + btwSample < 0 ? btwSample * 32768 : btwSample * 32767) | 0; // scale to 16-bit signed int
+                btwSample = (0.5 + btwSample < 0 ? btwSample * 32768 : btwSample * 32767) || 0; // scale to 16-bit signed int
                 btwView.setInt16(btwPos, btwSample, true); // write 16-bit sample
                 btwPos += 2;
             }
             btwOffset++; // next source sample
         }
 
-        let wavHdr = lamejs.WavHeader.readHeader(new DataView(btwArrBuff));
+        const wavHdr = lamejs.WavHeader.readHeader(new DataView(btwArrBuff));
 
         //Stereo
         const data = new Int16Array(btwArrBuff, wavHdr.dataOffset, wavHdr.dataLen / 2);
@@ -81,26 +92,16 @@ export class ConvertToMp3Service {
         const right = new Int16Array(rightData);
 
 
-        // if (format === 'MP3') {
+        // if (format === 'mp3') {
             //STEREO
             if (wavHdr.channels===2)
-                return this.wavToMp3(wavHdr.channels, wavHdr.sampleRate, left, right);
+                {return this.wavToMp3(wavHdr.channels, wavHdr.sampleRate, left, right);}
             //MONO
             else if (wavHdr.channels===1)
-                return this.wavToMp3(wavHdr.channels, wavHdr.sampleRate, data);
+                {return this.wavToMp3(wavHdr.channels, wavHdr.sampleRate, data);}
         // }
         // else
         //    return new Blob([btwArrBuff], {type: "audio/wav"});
-
-        function setUint16(data) {
-            btwView.setUint16(btwPos, data, true);
-            btwPos += 2;
-        }
-
-        function setUint32(data) {
-            btwView.setUint32(btwPos, data, true);
-            btwPos += 4;
-        }
     }
 
     private wavToMp3(channels: number, sampleRate: number, left: Int16Array, right: Int16Array = null) {

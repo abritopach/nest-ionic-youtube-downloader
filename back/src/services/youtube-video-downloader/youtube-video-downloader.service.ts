@@ -32,8 +32,8 @@ export class YoutubeVideoDownloaderService {
     return new Promise((resolve, reject) => {
       try {
         let stream = ytdl(videoInfoDto.url, {
-          filter: videoInfoDto.format === 'MP3' ? 'audioonly' : 'audioandvideo',
-          quality: videoInfoDto.format === 'MP3' ? 'highestaudio' : 'highestvideo',
+          filter: videoInfoDto.format === 'mp3' ? 'audioonly' : 'audioandvideo',
+          quality: videoInfoDto.format === 'mp3' ? 'highestaudio' : 'highestvideo',
         });
         let aData = [];
 

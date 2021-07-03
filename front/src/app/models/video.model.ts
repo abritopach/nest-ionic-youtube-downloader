@@ -1,4 +1,4 @@
-import { FormatType } from "./format.model";
+import { FormatType } from './format.model';
 
 /**
  * Description [Interface to define video info data.]
@@ -7,7 +7,7 @@ import { FormatType } from "./format.model";
  * @version 0.0.1
  *
  * @interface
-*/
+ */
 
 export interface IVideoInfo {
     url: string;
@@ -22,7 +22,7 @@ export interface IVideoInfo {
  * @version 0.0.1
  *
  * @interface
-*/
+ */
 
 export interface IVideoCheckResponse {
     author: string;

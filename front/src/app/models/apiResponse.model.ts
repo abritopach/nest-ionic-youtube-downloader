@@ -1,4 +1,4 @@
-import { IVideoCheckResponse } from "./video.model";
+import { IVideoCheckResponse } from './video.model';
 
 /**
  * Description [Interface to define api response.]
