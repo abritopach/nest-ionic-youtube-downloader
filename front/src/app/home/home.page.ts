@@ -10,13 +10,13 @@ import { saveAs } from 'file-saver';
 /* Project */
 
 // Models
-import { ACCEPT_MIME_TYPES, FormatType } from '../models/format.model';
-import { IVideoInfo } from '../models/video.model';
+import { ACCEPT_MIME_TYPES, FormatType } from '@models/format.model';
+import { IVideoInfo } from '@models/video.model';
 
 // Services
-import { ApiService } from '../services/api/api.service';
-import { ConvertToMp3Service } from '../services/mp3/convert-to-mp3.service';
-import { handlePromise, isValidYouTubeVideoUrl } from '../utils/utils';
+import { ApiService } from '@services/api/api.service';
+import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
+import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 
 @Component({
     selector: 'app-home',

@@ -2,9 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { IAPIResponse } from 'src/app/models/apiResponse.model';
-import { IVideoInfo } from 'src/app/models/video.model';
-import { environment } from 'src/environments/environment';
+import { IAPIResponse } from '@models/apiResponse.model';
+import { IVideoInfo } from '@models/video.model';
+import { environment } from '@environments/environment';
 
 @Injectable({
     providedIn: 'root'
