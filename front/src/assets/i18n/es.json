@@ -1,1 +1,13 @@
-{}
+{
+    "pages": {
+        "home": {
+            "title": "Youtube Video Downloader",
+            "buttonDownload": "Descargar",
+            "labelMp3": "MP3",
+            "labelMp4": "MP4",
+            "validations": {
+                "errorWrongYoutubeUrl": "Youtube video URL incorrecta"
+            }
+        }
+    }
+}

@@ -7,13 +7,15 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { NtkmeButtonModule } from '@ctrl/ngx-github-buttons';
+import { TranslocoModule } from '@ngneat/transloco';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    NtkmeButtonModule
+    NtkmeButtonModule,
+    TranslocoModule
   ],
   declarations: [HomePage]
 })

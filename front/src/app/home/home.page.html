@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
         <ion-title>
-        Youtube downloader
+            {{ 'pages.home.title' | transloco }}
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -22,13 +22,13 @@
                                 <ion-searchbar [(ngModel)]="videoInfo.url" showCancelButton="focus"
                                 placeholder="https://www.youtube.com/watch?v=LKwmdv39Rks"></ion-searchbar>
                                 <ion-item *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)" lines="none" class="error-message">
-                                    <ion-label>Wrong youtube video url</ion-label>
+                                    <ion-label>{{ 'pages.home.validations.errorWrongYoutubeUrl' | transloco }}</ion-label>
                                 </ion-item>
                             </ion-col>
                             <ion-col size="3">
                                 <ion-button size="small" (click)="downloadYoutubeVideo()" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url)">
                                     <ion-icon slot="start" name="cloud-download"></ion-icon>
-                                    Download
+                                    {{ 'pages.home.buttonDownload' | transloco }}
                                 </ion-button>
                                 <ion-item *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)"></ion-item>
                             </ion-col>
@@ -37,11 +37,11 @@
                         <ion-item lines="none">
                             <ion-segment [value]="format.mp3" (ionChange)="videoFormatChanged($event)">
                                 <ion-segment-button layout="icon-start" [value]="format.mp3">
-                                    <ion-label>MP3</ion-label>
+                                    <ion-label>{{ 'pages.home.labelMp3' | transloco }}</ion-label>
                                     <ion-icon name="musical-notes"></ion-icon>
                                 </ion-segment-button>
                                 <ion-segment-button layout="icon-start" [value]="format.mp4">
-                                    <ion-label>MP4</ion-label>
+                                    <ion-label>{{ 'pages.home.labelMp4' | transloco }}</ion-label>
                                     <ion-icon name="videocam"></ion-icon>
                                 </ion-segment-button>
                             </ion-segment>
