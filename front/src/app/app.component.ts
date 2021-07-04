@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { getBrowserLang, TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(private translocoService: TranslocoService) {
+    let currentLanguage = getBrowserLang();
+    console.log('currentLanguage', currentLanguage);
+    console.log(this.translocoService.getAvailableLangs());
+    const availableLangs = this.translocoService.getAvailableLangs() as string[];
+    if (!availableLangs.includes(currentLanguage)) {
+      currentLanguage = 'en';
+  }
+    this.translocoService.setActiveLang(currentLanguage);
+  }
 }
