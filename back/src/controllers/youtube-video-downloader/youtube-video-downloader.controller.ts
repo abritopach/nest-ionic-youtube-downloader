@@ -19,4 +19,10 @@ export class YoutubeVideoDownloaderController {
     console.log('videoInfo', videoInfoDto);
     return await this.youtubeVideoDownloaderService.downloadYoutubeVideo(videoInfoDto);
   }
+
+  @Post('downloadAndConvert')
+  async downloadConvertYoutubeVideo(@Body() videoInfoDto: VideoInfoDto) {
+    console.log('videoInfo', videoInfoDto);
+    return await this.youtubeVideoDownloaderService.downloadConvertYoutubeVideo(videoInfoDto);
+  }
 }

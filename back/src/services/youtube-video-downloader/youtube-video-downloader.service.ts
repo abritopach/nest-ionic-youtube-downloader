@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { VideoInfoDto } from 'src/dtos/video-info.dto';
 import * as ytdl from 'ytdl-core';
+import ffmpeg from 'fluent-ffmpeg';
 
 @Injectable()
 export class YoutubeVideoDownloaderService {
@@ -8,7 +9,7 @@ export class YoutubeVideoDownloaderService {
   async checkYoutubeVideo(URL: string) {
     try {
       /*
-      const videoId = URL.split("v=")[1].substring(0, 11)
+      const videoId = URL.split('v=')[1].substring(0, 11)
       const info = await ytdl.getInfo(videoId);
       const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
       console.log('Formats with only audio');
@@ -46,6 +47,49 @@ export class YoutubeVideoDownloaderService {
           console.log('buffer', buffer);
           resolve({ status: 'OK', message: 'Get youtube video!', data: buffer});
         });
+      } catch (error) {
+        console.log('Error', error);
+        reject({ status: 'KO', message: error.message, data: null});
+      }
+    })
+  }
+
+  async downloadConvertYoutubeVideo(videoInfoDto: VideoInfoDto) {
+    console.log('YoutubeVideoDownloaderService::downloadConvertYoutubeVideo method called');
+    return new Promise((resolve, reject) => {
+      try {
+        const audio = ytdl(videoInfoDto.url, {
+          filter: 'audioonly',
+          quality: 'highestaudio'
+        });
+
+        // Convert audio to mp3 format
+        const command = ffmpeg(audio)
+        .audioCodec('libmp3lame')
+        .audioBitrate(128)
+        .on('progress', (data) => {
+          console.log(data.percent);
+        })
+        .on('end', () => {
+          console.log('Audio file converted to mp3 format');
+        })
+        .on('error', (err) => {
+          console.log('An error occurred while trying to convert the audio to mp3: ' + err.message);
+        });
+
+        let aData = [];
+        const stream = command.pipe();
+        stream.on('data', (data) => {
+          console.log('ffmpeg just wrote ' + data.length + ' bytes');
+          aData.push(data);
+        });
+
+        stream.on('end', () => {
+          const buffer = Buffer.concat(aData);
+          console.log('buffer', buffer);
+          resolve({ status: 'OK', message: 'Get youtube video!', data: buffer});
+        });
+
       } catch (error) {
         console.log('Error', error);
         reject({ status: 'KO', message: error.message, data: null});
