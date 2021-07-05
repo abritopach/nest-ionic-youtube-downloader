@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { VideoInfoDto } from 'src/dtos/video-info.dto';
 import * as ytdl from 'ytdl-core';
-import ffmpeg from 'fluent-ffmpeg';
+import * as ffmpeg from 'fluent-ffmpeg';
 
 @Injectable()
 export class YoutubeVideoDownloaderService {
@@ -67,14 +67,11 @@ export class YoutubeVideoDownloaderService {
         const command = ffmpeg(audio)
         .audioCodec('libmp3lame')
         .audioBitrate(128)
-        .on('progress', (data) => {
-          console.log(data.percent);
+        .on('error', (err) => {
+          console.log('An error occurred while trying to convert the audio to mp3: ' + err.message);
         })
         .on('end', () => {
           console.log('Audio file converted to mp3 format');
-        })
-        .on('error', (err) => {
-          console.log('An error occurred while trying to convert the audio to mp3: ' + err.message);
         });
 
         let aData = [];

@@ -58,6 +58,27 @@ export class ApiService {
     }
 
     /**
+     * Description [This method call download and convert video api endpoint.]
+     *
+     * @author abrito
+     * @version 0.0.1
+     *
+     * @method
+     * @name downloadVideo
+     * @param
+     * @returns {Observable}.
+     */
+
+    downloadAndConvertVideo(payload: IVideoInfo): Observable<IAPIResponse> {
+        return this.http
+        .post<IAPIResponse>(`${this.API_URL_BASE}/youtube-video-downloader/downloadAndConvert`, payload)
+        .pipe(
+            retry(3),
+            catchError(this.handleError),
+        );
+    }
+
+    /**
      * Description [This method handles api endpoints errors.]
      *
      * @author abrito
