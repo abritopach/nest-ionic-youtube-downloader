@@ -67,14 +67,18 @@ export class YoutubeVideoDownloaderService {
         const command = ffmpeg(audio)
         .audioCodec('libmp3lame')
         .audioBitrate(128)
+        .toFormat('mp3')
         .on('error', (err) => {
           console.log('An error occurred while trying to convert the audio to mp3: ' + err.message);
+          reject({ status: 'KO', message: err.message, data: null});
         })
         .on('end', () => {
           console.log('Audio file converted to mp3 format');
+          resolve({ status: 'OK', message: 'Get youtube video!', data: null});
         });
 
         let aData = [];
+        let buffer: Buffer = null;
         const stream = command.pipe();
         stream.on('data', (data) => {
           console.log('ffmpeg just wrote ' + data.length + ' bytes');
@@ -82,8 +86,11 @@ export class YoutubeVideoDownloaderService {
         });
 
         stream.on('end', () => {
-          const buffer = Buffer.concat(aData);
+          buffer = Buffer.concat(aData);
           console.log('buffer', buffer);
+        });
+
+        stream.on('close', () => {
           resolve({ status: 'OK', message: 'Get youtube video!', data: buffer});
         });
 
