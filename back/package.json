@@ -28,7 +28,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
-    "ytdl-core": "git://github.com/fent/node-ytdl-core.git#d1f535712410eebd79a7468abd07d94f8c4ebe5a"
+    "ytdl-core": "^4.8.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
