@@ -1,8 +1,8 @@
 // Angular
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 // Ionic
-import { LoadingController } from '@ionic/angular';
+import { Animation, AnimationController } from '@ionic/angular';
 
 // Third parties
 import { saveAs } from 'file-saver';
@@ -16,6 +16,8 @@ import { IVideoInfo } from '@models/video.model';
 // Services
 import { ApiService } from '@services/api/api.service';
 import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
+
+// Utils
 import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 
 @Component({
@@ -25,6 +27,7 @@ import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 })
 export class HomePage {
 
+    @ViewChild('downloadingIcon', { read: ElementRef }) downloadingIcon: ElementRef;
     currentYear = new Date().getFullYear();
     format = FormatType;
     videoInfo: IVideoInfo = {
@@ -33,13 +36,15 @@ export class HomePage {
     };
     loading: HTMLIonLoadingElement;
     isValidYouTubeVideoUrl = isValidYouTubeVideoUrl;
+    isDownloadStarted = false;
+    downloadingAnimation: Animation;
 
-    constructor(private apiService: ApiService, private loadingCtrl: LoadingController,
-                private convertToMp3Service: ConvertToMp3Service) {}
+    constructor(private apiService: ApiService,
+                private convertToMp3Service: ConvertToMp3Service,
+                private animationCtrl: AnimationController) {}
 
     async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
-        this.showLoading();
 
         const [checkVideoResult, checkVideoError] = await handlePromise(this.apiService.checkVideo({url: this.videoInfo.url}).toPromise());
         console.log('checkVideoResult', checkVideoResult);
@@ -69,7 +74,7 @@ export class HomePage {
             }
         }
 
-        this.hideLoading();
+        this.stopDownloadingAnimation();
     }
 
     videoFormatChanged(event: any) {
@@ -77,22 +82,20 @@ export class HomePage {
         this.videoInfo.format = event.detail.value;
     }
 
-    async showLoading() {
-        try {
-            this.loading = await this.loadingCtrl.create(
-                {
-                    message: 'Please wait...',
-                    translucent: true,
-                }
-            );
-            await this.loading.present();
-        } catch (error) {
-            console.log(error);
-        }
+    startDownloadingAnimation() {
+        this.isDownloadStarted = true;
+        this.downloadingAnimation = this.animationCtrl.create('downloading-animation')
+            .addElement(this.downloadingIcon.nativeElement)
+            .duration(1500)
+            .iterations(Infinity)
+            .fromTo('transform', 'rotate(0deg)', 'rotate(360deg)');
+
+        this.downloadingAnimation.play();
     }
 
-    hideLoading() {
-        this.loading.dismiss();
+    stopDownloadingAnimation() {
+        this.isDownloadStarted = false;
+        this.downloadingAnimation.stop();
     }
 
 }
