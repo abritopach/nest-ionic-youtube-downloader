@@ -6,7 +6,7 @@
             "labelMp3": "MP3",
             "labelMp4": "MP4",
             "validations": {
-                "errorWrongYoutubeUrl": "Youtube video URL incorrecta"
+                "errorWrongYoutubeUrl": "La URL del video de Youtube es incorrecta"
             }
         }
     }

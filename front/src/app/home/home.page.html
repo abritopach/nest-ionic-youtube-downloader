@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-title>
             {{ 'pages.home.title' | transloco }}
         </ion-title>
@@ -26,16 +26,17 @@
                                 </ion-item>
                             </ion-col>
                             <ion-col size="3">
-                                <ion-button size="small" (click)="startDownloadingAnimation(); downloadYoutubeVideo()" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url) || isDownloadStarted">
+                                <ion-button [color]="isDownloadStarted ? 'tertiary' : 'secondary'" size="small"
+                                (click)="startDownloadingAnimation(); downloadYoutubeVideo()" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url) || isDownloadStarted">
                                     <ion-icon #downloadingIcon slot="start" [name]="isDownloadStarted ? 'reload' : 'cloud-download'"></ion-icon>
                                     {{ 'pages.home.buttonDownload' | transloco }}
                                 </ion-button>
-                                <ion-item *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)"></ion-item>
+                                <ion-item lines="none" *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)"></ion-item>
                             </ion-col>
                         </ion-row>
                     </ion-toolbar>
                         <ion-item lines="none">
-                            <ion-segment [value]="format.mp3" (ionChange)="videoFormatChanged($event)">
+                            <ion-segment color="tertiary" [value]="format.mp3" (ionChange)="videoFormatChanged($event)">
                                 <ion-segment-button layout="icon-start" [value]="format.mp3">
                                     <ion-label>{{ 'pages.home.labelMp3' | transloco }}</ion-label>
                                     <ion-icon name="musical-notes"></ion-icon>
@@ -54,7 +55,7 @@
 </ion-content>
 
 <ion-footer>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-title>© {{ currentYear }} Adrián Brito Pacheco</ion-title>
         <ion-buttons slot="end">
             <ntkme-github-button user="abritopach" repo="nest-ionic-youtube-downloader" target="_blank"></ntkme-github-button>
