@@ -17,7 +17,7 @@
                     <ion-card-content>
                         <ion-toolbar>
                         <ion-row class="ion-align-items-center">
-                            <ion-col size="9">
+                            <ion-col size-lg="9" size-md="8" size-sm="12" size-xs="12">
                                 <!-- Searchbar with cancel button always shown -->
                                 <ion-searchbar [(ngModel)]="videoInfo.url" showCancelButton="focus"
                                 placeholder="https://www.youtube.com/watch?v=LKwmdv39Rks"></ion-searchbar>
@@ -25,8 +25,8 @@
                                     <ion-label>{{ 'pages.home.validations.errorWrongYoutubeUrl' | transloco }}</ion-label>
                                 </ion-item>
                             </ion-col>
-                            <ion-col size="3">
-                                <ion-button [color]="isDownloadStarted ? 'tertiary' : 'secondary'" size="small"
+                            <ion-col size-lg="3" size-md="4" size-sm="12" size-xs="12">
+                                <ion-button expand="block" [color]="isDownloadStarted ? 'tertiary' : 'secondary'" size="small"
                                 (click)="startDownloadingAnimation(); downloadYoutubeVideo()" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url) || isDownloadStarted">
                                     <ion-icon #downloadingIcon slot="start" [name]="isDownloadStarted ? 'reload' : 'cloud-download'"></ion-icon>
                                     {{ 'pages.home.buttonDownload' | transloco }}
