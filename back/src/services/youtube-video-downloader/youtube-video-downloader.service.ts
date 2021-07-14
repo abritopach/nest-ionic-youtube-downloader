@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { VideoInfoDto } from 'src/dtos/video-info.dto';
+import { VideoInfoDto } from '../../dtos/video-info.dto';
 import * as ytdl from 'ytdl-core';
 import * as ffmpeg from 'fluent-ffmpeg';
 
