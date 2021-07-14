@@ -1,4 +1,4 @@
 export class VideoInfoDto {
-    url: string;
-    format: string;
+    readonly url: string;
+    readonly format: string;
 }
