@@ -12,6 +12,8 @@
             "dest": "src/main.ts",
             "methods": [
                 "GET",
+                "OPTIONS",
+                "PATCH",
                 "POST",
                 "PUT",
                 "DELETE"
