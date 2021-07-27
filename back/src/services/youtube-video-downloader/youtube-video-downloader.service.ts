@@ -44,7 +44,7 @@ export class YoutubeVideoDownloaderService {
 
         stream.on('end', () => {
           const buffer = Buffer.concat(aData);
-          console.log('buffer', buffer);
+          //console.log('buffer', buffer);
           resolve({ status: 'OK', message: 'Get youtube video!', data: buffer});
         });
       } catch (error) {
@@ -81,13 +81,13 @@ export class YoutubeVideoDownloaderService {
         let buffer: Buffer = null;
         const stream = command.pipe();
         stream.on('data', (data) => {
-          console.log('ffmpeg just wrote ' + data.length + ' bytes');
+          //console.log('ffmpeg just wrote ' + data.length + ' bytes');
           aData.push(data);
         });
 
         stream.on('end', () => {
           buffer = Buffer.concat(aData);
-          console.log('buffer', buffer);
+          //console.log('buffer', buffer);
         });
 
         stream.on('close', () => {
