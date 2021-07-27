@@ -9,7 +9,9 @@ describe('VideoYoutubeDownloaderService', () => {
       providers: [VideoYoutubeDownloaderService],
     }).compile();
 
-    service = module.get<VideoYoutubeDownloaderService>(VideoYoutubeDownloaderService);
+    service = module.get<VideoYoutubeDownloaderService>(
+      VideoYoutubeDownloaderService,
+    );
   });
 
   it('should be defined', () => {

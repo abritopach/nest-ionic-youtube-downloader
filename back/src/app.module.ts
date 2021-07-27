@@ -7,7 +7,11 @@ import { HealthCheckController } from './controllers/health-check/health-check.c
 
 @Module({
   imports: [],
-  controllers: [AppController, YoutubeVideoDownloaderController, HealthCheckController],
+  controllers: [
+    AppController,
+    YoutubeVideoDownloaderController,
+    HealthCheckController,
+  ],
   providers: [AppService, YoutubeVideoDownloaderService],
 })
 export class AppModule {}
