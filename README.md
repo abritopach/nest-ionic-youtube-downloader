@@ -46,3 +46,5 @@ Run `npm run start:dev` for a dev server. Navigate to `http://localhost:3000/`.
 ## Hosting
 
 Currently both Front and Back are deployed in Vercel.
+
+Also Back is deployed to Heroku.
