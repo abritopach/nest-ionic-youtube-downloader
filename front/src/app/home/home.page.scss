@@ -1,5 +1,6 @@
 ion-item img {
   margin: auto;
+  aspect-ratio: attr(width) / attr(height);
 }
 
 
