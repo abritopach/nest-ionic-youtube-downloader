@@ -5,6 +5,12 @@
             "buttonDownload": "Descargar",
             "labelMp3": "MP3",
             "labelMp4": "MP4",
+            "actionSheet": {
+                "header": "Opciones adicionales",
+                "optionUploadDrive": "Subir a Google Drive",
+                "optionUploadDropbox": "Subir a Dropbox",
+                "optionCancel": "Cancelar"
+            },
             "validations": {
                 "errorWrongYoutubeUrl": "La URL del video de Youtube es incorrecta"
             }

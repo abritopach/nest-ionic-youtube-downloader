@@ -5,6 +5,12 @@
             "buttonDownload": "Download",
             "labelMp3": "MP3",
             "labelMp4": "MP4",
+            "actionSheet": {
+                "header": "Additional options",
+                "optionUploadDrive": "Upload to Google Drive",
+                "optionUploadDropbox": "Upload to Dropbox",
+                "optionCancel": "Cancel"
+            },
             "validations": {
                 "errorWrongYoutubeUrl": "Wrong youtube video url"
             }

@@ -2,7 +2,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 // Ionic
-import { Animation, AnimationController } from '@ionic/angular';
+import { ActionSheetController, Animation, AnimationController } from '@ionic/angular';
 
 // Third parties
 import { saveAs } from 'file-saver';
@@ -19,6 +19,7 @@ import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
 
 // Utils
 import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
     selector: 'app-home',
@@ -41,7 +42,9 @@ export class HomePage {
 
     constructor(private apiService: ApiService,
                 private convertToMp3Service: ConvertToMp3Service,
-                private animationCtrl: AnimationController) {}
+                private animationCtrl: AnimationController,
+                private actionSheetController: ActionSheetController,
+                private translocoService: TranslocoService) {}
 
     async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
@@ -75,6 +78,7 @@ export class HomePage {
         }
 
         this.stopDownloadingAnimation();
+        // this.presentActionSheet(); TODO: Working in this code.
     }
 
     videoFormatChanged(event: any) {
@@ -96,6 +100,36 @@ export class HomePage {
     stopDownloadingAnimation() {
         this.isDownloadStarted = false;
         this.downloadingAnimation.stop();
+    }
+
+    async presentActionSheet() {
+        const actionSheet = await this.actionSheetController.create({
+            header: this.translocoService.translate('pages.home.actionSheet.header'),
+            buttons: [{
+                text: this.translocoService.translate('pages.home.actionSheet.optionUploadDrive'),
+                icon: 'logo-google',
+                handler: () => {
+                console.log('Upload to Google Drive clicked');
+                }
+            }, {
+                text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
+                icon: 'logo-dropbox',
+                handler: () => {
+                console.log('Upload to Dropbox clicked');
+                }
+            }, {
+                text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
+                icon: 'close',
+                role: 'cancel',
+                handler: () => {
+                console.log('Cancel clicked');
+                }
+            }]
+            });
+        await actionSheet.present();
+
+        const { role } = await actionSheet.onDidDismiss();
+        console.log('onDidDismiss resolved with role', role);
     }
 
 }
