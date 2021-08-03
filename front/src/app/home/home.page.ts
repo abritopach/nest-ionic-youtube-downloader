@@ -20,6 +20,7 @@ import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
 // Utils
 import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 import { TranslocoService } from '@ngneat/transloco';
+import { GapiAuthServiceService } from '@services/auth/gapi-auth-service.service';
 
 @Component({
     selector: 'app-home',
@@ -44,7 +45,12 @@ export class HomePage {
                 private convertToMp3Service: ConvertToMp3Service,
                 private animationCtrl: AnimationController,
                 private actionSheetController: ActionSheetController,
-                private translocoService: TranslocoService) {}
+                private translocoService: TranslocoService,
+                private gapiAuthServiceService: GapiAuthServiceService) {}
+
+    ionViewDidEnter() {
+        //this.presentActionSheet();
+    }
 
     async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
@@ -109,20 +115,21 @@ export class HomePage {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDrive'),
                 icon: 'logo-google',
                 handler: () => {
-                console.log('Upload to Google Drive clicked');
+                    console.log('Upload to Google Drive clicked');
+                    this.gapiAuthServiceService.fetchGoogleUser();
                 }
             }, {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
                 icon: 'logo-dropbox',
                 handler: () => {
-                console.log('Upload to Dropbox clicked');
+                    console.log('Upload to Dropbox clicked');
                 }
             }, {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',
                 role: 'cancel',
                 handler: () => {
-                console.log('Cancel clicked');
+                    console.log('Cancel clicked');
                 }
             }]
             });

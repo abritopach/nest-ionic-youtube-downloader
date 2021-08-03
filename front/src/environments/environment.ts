@@ -5,7 +5,12 @@
 export const environment = {
   production: false,
   API_URL_BASE: 'http://localhost:3000',
-  GAPI_CLIENT_ID: '917936509225-euhf9snt83grlbjm8a284g1542d4rk2k.apps.googleusercontent.com'
+  GAPI: {
+    API_KEY: '',
+    CLIENT_ID: '',
+    DISCOVERY_DOCS: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+    SCOPE: 'https://www.googleapis.com/auth/drive.metadata.readonly'
+  }
 };
 
 /*
