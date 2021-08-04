@@ -49,7 +49,7 @@ export class HomePage {
                 private gapiAuthServiceService: GapiAuthServiceService) {}
 
     ionViewDidEnter() {
-        //this.presentActionSheet();
+        this.presentActionSheet();
     }
 
     async downloadYoutubeVideo() {
@@ -114,9 +114,10 @@ export class HomePage {
             buttons: [{
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDrive'),
                 icon: 'logo-google',
-                handler: () => {
+                handler: async () => {
                     console.log('Upload to Google Drive clicked');
-                    this.gapiAuthServiceService.fetchGoogleUser();
+                    await this.gapiAuthServiceService.fetchGoogleUser();
+                    await this.gapiAuthServiceService.listUserFiles();
                 }
             }, {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
