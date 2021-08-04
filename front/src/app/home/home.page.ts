@@ -49,7 +49,7 @@ export class HomePage {
                 private gapiAuthServiceService: GapiAuthServiceService) {}
 
     ionViewDidEnter() {
-        this.presentActionSheet();
+        //this.presentActionSheet();
     }
 
     async downloadYoutubeVideo() {
