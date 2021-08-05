@@ -6,7 +6,7 @@ declare var gapi: any;
 @Injectable({
     providedIn: 'root'
 })
-export class GapiAuthServiceService {
+export class GapiAuthService {
 
     constructor() { }
 
@@ -31,7 +31,6 @@ export class GapiAuthServiceService {
             try {
                 const gAuth = await this.initGapiAuth();
                 const oAuthUser = await gAuth.signIn({prompt: 'consent'});
-                console.log('oAuthUser', oAuthUser);
                 console.log('user basic profile', oAuthUser.getBasicProfile());
                 //const authResponse = gAuth.currentUser.get().getAuthResponse();
                 //console.log('authResponse', authResponse);
@@ -42,17 +41,21 @@ export class GapiAuthServiceService {
         });
     }
 
-    listUserFiles() {
+    listUserFilesInDrive() {
         return new Promise(async (resolve, reject) => {
             try {
-                gapi.client.load('drive', 'v3', async () => {
-                    const response = await gapi.client.drive.files.list({
-                        'pageSize': 10,
-                        'fields': "nextPageToken, files(id, name, mimeType, createdTime, size)"
+                gapi.load('client', () => {
+                    gapi.client.load('drive', 'v3', () => {
+                        gapi.client.drive.files.list({
+                            'pageSize': 10,
+                            'fields': "nextPageToken, files(id, name, mimeType, createdTime, size)"
+                        }).then(res => {
+                            resolve(res.result.files);
+                        }).catch(err => {
+                            reject(err);
                         });
-                        const files = response.result.files;
-                        resolve(files);
-                }, reject);
+                    });
+                });
             } catch (e) {
                 reject(e);
             }

@@ -20,7 +20,7 @@ import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
 // Utils
 import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 import { TranslocoService } from '@ngneat/transloco';
-import { GapiAuthServiceService } from '@services/auth/gapi-auth-service.service';
+import { GapiAuthService } from '@services/auth/gapi-auth.service';
 
 @Component({
     selector: 'app-home',
@@ -46,10 +46,10 @@ export class HomePage {
                 private animationCtrl: AnimationController,
                 private actionSheetController: ActionSheetController,
                 private translocoService: TranslocoService,
-                private gapiAuthServiceService: GapiAuthServiceService) {}
+                private gapiAuthService: GapiAuthService) {}
 
     ionViewDidEnter() {
-        //this.presentActionSheet();
+        this.presentActionSheet();
     }
 
     async downloadYoutubeVideo() {
@@ -116,8 +116,10 @@ export class HomePage {
                 icon: 'logo-google',
                 handler: async () => {
                     console.log('Upload to Google Drive clicked');
-                    await this.gapiAuthServiceService.fetchGoogleUser();
-                    await this.gapiAuthServiceService.listUserFiles();
+                    const user = await this.gapiAuthService.fetchGoogleUser();
+                    console.log('google user', user);
+                    const userFiles = await this.gapiAuthService.listUserFilesInDrive();
+                    console.log('user files in drive', userFiles);
                 }
             }, {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
