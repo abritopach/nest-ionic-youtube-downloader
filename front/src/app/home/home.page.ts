@@ -49,7 +49,7 @@ export class HomePage {
                 private gapiAuthService: GapiAuthService) {}
 
     ionViewDidEnter() {
-        this.presentActionSheet();
+        // this.presentActionSheet();
     }
 
     async downloadYoutubeVideo() {
@@ -81,10 +81,10 @@ export class HomePage {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
             }
+            this.presentActionSheet(blob, ACCEPT_MIME_TYPES.get(this.videoInfo.format));
         }
 
         this.stopDownloadingAnimation();
-        // this.presentActionSheet(); TODO: Working in this code.
     }
 
     videoFormatChanged(event: any) {
@@ -108,7 +108,7 @@ export class HomePage {
         this.downloadingAnimation.stop();
     }
 
-    async presentActionSheet() {
+    async presentActionSheet(file: Blob, mimeType: string) {
         const actionSheet = await this.actionSheetController.create({
             header: this.translocoService.translate('pages.home.actionSheet.header'),
             buttons: [{
@@ -120,6 +120,7 @@ export class HomePage {
                     console.log('google user', user);
                     const userFiles = await this.gapiAuthService.listUserFilesInDrive();
                     console.log('user files in drive', userFiles);
+                    this.gapiAuthService.uploadFileToDrive(file, mimeType);
                 }
             }, {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
