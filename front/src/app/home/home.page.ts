@@ -81,7 +81,7 @@ export class HomePage {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
             }
-            this.presentActionSheet(blob, ACCEPT_MIME_TYPES.get(this.videoInfo.format));
+            // this.presentActionSheet(blob, ACCEPT_MIME_TYPES.get(this.videoInfo.format));
         }
 
         this.stopDownloadingAnimation();
