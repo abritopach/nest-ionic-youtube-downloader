@@ -20,7 +20,8 @@ import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
 // Utils
 import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 import { TranslocoService } from '@ngneat/transloco';
-import { GapiAuthService } from '@services/auth/gapi-auth.service';
+import { GapiAuthService } from '@services/gapi/auth/gapi-auth.service';
+import { GapiDriveService } from '@services/gapi/drive/gapi-drive.service';
 
 @Component({
     selector: 'app-home',
@@ -46,7 +47,8 @@ export class HomePage {
                 private animationCtrl: AnimationController,
                 private actionSheetController: ActionSheetController,
                 private translocoService: TranslocoService,
-                private gapiAuthService: GapiAuthService) {}
+                private gapiAuthService: GapiAuthService,
+                private gapiDriveService: GapiDriveService) {}
 
     ionViewDidEnter() {
         //this.presentActionSheet();
@@ -118,17 +120,22 @@ export class HomePage {
                     console.log('Upload to Google Drive clicked');
                     const user = await this.gapiAuthService.fetchGoogleUser();
                     console.log('google user', user);
-                    const userFiles = await this.gapiAuthService.listUserFilesInDrive();
+                    const userFiles = await this.gapiDriveService.listUserFiles();
                     console.log('user files in drive', userFiles);
-                    this.gapiAuthService.uploadVideoOrAudioToDrive(videoInfo);
+                    this.gapiDriveService.uploadVideoOrAudio(videoInfo);
                 }
-            }, {
+            },
+            // TODO: Development dropbox upload.
+            /*
+            {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
                 icon: 'logo-dropbox',
                 handler: () => {
                     console.log('Upload to Dropbox clicked');
                 }
-            }, {
+            },
+            */
+            {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',
                 role: 'cancel',
