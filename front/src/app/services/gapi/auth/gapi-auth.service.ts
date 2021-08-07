@@ -32,7 +32,7 @@ export class GapiAuthService {
                 console.log('user basic profile', oAuthUser.getBasicProfile());
                 //const authResponse = gAuth.currentUser.get().getAuthResponse();
                 //console.log('authResponse', authResponse);
-                resolve(oAuthUser.getBasicProfile());
+                resolve(oAuthUser);
             } catch (e) {
                 reject(e);
             }

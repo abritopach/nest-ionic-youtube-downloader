@@ -2,10 +2,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 // Ionic
-import { ActionSheetController, Animation, AnimationController } from '@ionic/angular';
+import { ActionSheetController, Animation, AnimationController, LoadingController } from '@ionic/angular';
+
+// Rxjs
+import { firstValueFrom } from 'rxjs';
 
 // Third parties
 import { saveAs } from 'file-saver';
+import { TranslocoService } from '@ngneat/transloco';
 
 /* Project */
 
@@ -16,12 +20,12 @@ import { IVideoInfo } from '@models/video.model';
 // Services
 import { ApiService } from '@services/api/api.service';
 import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
+import { GapiAuthService } from '@services/gapi/auth/gapi-auth.service';
+import { GapiDriveService } from '@services/gapi/drive/gapi-drive.service';
 
 // Utils
 import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
-import { TranslocoService } from '@ngneat/transloco';
-import { GapiAuthService } from '@services/gapi/auth/gapi-auth.service';
-import { GapiDriveService } from '@services/gapi/drive/gapi-drive.service';
+
 
 @Component({
     selector: 'app-home',
@@ -48,7 +52,8 @@ export class HomePage {
                 private actionSheetController: ActionSheetController,
                 private translocoService: TranslocoService,
                 private gapiAuthService: GapiAuthService,
-                private gapiDriveService: GapiDriveService) {}
+                private gapiDriveService: GapiDriveService,
+                private loadingCtrl: LoadingController) {}
 
     ionViewDidEnter() {
         //this.presentActionSheet();
@@ -83,7 +88,7 @@ export class HomePage {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
             }
-            this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+            //this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
         }
 
         this.stopDownloadingAnimation();
@@ -119,10 +124,13 @@ export class HomePage {
                 handler: async () => {
                     console.log('Upload to Google Drive clicked');
                     const user = await this.gapiAuthService.fetchGoogleUser();
-                    console.log('google user', user);
-                    const userFiles = await this.gapiDriveService.listUserFiles();
-                    console.log('user files in drive', userFiles);
-                    this.gapiDriveService.uploadVideoOrAudio(videoInfo);
+                    if (user) {
+                        console.log('google user', user);
+                        await this.showLoading();
+                        const uploadResult = await firstValueFrom(this.gapiDriveService.uploadVideoOrAudio(user, videoInfo));
+                        console.log('uploadResult', uploadResult);
+                        this.hideLoading();
+                    }
                 }
             },
             // TODO: Development dropbox upload.
@@ -148,6 +156,24 @@ export class HomePage {
 
         const { role } = await actionSheet.onDidDismiss();
         console.log('onDidDismiss resolved with role', role);
+    }
+
+    async showLoading() {
+        try {
+            this.loading = await this.loadingCtrl.create(
+                {
+                    message: 'Please wait...uploading file',
+                    translucent: true,
+                }
+            );
+            await this.loading.present();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    hideLoading() {
+        this.loading.dismiss();
     }
 
 }
