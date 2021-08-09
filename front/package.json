@@ -27,7 +27,6 @@
     "@types/gapi": "0.0.41",
     "@types/gapi.auth2": "0.0.55",
     "@types/gapi.client.drive": "^3.0.13",
-    "dropbox": "^10.5.0",
     "file-saver": "^2.0.5",
     "lamejs": "^1.2.0",
     "rxjs": "^7.2.0",
@@ -67,6 +66,9 @@
     "protractor": "^7.0.0",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
+  },
+  "browser": {
+    "crypto": false
   },
   "description": "An Ionic project"
 }

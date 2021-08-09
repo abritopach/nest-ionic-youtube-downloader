@@ -25,6 +25,7 @@ import { GapiDriveService } from '@services/gapi/drive/gapi-drive.service';
 
 // Utils
 import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
+import { DropboxService } from '@services/dropbox/dropbox.service';
 
 
 @Component({
@@ -53,7 +54,8 @@ export class HomePage {
                 private translocoService: TranslocoService,
                 private gapiAuthService: GapiAuthService,
                 private gapiDriveService: GapiDriveService,
-                private loadingCtrl: LoadingController) {}
+                private loadingCtrl: LoadingController,
+                private dropboxService: DropboxService) {}
 
     ionViewDidEnter() {
         //this.presentActionSheet();
@@ -115,7 +117,7 @@ export class HomePage {
         this.downloadingAnimation.stop();
     }
 
-    async presentActionSheet(videoInfo: {name: string, file: Blob, mimeType: string}) {
+    async presentActionSheet(videoInfo?: {name: string, file: Blob, mimeType: string}) {
         const actionSheet = await this.actionSheetController.create({
             header: this.translocoService.translate('pages.home.actionSheet.header'),
             buttons: [{
@@ -134,15 +136,16 @@ export class HomePage {
                 }
             },
             // TODO: Development dropbox upload.
-            /*
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
                 icon: 'logo-dropbox',
                 handler: () => {
                     console.log('Upload to Dropbox clicked');
+                    this.dropboxService.authenticateUser().subscribe(result =>
+                        console.log('result', result)
+                    )
                 }
             },
-            */
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',
