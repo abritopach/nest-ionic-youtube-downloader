@@ -139,11 +139,11 @@ export class HomePage {
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
                 icon: 'logo-dropbox',
-                handler: () => {
+                handler: async () => {
                     console.log('Upload to Dropbox clicked');
-                    this.dropboxService.authenticateUser().subscribe(result =>
-                        console.log('result', result)
-                    )
+                    //const authorizationUrl = await this.dropboxService.authorizationUrl();
+                    //window.open(authorizationUrl, '_self');
+                    //this.dropboxService.getToken().subscribe(token => console.log('token', token));
                 }
             },
             {

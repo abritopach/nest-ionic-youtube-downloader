@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { sha256 } from '@utils/utils';
@@ -9,12 +9,29 @@ import { catchError, retry, throwError } from 'rxjs';
 })
 export class DropboxService {
 
+    codeChallenge: string;
+
     constructor(private http: HttpClient) { }
 
-    authenticateUser() {
+    async authorizationUrl() {
+        this.codeChallenge = await sha256('video-youtube-downloader');
+        console.log('code-challenge', this.codeChallenge);
+        return `https://www.dropbox.com/oauth2/authorize?client_id=${environment.DROPBOX.CLIENT_ID}&response_type=code&code_challenge=${this.codeChallenge}&code_challenge_method=S256&redirect_uri=http://localhost:8100`;
+    }
+
+    getToken() {
+
+        let headers = new HttpHeaders();
+        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
+
+        const payload = new HttpParams()
+        .set('code', '')
+        .set('grant_type', 'authorization_code')
+        .set('code_verifier', this.codeChallenge)
+        .set('client_id', environment.DROPBOX.CLIENT_ID);
+
         return this.http
-        // https://www.dropbox.com/oauth2/authorize?response_type=token&client_id=cg750anjts67v15&redirect_uri=https%3A%2F%2Fdropbox.github.io%2Fdropbox-api-v2-explorer%2F&state=auth_token%2Ffrom_oauth1!jFJJ4s1vZAKhFysZFuLOZat4&token_access_type=online&
-        .get<any>(`https://www.dropbox.com/oauth2/authorize?client_id=${environment.DROPBOX.CLIENT_ID}&response_type=code&code_challenge=${sha256('video-youtube-downloader')}&code_challenge_method=S256&redirect_uri='http://localhost:8100/'`)
+        .post<any>('https://api.dropboxapi.com/oauth2/token', payload, { headers })
         .pipe(
             retry(3),
             catchError(this.handleError),
@@ -22,6 +39,7 @@ export class DropboxService {
     }
 
     uploadVideoOrAudio(accessToken: string, videoInfo: {name: string, file: Blob, mimeType: string}) {
+        // TODO: Add implementation
     }
 
     /**

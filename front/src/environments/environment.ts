@@ -12,7 +12,8 @@ export const environment = {
     SCOPE: 'https://www.googleapis.com/auth/drive.metadata.readonly'
   },
   DROPBOX: {
-    CLIENT_ID: ''
+    CLIENT_ID: '',
+    CLIENT_SECRET: ''
   }
 };
 
