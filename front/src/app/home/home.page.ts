@@ -141,8 +141,13 @@ export class HomePage {
                 icon: 'logo-dropbox',
                 handler: async () => {
                     console.log('Upload to Dropbox clicked');
-                    //const authorizationUrl = await this.dropboxService.authorizationUrl();
-                    //window.open(authorizationUrl, '_self');
+                    const authorizationUrl = await this.dropboxService.authorizationUrl();
+                    console.log('authorizationUrl', authorizationUrl);
+                    // Review this example https://github.com/dropbox/dropbox-sdk-js/blob/main/examples/javascript/pkce-browser/index.html
+                    //window.sessionStorage.clear();
+                    //window.sessionStorage.setItem("codeVerifier", authorizationUrl.codeVerifier);
+                    // window.open(authorizationUrl, '_self');
+                    window.open(authorizationUrl);
                     //this.dropboxService.getToken().subscribe(token => console.log('token', token));
                 }
             },
