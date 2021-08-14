@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { sha256 } from '@utils/utils';
+import { Dropbox, DropboxAuth } from 'dropbox';
 import { catchError, retry, throwError } from 'rxjs';
 
 @Injectable({
@@ -10,8 +11,13 @@ import { catchError, retry, throwError } from 'rxjs';
 export class DropboxService {
 
     codeChallenge: string;
+    dbxAuth: DropboxAuth;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.dbxAuth = new DropboxAuth({
+            clientId: environment.DROPBOX.CLIENT_ID,
+        });
+    }
 
     async authorizationUrl() {
         this.codeChallenge = await sha256('video-youtube-downloader');

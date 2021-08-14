@@ -1,4 +1,7 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
+
+/* crypto, stream and util paths needed for dropbox sdk js ->
+BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -17,7 +20,16 @@
       "@environments/*": ["src/environments/*"],
       "@models/*": ["src/app/models/*"],
       "@services/*": ["src/app/services/*"],
-      "@utils/*": ["src/app/utils/*"]
+      "@utils/*": ["src/app/utils/*"],
+      "crypto": [
+        "./node_modules/crypto-browserify"
+      ],
+      "stream": [
+        "./node_modules/stream-browserify"
+      ],
+      "util": [
+        "./node_modules/util"
+      ]
     },
   },
   "angularCompilerOptions": {
