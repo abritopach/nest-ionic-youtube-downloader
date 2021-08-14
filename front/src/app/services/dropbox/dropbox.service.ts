@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 // Third parties
-import { DropboxAuth } from 'dropbox';
+import { Dropbox, DropboxAuth } from 'dropbox';
 
 /* Project */
 
@@ -50,11 +50,11 @@ export class DropboxService {
         return !!DropboxUtils.getCodeFromUrl();
     }
 
-    getToken() {
+    async getToken() {
         console.log('DropboxService::getToken method called');
         if (this.hasRedirectedFromAuth()) {
             this.dbxAuth.setCodeVerifier(window.sessionStorage.getItem('codeVerifier'));
-            this.dbxAuth.getAccessTokenFromCode(environment.DROPBOX.REDIRECT_URI, DropboxUtils.getCodeFromUrl())
+            return this.dbxAuth.getAccessTokenFromCode(environment.DROPBOX.REDIRECT_URI, DropboxUtils.getCodeFromUrl())
                 .then((response) => {
                     console.log('getAccessTokenFromCode response', response);
                     const tokenData = response.result as IDropboxTokenResonse;
@@ -66,8 +66,11 @@ export class DropboxService {
         }
     }
 
-    uploadVideoOrAudio(videoInfo: {name: string, file: Blob, mimeType: string}) {
-        // TODO: Add implementation
+    uploadVideoOrAudio(/*videoInfo: {name: string, file: Blob, mimeType: string}*/) {
+        const dbx = new Dropbox({
+            auth: this.dbxAuth
+        });
+        return dbx.filesUpload({contents: JSON.stringify('hola'), path: '/test.txt', autorename: false, mute: true });
     }
 
 }

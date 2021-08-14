@@ -60,12 +60,17 @@ export class HomePage {
     ionViewDidEnter() {
         /*
         if (this.dropboxService.hasRedirectedFromAuth()) {
-            this.dropboxService.getToken();
+            this.uploadToDropbox();
         }
         else {
             this.presentActionSheet();
         }
         */
+    }
+
+    async uploadToDropbox() {
+        await this.dropboxService.getToken();
+        this.dropboxService.uploadVideoOrAudio();
     }
 
     async downloadYoutubeVideo() {
@@ -142,7 +147,6 @@ export class HomePage {
                     }
                 }
             },
-            // TODO: Development dropbox upload.
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
                 icon: 'logo-dropbox',
