@@ -10,6 +10,7 @@ export const environment = {
   },
   DROPBOX: {
     CLIENT_ID: '',
-    CLIENT_SECRET: ''
+    CLIENT_SECRET: '',
+    REDIRECT_URI: 'http://localhost:8100'
   }
 };

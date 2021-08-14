@@ -1,80 +1,73 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+// Angular
 import { Injectable } from '@angular/core';
+
+// Third parties
+import { DropboxAuth } from 'dropbox';
+
+/* Project */
+
+// Models
+import { IDropboxTokenResonse } from '@models/dropbox.model';
+
+// Environments
 import { environment } from '@environments/environment';
-import { sha256 } from '@utils/utils';
-import { Dropbox, DropboxAuth } from 'dropbox';
-import { catchError, retry, throwError } from 'rxjs';
+
+// Utils
+import { DropboxUtils } from '@utils/dropbox.utils';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DropboxService {
 
-    codeChallenge: string;
     dbxAuth: DropboxAuth;
 
-    constructor(private http: HttpClient) {
+    constructor() {
         this.dbxAuth = new DropboxAuth({
             clientId: environment.DROPBOX.CLIENT_ID,
         });
     }
 
-    async authorizationUrl() {
-        this.codeChallenge = await sha256('video-youtube-downloader');
-        console.log('code-challenge', this.codeChallenge);
-        return `https://www.dropbox.com/oauth2/authorize?client_id=${environment.DROPBOX.CLIENT_ID}&response_type=code&code_challenge=${this.codeChallenge}&code_challenge_method=S256&redirect_uri=http://localhost:8100`;
+    // Get authentication url as following
+    // `https://www.dropbox.com/oauth2/authorize?client_id=${environment.DROPBOX.CLIENT_ID}&response_type=code&code_challenge=${this.codeChallenge}&code_challenge_method=S256&redirect_uri=http://localhost:8100`;
+    async doAuth() {
+        console.log('DropboxService::doAuth method called');
+        try {
+            const authUrl = await this.dbxAuth.getAuthenticationUrl(environment.DROPBOX.REDIRECT_URI, undefined, 'code', 'offline', undefined, undefined, true);
+            console.log('authUrl', authUrl);
+            console.log('codeVerifier', this.dbxAuth.getCodeVerifier());
+            window.sessionStorage.clear();
+            window.sessionStorage.setItem("codeVerifier", this.dbxAuth.getCodeVerifier());
+            window.location.href = authUrl.toString();
+        } catch (error) {
+            return console.error(error);
+        }
+    }
+
+    // If the user was just redirected from authenticating, the urls hash will
+    // contain the access token.
+    hasRedirectedFromAuth() {
+        return !!DropboxUtils.getCodeFromUrl();
     }
 
     getToken() {
-
-        let headers = new HttpHeaders();
-        headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
-
-        const payload = new HttpParams()
-        .set('code', '')
-        .set('grant_type', 'authorization_code')
-        .set('code_verifier', this.codeChallenge)
-        .set('client_id', environment.DROPBOX.CLIENT_ID);
-
-        return this.http
-        .post<any>('https://api.dropboxapi.com/oauth2/token', payload, { headers })
-        .pipe(
-            retry(3),
-            catchError(this.handleError),
-        );
-    }
-
-    uploadVideoOrAudio(accessToken: string, videoInfo: {name: string, file: Blob, mimeType: string}) {
-        // TODO: Add implementation
-    }
-
-    /**
-     * Description [This method handles api endpoints errors.]
-     *
-     * @author abrito
-     * @version 0.0.1
-     *
-     * @method
-     * @name handleError
-     * @param error - Api endpoint response error.
-     * @returns {Observable}.
-     */
-
-    private handleError(error: HttpErrorResponse) {
-        let errorMessage = 'Unknown error!';
-        if (error.error instanceof ErrorEvent) {
-            // Client-side errors.
-            errorMessage = `Error: ${error.error.message}`;
-            console.log(`Error: ${error.error.message}`);
-        } else {
-            // Server-side errors.
-            // errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-            if (error) {
-                console.error( `Error Code: ${error?.status}\nMessage: ${error?.message}`);
-                errorMessage = `Error: ${error.error?.message}`;
-            }
+        console.log('DropboxService::getToken method called');
+        if (this.hasRedirectedFromAuth()) {
+            this.dbxAuth.setCodeVerifier(window.sessionStorage.getItem('codeVerifier'));
+            this.dbxAuth.getAccessTokenFromCode(environment.DROPBOX.REDIRECT_URI, DropboxUtils.getCodeFromUrl())
+                .then((response) => {
+                    console.log('getAccessTokenFromCode response', response);
+                    const tokenData = response.result as IDropboxTokenResonse;
+                    this.dbxAuth.setAccessToken(tokenData.access_token);
+                })
+                .catch((error) => {
+                    console.error(error)
+                });
         }
-        return throwError(() => Error(errorMessage));
+    }
+
+    uploadVideoOrAudio(videoInfo: {name: string, file: Blob, mimeType: string}) {
+        // TODO: Add implementation
     }
 
 }
