@@ -78,7 +78,7 @@ export class DropboxService {
         console.log('name', name);
         const mimeType = window.sessionStorage.getItem('mimeType');
         const blobFile = convertBase64ToBlob(file, mimeType);
-        return dbx.filesUpload({contents: blobFile, path: `/${name}.mp3`, autorename: false, mute: true });
+        return dbx.filesUpload({contents: blobFile, path: `/${name}.${mimeType.split('/').pop()}`, autorename: false, mute: true });
     }
 
 }
