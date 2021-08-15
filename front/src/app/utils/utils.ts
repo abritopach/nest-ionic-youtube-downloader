@@ -23,3 +23,36 @@ export const sha256 = async (message: string) => {
     console.log('hashHex', hashHex);
     return hashHex;
 }
+
+export const convertBlobToString = async (blob: Blob) => {
+    return await blob.text();
+}
+
+export const convertBase64ToBlob = (base64Image: string, type: string) => {
+    // Split into two parts
+    const parts = base64Image.split(';base64,');
+    // Hold the content type
+    const imageType = parts[0].split(':')[1];
+    // Decode Base64 string
+    const decodedData = window.atob(parts[1]);
+    // Create UNIT8ARRAY of size same as row data length
+    const uInt8Array = new Uint8Array(decodedData.length);
+    // Insert all character code into uInt8Array
+    for (let i = 0; i < decodedData.length; ++i) {
+        uInt8Array[i] = decodedData.charCodeAt(i);
+    }
+    // Return BLOB image after conversion
+    return new Blob([uInt8Array], { type });
+}
+
+export const convertAudioBlobToBase64 = async (audioFile): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = (e) => {
+            console.log('onvertAudioBlobToBase64', e.target.result);
+            resolve(e.target.result as string)
+        };
+        reader.readAsDataURL(audioFile);
+    });
+}

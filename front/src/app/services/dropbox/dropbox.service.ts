@@ -14,6 +14,7 @@ import { environment } from '@environments/environment';
 
 // Utils
 import { DropboxUtils } from '@utils/dropbox.utils';
+import { convertBase64ToBlob } from '@utils/utils';
 
 @Injectable({
     providedIn: 'root'
@@ -36,8 +37,8 @@ export class DropboxService {
             const authUrl = await this.dbxAuth.getAuthenticationUrl(environment.DROPBOX.REDIRECT_URI, undefined, 'code', 'offline', undefined, undefined, true);
             console.log('authUrl', authUrl);
             console.log('codeVerifier', this.dbxAuth.getCodeVerifier());
-            window.sessionStorage.clear();
-            window.sessionStorage.setItem("codeVerifier", this.dbxAuth.getCodeVerifier());
+            // window.sessionStorage.clear();
+            window.sessionStorage.setItem('codeVerifier', this.dbxAuth.getCodeVerifier());
             window.location.href = authUrl.toString();
         } catch (error) {
             return console.error(error);
@@ -67,10 +68,17 @@ export class DropboxService {
     }
 
     uploadVideoOrAudio(/*videoInfo: {name: string, file: Blob, mimeType: string}*/) {
+        console.log('DropboxService::uploadVideoOrAudio method called');
         const dbx = new Dropbox({
             auth: this.dbxAuth
         });
-        return dbx.filesUpload({contents: JSON.stringify('hola'), path: '/test.txt', autorename: false, mute: true });
+        const file = window.sessionStorage.getItem('file');
+        console.log('uploadVideoOrAudio file as base64', file);
+        const name = window.sessionStorage.getItem('name');
+        console.log('name', name);
+        const mimeType = window.sessionStorage.getItem('mimeType');
+        const blobFile = convertBase64ToBlob(file, mimeType);
+        return dbx.filesUpload({contents: blobFile, path: `/${name}.mp3`, autorename: false, mute: true });
     }
 
 }

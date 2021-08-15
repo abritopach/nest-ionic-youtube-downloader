@@ -24,7 +24,7 @@ import { GapiAuthService } from '@services/gapi/auth/gapi-auth.service';
 import { GapiDriveService } from '@services/gapi/drive/gapi-drive.service';
 
 // Utils
-import { handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
+import { convertAudioBlobToBase64, convertBlobToString, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 import { DropboxService } from '@services/dropbox/dropbox.service';
 
 
@@ -58,19 +58,17 @@ export class HomePage {
                 private dropboxService: DropboxService) {}
 
     ionViewDidEnter() {
-        /*
         if (this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
         }
-        else {
-            this.presentActionSheet();
-        }
-        */
     }
 
     async uploadToDropbox() {
+        this.showLoading();
         await this.dropboxService.getToken();
-        this.dropboxService.uploadVideoOrAudio();
+        await this.dropboxService.uploadVideoOrAudio();
+        window.sessionStorage.clear();
+        this.hideLoading();
     }
 
     async downloadYoutubeVideo() {
@@ -97,12 +95,13 @@ export class HomePage {
             const blob = new Blob([new Uint8Array(downloadVideoData['data'])], { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
+                // this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
+                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
-            //this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
         }
 
         this.stopDownloadingAnimation();
@@ -136,7 +135,7 @@ export class HomePage {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDrive'),
                 icon: 'logo-google',
                 handler: async () => {
-                    console.log('Upload to Google Drive clicked');
+                    console.log('Upload to Google Drive clicked', videoInfo);
                     const user = await this.gapiAuthService.fetchGoogleUser();
                     if (user) {
                         console.log('google user', user);
@@ -151,7 +150,10 @@ export class HomePage {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
                 icon: 'logo-dropbox',
                 handler: async () => {
-                    console.log('Upload to Dropbox clicked');
+                    console.log('Upload to Dropbox clicked', videoInfo);
+                    window.sessionStorage.setItem("file", await convertAudioBlobToBase64(videoInfo.file));
+                    window.sessionStorage.setItem("mimeType", videoInfo.mimeType);
+                    window.sessionStorage.setItem("name", videoInfo.name);
                     await this.dropboxService.doAuth();
                 }
             },
