@@ -4,9 +4,6 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 // Ionic
 import { ActionSheetController, Animation, AnimationController, LoadingController } from '@ionic/angular';
 
-// Rxjs
-import { firstValueFrom } from 'rxjs';
-
 // Third parties
 import { saveAs } from 'file-saver';
 import { TranslocoService } from '@ngneat/transloco';
@@ -20,8 +17,7 @@ import { IVideoInfo } from '@models/video.model';
 // Services
 import { ApiService } from '@services/api/api.service';
 import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
-import { GapiAuthService } from '@services/gapi/auth/gapi-auth.service';
-import { GapiDriveService } from '@services/gapi/drive/gapi-drive.service';
+import { DriveService } from '@services/gapi/drive/drive.service';
 
 // Utils
 import { convertAudioBlobToBase64, convertBlobToString, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
@@ -52,8 +48,7 @@ export class HomePage {
                 private animationCtrl: AnimationController,
                 private actionSheetController: ActionSheetController,
                 private translocoService: TranslocoService,
-                private gapiAuthService: GapiAuthService,
-                private gapiDriveService: GapiDriveService,
+                private driveService: DriveService,
                 private loadingCtrl: LoadingController,
                 private dropboxService: DropboxService) {}
 
@@ -66,7 +61,12 @@ export class HomePage {
     async uploadToDropbox() {
         this.showLoading();
         await this.dropboxService.getToken();
-        await this.dropboxService.uploadVideoOrAudio();
+        const videoInfo = {
+            name: window.sessionStorage.getItem('name'),
+            file: window.sessionStorage.getItem('file'),
+            mimeType: window.sessionStorage.getItem('mimeType')
+        };
+        await this.dropboxService.uploadVideoOrAudio(videoInfo);
         window.sessionStorage.clear();
         this.hideLoading();
     }
@@ -136,14 +136,10 @@ export class HomePage {
                 icon: 'logo-google',
                 handler: async () => {
                     console.log('Upload to Google Drive clicked', videoInfo);
-                    const user = await this.gapiAuthService.fetchGoogleUser();
-                    if (user) {
-                        console.log('google user', user);
-                        await this.showLoading();
-                        const uploadResult = await firstValueFrom(this.gapiDriveService.uploadVideoOrAudio(user, videoInfo));
-                        console.log('uploadResult', uploadResult);
-                        this.hideLoading();
-                    }
+                    await this.showLoading();
+                    const uploadResult = await this.driveService.uploadVideoOrAudio(videoInfo);
+                    console.log('uploadResult', uploadResult);
+                    this.hideLoading();
                 }
             },
             {

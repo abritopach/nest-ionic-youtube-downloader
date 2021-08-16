@@ -15,11 +15,12 @@ import { environment } from '@environments/environment';
 // Utils
 import { DropboxUtils } from '@utils/dropbox.utils';
 import { convertBase64ToBlob } from '@utils/utils';
+import { CloudStorageService } from '@models/cloud-storage.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class DropboxService {
+export class DropboxService implements CloudStorageService {
 
     dbxAuth: DropboxAuth;
 
@@ -67,18 +68,14 @@ export class DropboxService {
         }
     }
 
-    uploadVideoOrAudio(/*videoInfo: {name: string, file: Blob, mimeType: string}*/) {
+    uploadVideoOrAudio(videoInfo: {name: string, file: string, mimeType: string}) {
         console.log('DropboxService::uploadVideoOrAudio method called');
         const dbx = new Dropbox({
             auth: this.dbxAuth
         });
-        const file = window.sessionStorage.getItem('file');
-        console.log('uploadVideoOrAudio file as base64', file);
-        const name = window.sessionStorage.getItem('name');
-        console.log('name', name);
-        const mimeType = window.sessionStorage.getItem('mimeType');
-        const blobFile = convertBase64ToBlob(file, mimeType);
-        return dbx.filesUpload({contents: blobFile, path: `/${name}.${mimeType.split('/').pop()}`, autorename: false, mute: true });
+        console.log('uploadVideoOrAudio file as base64', videoInfo.file);
+        const blobFile = convertBase64ToBlob(videoInfo.file,videoInfo. mimeType);
+        return dbx.filesUpload({contents: blobFile, path: `/${videoInfo.name}.${videoInfo.mimeType.split('/').pop()}`, autorename: false, mute: true });
     }
 
 }
