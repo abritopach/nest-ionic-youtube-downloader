@@ -15,10 +15,10 @@ export class DriveService implements CloudStorageService {
 
     constructor(private http: HttpClient) { }
 
-    doAuth(): Promise<any> {
+    doAuth(): Promise<gapi.auth2.GoogleAuth> {
         return new Promise((resolve, reject) => {
             gapi.load('auth2', async () => {
-                const gAuth = await gapi.auth2.init({
+                const gAuth: gapi.auth2.GoogleAuth = await gapi.auth2.init({
                     apiKey: environment.GAPI.API_KEY,
                     client_id: environment.GAPI.CLIENT_ID,
                     discoveryDocs: environment.GAPI.DISCOVERY_DOCS,
@@ -29,15 +29,18 @@ export class DriveService implements CloudStorageService {
         });
     }
 
-    getToken(): Promise<any> {
-        return new Promise(async (resolve, reject) => {
+    getToken(): Promise<string> {
+        return new Promise((resolve, reject) => {
             try {
-                const gAuth = await this.doAuth();
-                const oAuthUser = await gAuth.signIn({prompt: 'consent'});
-                console.log('user basic profile', oAuthUser.getBasicProfile());
-                //const authResponse = gAuth.currentUser.get().getAuthResponse();
-                //console.log('authResponse', authResponse);
-                resolve(oAuthUser);
+                this.doAuth().then(gAuth => {
+                    console.log('gAuth', gAuth);
+                    gAuth.signIn({prompt: 'consent'}).then(oAuthUser => {
+                        console.log('user basic profile', oAuthUser.getBasicProfile());
+                        //const authResponse = gAuth.currentUser.get().getAuthResponse();
+                        //console.log('authResponse', authResponse);
+                        resolve(oAuthUser.getAuthResponse().access_token);
+                    });
+                });
             } catch (e) {
                 reject(e);
             }
@@ -70,7 +73,7 @@ export class DriveService implements CloudStorageService {
         const token = await this.getToken();
 
         if (token) {
-            console.log('google user', token);
+            console.log('token', token);
 
             const metadata = {
                 'name': videoInfo.name, // Filename at Google Drive
@@ -81,7 +84,7 @@ export class DriveService implements CloudStorageService {
             formData.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
             formData.append('file', videoInfo.file);
 
-            const accessToken = token.Zb.access_token; // Here gapi is used for retrieving the access token.
+            const accessToken = token; // Here gapi is used for retrieving the access token.
             const header = {
                 headers: new HttpHeaders()
                 .set('Authorization',  `Bearer ${accessToken}`)

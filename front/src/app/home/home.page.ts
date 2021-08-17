@@ -98,12 +98,12 @@ export class HomePage {
             const blob = new Blob([new Uint8Array(downloadVideoData['data'])], { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                // this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                this.presentActionSheet({name: checkVideoData.title, file: mp3Blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
         }
 
