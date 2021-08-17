@@ -4,6 +4,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 // Ionic
 import { ActionSheetController, Animation, AnimationController, LoadingController } from '@ionic/angular';
 
+// Rxjs
+import { firstValueFrom } from 'rxjs';
+
 // Third parties
 import { saveAs } from 'file-saver';
 import { TranslocoService } from '@ngneat/transloco';
@@ -18,11 +21,10 @@ import { IVideoInfo } from '@models/video.model';
 import { ApiService } from '@services/api/api.service';
 import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
 import { DriveService } from '@services/gapi/drive/drive.service';
+import { DropboxService } from '@services/dropbox/dropbox.service';
 
 // Utils
 import { convertAudioBlobToBase64, convertBlobToString, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
-import { DropboxService } from '@services/dropbox/dropbox.service';
-
 
 @Component({
     selector: 'app-home',
@@ -66,7 +68,8 @@ export class HomePage {
             file: window.sessionStorage.getItem('file'),
             mimeType: window.sessionStorage.getItem('mimeType')
         };
-        await this.dropboxService.uploadVideoOrAudio(videoInfo);
+        const [uploadResult, uploadError] = await handlePromise(this.dropboxService.uploadVideoOrAudio(videoInfo))
+        console.log('upload dropbox result', uploadResult);
         window.sessionStorage.clear();
         this.hideLoading();
     }
@@ -74,12 +77,12 @@ export class HomePage {
     async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
 
-        const [checkVideoResult, checkVideoError] = await handlePromise(this.apiService.checkVideo({url: this.videoInfo.url}).toPromise());
+        const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(this.apiService.checkVideo({url: this.videoInfo.url})));
         console.log('checkVideoResult', checkVideoResult);
         const { data: checkVideoData } = checkVideoResult;
 
         /*
-        const [downloadVideoResult, downloadVideoError] = await handlePromise(this.apiService.downloadAndConvertVideo(this.videoInfo).toPromise());
+        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(this.apiService.downloadAndConvertVideo(this.videoInfo)));
         console.log('downloadVideoResult', downloadVideoResult);
         const { data: downloadVideoData} = downloadVideoResult;
         if (downloadVideoData) {
@@ -88,19 +91,19 @@ export class HomePage {
         }
         */
 
-        const [downloadVideoResult, downloadVideoError] = await handlePromise(this.apiService.downloadVideo(this.videoInfo).toPromise());
+        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(this.apiService.downloadVideo(this.videoInfo)));
         console.log('downloadVideoResult', downloadVideoResult);
         const { data: downloadVideoData} = downloadVideoResult;
         if (downloadVideoData) {
             const blob = new Blob([new Uint8Array(downloadVideoData['data'])], { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                this.presentActionSheet({name: checkVideoData.title, file: mp3Blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
         }
 
@@ -137,8 +140,8 @@ export class HomePage {
                 handler: async () => {
                     console.log('Upload to Google Drive clicked', videoInfo);
                     await this.showLoading();
-                    const uploadResult = await this.driveService.uploadVideoOrAudio(videoInfo);
-                    console.log('uploadResult', uploadResult);
+                    const [uploadResult, uploadError] = await handlePromise(this.driveService.uploadVideoOrAudio(videoInfo));
+                    console.log('upload drive result', uploadResult);
                     this.hideLoading();
                 }
             },

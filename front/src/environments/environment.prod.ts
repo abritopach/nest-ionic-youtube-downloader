@@ -6,7 +6,7 @@ export const environment = {
     API_KEY: '',
     CLIENT_ID: '',
     DISCOVERY_DOCS: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-    SCOPE: 'https://www.googleapis.com/auth/drive.metadata.readonly'
+    SCOPE: 'https://www.googleapis.com/auth/drive'
   },
   DROPBOX: {
     CLIENT_ID: '',

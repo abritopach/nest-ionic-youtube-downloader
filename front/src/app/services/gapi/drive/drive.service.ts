@@ -87,7 +87,7 @@ export class DriveService implements CloudStorageService {
                 .set('Authorization',  `Bearer ${accessToken}`)
             }
 
-            return await firstValueFrom(this.http.post<any>(this.GOOGLE_DRIVE_UPLOAD_URL, formData,header));
+            return firstValueFrom(this.http.post<any>(this.GOOGLE_DRIVE_UPLOAD_URL, formData, header));
         }
     }
 
