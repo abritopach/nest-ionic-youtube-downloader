@@ -68,7 +68,7 @@ export class HomePage {
             file: window.sessionStorage.getItem('file'),
             mimeType: window.sessionStorage.getItem('mimeType')
         };
-        const [uploadResult, uploadError] = await handlePromise(this.dropboxService.uploadVideoOrAudio(videoInfo))
+        const [uploadResult, uploadError] = await handlePromise(this.dropboxService.uploadVideoOrAudio(videoInfo));
         console.log('upload dropbox result', uploadResult);
         window.sessionStorage.clear();
         this.hideLoading();
@@ -77,33 +77,43 @@ export class HomePage {
     async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
 
-        const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(this.apiService.checkVideo({url: this.videoInfo.url})));
+        const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
+            this.apiService.checkVideo({url: this.videoInfo.url})
+        ));
         console.log('checkVideoResult', checkVideoResult);
         const { data: checkVideoData } = checkVideoResult;
 
         /*
-        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(this.apiService.downloadAndConvertVideo(this.videoInfo)));
+        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
+            this.apiService.downloadAndConvertVideo(this.videoInfo)
+        ));
         console.log('downloadVideoResult', downloadVideoResult);
         const { data: downloadVideoData} = downloadVideoResult;
         if (downloadVideoData) {
-            const blob = new Blob([new Uint8Array(downloadVideoData['data'])], { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+            const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
+            { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
         }
         */
 
-        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(this.apiService.downloadVideo(this.videoInfo)));
+        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
+            this.apiService.downloadVideo(this.videoInfo)
+        ));
         console.log('downloadVideoResult', downloadVideoResult);
         const { data: downloadVideoData} = downloadVideoResult;
         if (downloadVideoData) {
-            const blob = new Blob([new Uint8Array(downloadVideoData['data'])], { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+            const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
+            { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                // this.presentActionSheet({name: checkVideoData.title, file: blob,
+                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob, mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
+                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
         }
 
@@ -131,7 +141,7 @@ export class HomePage {
         this.downloadingAnimation.stop();
     }
 
-    async presentActionSheet(videoInfo?: {name: string, file: Blob, mimeType: string}) {
+    async presentActionSheet(videoInfo?: {name: string; file: Blob; mimeType: string}) {
         const actionSheet = await this.actionSheetController.create({
             header: this.translocoService.translate('pages.home.actionSheet.header'),
             buttons: [{
@@ -150,9 +160,9 @@ export class HomePage {
                 icon: 'logo-dropbox',
                 handler: async () => {
                     console.log('Upload to Dropbox clicked', videoInfo);
-                    window.sessionStorage.setItem("file", await convertAudioBlobToBase64(videoInfo.file));
-                    window.sessionStorage.setItem("mimeType", videoInfo.mimeType);
-                    window.sessionStorage.setItem("name", videoInfo.name);
+                    window.sessionStorage.setItem('file', await convertAudioBlobToBase64(videoInfo.file));
+                    window.sessionStorage.setItem('mimeType', videoInfo.mimeType);
+                    window.sessionStorage.setItem('name', videoInfo.name);
                     await this.dropboxService.doAuth();
                 }
             },
