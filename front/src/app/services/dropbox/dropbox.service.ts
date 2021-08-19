@@ -63,12 +63,12 @@ export class DropboxService implements CloudStorageService {
                     this.dbxAuth.setAccessToken(tokenData.access_token);
                 })
                 .catch((error) => {
-                    console.error(error)
+                    console.error(error);
                 });
         }
     }
 
-    uploadVideoOrAudio(videoInfo: {name: string, file: string, mimeType: string}) {
+    uploadVideoOrAudio(videoInfo: {name: string; file: string; mimeType: string}) {
         console.log('DropboxService::uploadVideoOrAudio method called');
         const dbx = new Dropbox({
             auth: this.dbxAuth

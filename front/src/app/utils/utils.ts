@@ -22,11 +22,9 @@ export const sha256 = async (message: string) => {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     console.log('hashHex', hashHex);
     return hashHex;
-}
+};
 
-export const convertBlobToString = async (blob: Blob) => {
-    return await blob.text();
-}
+export const convertBlobToString = async (blob: Blob) => await blob.text();
 
 export const convertBase64ToBlob = (base64Image: string, type: string) => {
     // Split into two parts
@@ -43,16 +41,14 @@ export const convertBase64ToBlob = (base64Image: string, type: string) => {
     }
     // Return BLOB image after conversion
     return new Blob([uInt8Array], { type });
-}
+};
 
-export const convertAudioBlobToBase64 = async (audioFile): Promise<string> => {
-    return new Promise((resolve, reject) => {
+export const convertAudioBlobToBase64 = async (audioFile): Promise<string> => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onerror = reject;
         reader.onload = (e) => {
             console.log('onvertAudioBlobToBase64', e.target.result);
-            resolve(e.target.result as string)
+            resolve(e.target.result as string);
         };
         reader.readAsDataURL(audioFile);
     });
-}

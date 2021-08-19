@@ -4,7 +4,7 @@ import { environment } from '@environments/environment';
 import { CloudStorageService } from '@models/cloud-storage.model';
 import { firstValueFrom } from 'rxjs';
 
-declare var gapi: any;
+declare let gapi: any;
 
 @Injectable({
     providedIn: 'root'
@@ -53,8 +53,8 @@ export class DriveService implements CloudStorageService {
                 gapi.load('client', () => {
                     gapi.client.load('drive', 'v3', () => {
                         gapi.client.drive.files.list({
-                            'pageSize': 10,
-                            'fields': "nextPageToken, files(id, name, mimeType, createdTime, size)"
+                            pageSize: 10,
+                            fields: 'nextPageToken, files(id, name, mimeType, createdTime, size)'
                         }).then(res => {
                             resolve(res.result.files);
                         }).catch(err => {
@@ -68,7 +68,7 @@ export class DriveService implements CloudStorageService {
         });
     }
 
-    async uploadVideoOrAudio(videoInfo: {name: string, file: Blob, mimeType: string}) {
+    async uploadVideoOrAudio(videoInfo: {name: string; file: Blob; mimeType: string}) {
 
         const token = await this.getToken();
 
@@ -76,7 +76,7 @@ export class DriveService implements CloudStorageService {
             console.log('token', token);
 
             const metadata = {
-                'name': videoInfo.name, // Filename at Google Drive
+                name: videoInfo.name, // Filename at Google Drive
                 mimeType: videoInfo.mimeType, // mimeType at Google Drive
                 // 'parents': ['### folder ID ###'], // Folder ID at Google Drive
             };
@@ -88,7 +88,7 @@ export class DriveService implements CloudStorageService {
             const header = {
                 headers: new HttpHeaders()
                 .set('Authorization',  `Bearer ${accessToken}`)
-            }
+            };
 
             return firstValueFrom(this.http.post<any>(this.GOOGLE_DRIVE_UPLOAD_URL, formData, header));
         }
