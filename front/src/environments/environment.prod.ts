@@ -1,16 +1,16 @@
 export const environment = {
   production: true,
-  // API_URL_BASE: 'https://youtube-video-downloader-api.vercel.app',
-  API_URL_BASE: 'https://youtube-video-downloader-api.herokuapp.com',
-  GAPI: {
-    API_KEY: '',
-    CLIENT_ID: '',
-    DISCOVERY_DOCS: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-    SCOPE: 'https://www.googleapis.com/auth/drive'
+  // apiUrlBase: 'https://youtube-video-downloader-api.vercel.app',
+  apiUrlBase: 'https://youtube-video-downloader-api.herokuapp.com',
+  gapi: {
+    apiKey: '',
+    clientId: '',
+    discoveryDocs: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+    scope: 'https://www.googleapis.com/auth/drive'
   },
-  DROPBOX: {
-    CLIENT_ID: '',
-    CLIENT_SECRET: '',
-    REDIRECT_URI: 'http://localhost:8100'
+  dropbox: {
+    clientId: '',
+    clientSecret: '',
+    redirectUri: 'http://localhost:8100'
   }
 };

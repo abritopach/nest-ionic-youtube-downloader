@@ -102,7 +102,7 @@ export class HomePage {
         console.log('downloadVideoResult', downloadVideoResult);
         const { data: downloadVideoData} = downloadVideoResult;
         if (downloadVideoData) {
-            const blob = new Blob([new Uint8Array(downloadVideoData.data)],
+            const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
             { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);

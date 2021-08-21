@@ -1,7 +1,12 @@
 /* This functions below are from the Dropbox SDK examples to retreive the auth token from the query string */
 export class DropboxUtils {
 
-    private static parseQueryString(str: string): Object {
+    // Parses the url and gets the access token if it is in the urls hash.
+    public static getCodeFromUrl(): string {
+        return DropboxUtils.parseQueryString(window.location.search)['code'];
+    }
+
+    private static parseQueryString(str: string): object {
         const ret: {[k: string]: string[] | string} = Object.create(null);
         if (typeof str !== 'string') {
             return ret;
@@ -28,14 +33,9 @@ export class DropboxUtils {
             } else if (Array.isArray(retVal)) {
                 retVal.push(val);
             } else {
-                ret[key] = [<string> ret[key], val];
+                ret[key] = [ret[key] as string, val];
             }
         });
         return ret;
-    }
-
-    // Parses the url and gets the access token if it is in the urls hash.
-    public static getCodeFromUrl(): string {
-        return DropboxUtils.parseQueryString(window.location.search).code;
     }
 }

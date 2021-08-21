@@ -26,16 +26,19 @@ export class DropboxService implements CloudStorageService {
 
     constructor() {
         this.dbxAuth = new DropboxAuth({
-            clientId: environment.DROPBOX.CLIENT_ID,
+            clientId: environment.dropbox.clientId,
         });
     }
 
     // Get authentication url as following
-    // `https://www.dropbox.com/oauth2/authorize?client_id=${environment.DROPBOX.CLIENT_ID}&response_type=code&code_challenge=${this.codeChallenge}&code_challenge_method=S256&redirect_uri=http://localhost:8100`;
+    // `https://www.dropbox.com/oauth2/authorize?client_id=${environment.dropbox.clientId}
+    // &response_type=code&code_challenge=${this.codeChallenge}&code_challenge_method=S256&
+    // redirect_uri=http://localhost:8100`;
     async doAuth() {
         console.log('DropboxService::doAuth method called');
         try {
-            const authUrl = await this.dbxAuth.getAuthenticationUrl(environment.DROPBOX.REDIRECT_URI, undefined, 'code', 'offline', undefined, undefined, true);
+            const authUrl = await this.dbxAuth.getAuthenticationUrl(environment.dropbox.redirectUri, undefined,
+                'code', 'offline', undefined, undefined, true);
             console.log('authUrl', authUrl);
             console.log('codeVerifier', this.dbxAuth.getCodeVerifier());
             // window.sessionStorage.clear();
@@ -56,7 +59,8 @@ export class DropboxService implements CloudStorageService {
         console.log('DropboxService::getToken method called');
         if (this.hasRedirectedFromAuth()) {
             this.dbxAuth.setCodeVerifier(window.sessionStorage.getItem('codeVerifier'));
-            return this.dbxAuth.getAccessTokenFromCode(environment.DROPBOX.REDIRECT_URI, DropboxUtils.getCodeFromUrl())
+            return this.dbxAuth.getAccessTokenFromCode(environment.dropbox.redirectUri,
+                DropboxUtils.getCodeFromUrl())
                 .then((response) => {
                     console.log('getAccessTokenFromCode response', response);
                     const tokenData = response.result as IDropboxTokenResonse;
@@ -75,7 +79,8 @@ export class DropboxService implements CloudStorageService {
         });
         console.log('uploadVideoOrAudio file as base64', videoInfo.file);
         const blobFile = convertBase64ToBlob(videoInfo.file,videoInfo. mimeType);
-        return dbx.filesUpload({contents: blobFile, path: `/${videoInfo.name}.${videoInfo.mimeType.split('/').pop()}`, autorename: false, mute: true });
+        return dbx.filesUpload({contents: blobFile, path:
+            `/${videoInfo.name}.${videoInfo.mimeType.split('/').pop()}`, autorename: false, mute: true });
     }
 
 }

@@ -11,7 +11,7 @@ declare let gapi: any;
 })
 export class DriveService implements CloudStorageService {
 
-    private readonly GOOGLE_DRIVE_UPLOAD_URL = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
+    private readonly googleDriveUploadUrl = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
 
     constructor(private http: HttpClient) { }
 
@@ -19,10 +19,10 @@ export class DriveService implements CloudStorageService {
         return new Promise((resolve, reject) => {
             gapi.load('auth2', async () => {
                 const gAuth: gapi.auth2.GoogleAuth = await gapi.auth2.init({
-                    apiKey: environment.GAPI.API_KEY,
-                    client_id: environment.GAPI.CLIENT_ID,
-                    discoveryDocs: environment.GAPI.DISCOVERY_DOCS,
-                    scope: environment.GAPI.SCOPE
+                    apiKey: environment.gapi.apiKey,
+                    client_id: environment.gapi.clientId,
+                    discoveryDocs: environment.gapi.discoveryDocs,
+                    scope: environment.gapi.scope
                 });
                 resolve(gAuth);
             }, reject);
@@ -90,7 +90,7 @@ export class DriveService implements CloudStorageService {
                 .set('Authorization',  `Bearer ${accessToken}`)
             };
 
-            return firstValueFrom(this.http.post<any>(this.GOOGLE_DRIVE_UPLOAD_URL, formData, header));
+            return firstValueFrom(this.http.post<any>(this.googleDriveUploadUrl, formData, header));
         }
     }
 

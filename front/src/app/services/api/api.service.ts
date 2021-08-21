@@ -11,7 +11,7 @@ import { environment } from '@environments/environment';
 })
 export class ApiService {
 
-    private readonly API_URL_BASE = environment.API_URL_BASE;
+    private readonly apiUrlBase = environment.apiUrlBase;
 
     constructor(private http: HttpClient) { }
 
@@ -29,7 +29,7 @@ export class ApiService {
 
     checkVideo(payload: {url: string}): Observable<IAPIResponse> {
         return this.http
-        .post<IAPIResponse>(`${this.API_URL_BASE}/youtube-video-downloader/check-video`, payload)
+        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/check-video`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
@@ -50,7 +50,7 @@ export class ApiService {
 
     downloadVideo(payload: IVideoInfo): Observable<IAPIResponse> {
         return this.http
-        .post<IAPIResponse>(`${this.API_URL_BASE}/youtube-video-downloader/download`, payload)
+        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/download`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
@@ -71,7 +71,7 @@ export class ApiService {
 
     downloadAndConvertVideo(payload: IVideoInfo): Observable<IAPIResponse> {
         return this.http
-        .post<IAPIResponse>(`${this.API_URL_BASE}/youtube-video-downloader/downloadAndConvert`, payload)
+        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/downloadAndConvert`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),

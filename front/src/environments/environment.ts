@@ -4,17 +4,17 @@
 
 export const environment = {
   production: false,
-  API_URL_BASE: 'http://localhost:3000',
-  GAPI: {
-    API_KEY: '',
-    CLIENT_ID: '',
-    DISCOVERY_DOCS: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
-    SCOPE: 'https://www.googleapis.com/auth/drive'
+  apiUrlBase: 'http://localhost:3000',
+  gapi: {
+    apiKey: '',
+    clientId: '',
+    discoveryDocs: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+    scope: 'https://www.googleapis.com/auth/drive'
   },
-  DROPBOX: {
-    CLIENT_ID: '',
-    CLIENT_SECRET: '',
-    REDIRECT_URI: 'http://localhost:8100'
+  dropbox: {
+    clientId: '',
+    clientSecret: '',
+    redirectUri: 'http://localhost:8100'
   }
 };
 
