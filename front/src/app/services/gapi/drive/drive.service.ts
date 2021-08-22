@@ -20,6 +20,7 @@ export class DriveService implements CloudStorageService {
             gapi.load('auth2', async () => {
                 const gAuth: gapi.auth2.GoogleAuth = await gapi.auth2.init({
                     apiKey: environment.gapi.apiKey,
+                    /* eslint-disable @typescript-eslint/naming-convention */
                     client_id: environment.gapi.clientId,
                     discoveryDocs: environment.gapi.discoveryDocs,
                     scope: environment.gapi.scope

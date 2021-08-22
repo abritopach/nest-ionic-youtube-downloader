@@ -3,10 +3,10 @@ export class DropboxUtils {
 
     // Parses the url and gets the access token if it is in the urls hash.
     public static getCodeFromUrl(): string {
-        return DropboxUtils.parseQueryString(window.location.search)['code'];
+        return DropboxUtils.parseQueryString(window.location.search)['code']?.toString() ?? undefined;
     }
 
-    private static parseQueryString(str: string): object {
+    private static parseQueryString(str: string) {
         const ret: {[k: string]: string[] | string} = Object.create(null);
         if (typeof str !== 'string') {
             return ret;

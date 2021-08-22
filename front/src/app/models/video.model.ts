@@ -28,3 +28,17 @@ export interface IVideoCheckResponse {
     author: string;
     title: string;
 }
+
+/**
+ * Description [Interface to define video downloaded data.]
+ *
+ * @author abrito
+ * @version 0.0.1
+ *
+ * @interface
+ */
+
+export interface IVideoDownloadedData {
+    type: 'Buffer';
+    data: number[];
+}

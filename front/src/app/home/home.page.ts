@@ -15,7 +15,7 @@ import { TranslocoService } from '@ngneat/transloco';
 
 // Models
 import { ACCEPT_MIME_TYPES, FormatType } from '@models/format.model';
-import { IVideoInfo } from '@models/video.model';
+import { IVideoCheckResponse, IVideoDownloadedData, IVideoInfo } from '@models/video.model';
 
 // Services
 import { ApiService } from '@services/api/api.service';
@@ -81,7 +81,7 @@ export class HomePage {
             this.apiService.checkVideo({url: this.videoInfo.url})
         ));
         console.log('checkVideoResult', checkVideoResult);
-        const { data: checkVideoData } = checkVideoResult;
+        const checkVideoData = checkVideoResult.data as IVideoCheckResponse;
 
         /*
         const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
@@ -100,20 +100,20 @@ export class HomePage {
             this.apiService.downloadVideo(this.videoInfo)
         ));
         console.log('downloadVideoResult', downloadVideoResult);
-        const { data: downloadVideoData} = downloadVideoResult;
+        const downloadVideoData = downloadVideoResult.data as IVideoDownloadedData;
         if (downloadVideoData) {
-            const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
+            const blob = new Blob([new Uint8Array(downloadVideoData.data)],
             { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: blob,
-                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                this.presentActionSheet({name: checkVideoData.title, file: blob,
+                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
-                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
+                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
         }
 

@@ -7,6 +7,7 @@
  */
 
 export interface IDropboxTokenResonse {
+    /* eslint-disable @typescript-eslint/naming-convention */
     access_token: string;
     account_id: string;
     expires_in: number;

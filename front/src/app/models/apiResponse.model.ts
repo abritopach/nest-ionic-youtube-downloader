@@ -1,4 +1,4 @@
-import { IVideoCheckResponse } from './video.model';
+import { IVideoCheckResponse, IVideoDownloadedData } from './video.model';
 
 /**
  * Description [Interface to define api response.]
@@ -11,5 +11,5 @@ import { IVideoCheckResponse } from './video.model';
 export interface IAPIResponse {
     success: boolean;
     message: string;
-    data: IVideoCheckResponse;
+    data: IVideoCheckResponse | IVideoDownloadedData;
 }
