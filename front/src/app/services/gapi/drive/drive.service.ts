@@ -77,7 +77,7 @@ export class DriveService implements CloudStorageService {
             console.log('token', token);
 
             const metadata = {
-                name: videoInfo.name, // Filename at Google Drive
+                name: `${videoInfo.name}.${videoInfo.mimeType.split('/').pop()}`, // Filename at Google Drive
                 mimeType: videoInfo.mimeType, // mimeType at Google Drive
                 // 'parents': ['### folder ID ###'], // Folder ID at Google Drive
             };
