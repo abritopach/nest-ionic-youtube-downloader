@@ -25,6 +25,7 @@ import { DropboxService } from '@services/dropbox/dropbox.service';
 
 // Utils
 import { convertAudioBlobToBase64, convertBlobToString, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
+import { StorageService } from '@services/storage/storage.service';
 
 @Component({
     selector: 'app-home',
@@ -52,7 +53,8 @@ export class HomePage {
                 private translocoService: TranslocoService,
                 private driveService: DriveService,
                 private loadingCtrl: LoadingController,
-                private dropboxService: DropboxService) {}
+                private dropboxService: DropboxService,
+                private storageService: StorageService) {}
 
     ionViewDidEnter() {
         if (this.dropboxService.hasRedirectedFromAuth()) {
@@ -63,14 +65,16 @@ export class HomePage {
     async uploadToDropbox() {
         this.showLoading();
         await this.dropboxService.getToken();
+        console.log('uploadToDropbox name', await this.storageService.get('name'));
+        console.log('uploadToDropbox mimeType', await this.storageService.get('mimeType'));
         const videoInfo = {
-            name: window.sessionStorage.getItem('name'),
-            file: window.sessionStorage.getItem('file'),
-            mimeType: window.sessionStorage.getItem('mimeType')
+            name: await this.storageService.get('name'), // window.sessionStorage.getItem('name'),
+            file: await this.storageService.get('file'), // window.sessionStorage.getItem('file'),
+            mimeType: await this.storageService.get('mimeType')// window.sessionStorage.getItem('mimeType')
         };
         const [uploadResult, uploadError] = await handlePromise(this.dropboxService.uploadVideoOrAudio(videoInfo));
         console.log('upload dropbox result', uploadResult);
-        window.sessionStorage.clear();
+        // window.sessionStorage.clear();
         this.hideLoading();
     }
 
@@ -106,14 +110,14 @@ export class HomePage {
             { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                this.presentActionSheet({name: checkVideoData.title, file: blob,
-                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                // this.presentActionSheet({name: checkVideoData.title, file: blob,
+                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
-                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
+                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
         }
 
@@ -160,9 +164,12 @@ export class HomePage {
                 icon: 'logo-dropbox',
                 handler: async () => {
                     console.log('Upload to Dropbox clicked', videoInfo);
-                    window.sessionStorage.setItem('file', await convertAudioBlobToBase64(videoInfo.file));
-                    window.sessionStorage.setItem('mimeType', videoInfo.mimeType);
-                    window.sessionStorage.setItem('name', videoInfo.name);
+                    this.storageService.set('file', await convertAudioBlobToBase64(videoInfo.file));
+                    this.storageService.set('mimeType', videoInfo.mimeType);
+                    this.storageService.set('name', videoInfo.name);
+                    //window.sessionStorage.setItem('file', await convertAudioBlobToBase64(videoInfo.file));
+                    //window.sessionStorage.setItem('mimeType', videoInfo.mimeType);
+                    // window.sessionStorage.setItem('name', videoInfo.name);
                     await this.dropboxService.doAuth();
                 }
             },

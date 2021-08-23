@@ -15,14 +15,14 @@ export class StorageService {
   }
 
   public async set(key: string, value: string) {
-    return await this.storage.set(key, value);
+    return this.storage.set(key, value);
   }
 
   public async get(key: string) {
-    return await this.storage.get(key);
+    return this.storage.get(key);
   }
 
   public async remove(key: string) {
-    return await this.storage.remove(key);
+    return this.storage.remove(key);
   }
 }

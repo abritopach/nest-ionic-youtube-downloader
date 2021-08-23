@@ -8,6 +8,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
+import { Storage } from '@ionic/storage';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,7 +20,7 @@ import { TranslocoRootModule } from './transloco/transloco-root.module';
     HttpClientModule,
     TranslocoRootModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Storage],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
