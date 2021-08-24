@@ -2,7 +2,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 // Ionic
-import { ActionSheetController, Animation, AnimationController, LoadingController } from '@ionic/angular';
+import { ActionSheetController, AlertController, Animation, AnimationController, LoadingController } from '@ionic/angular';
 
 // Rxjs
 import { firstValueFrom } from 'rxjs';
@@ -24,7 +24,7 @@ import { DriveService } from '@services/gapi/drive/drive.service';
 import { DropboxService } from '@services/dropbox/dropbox.service';
 
 // Utils
-import { convertAudioBlobToBase64, convertBlobToString, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
+import { convertAudioBlobToBase64, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 import { StorageService } from '@services/storage/storage.service';
 
 @Component({
@@ -54,7 +54,8 @@ export class HomePage {
                 private driveService: DriveService,
                 private loadingCtrl: LoadingController,
                 private dropboxService: DropboxService,
-                private storageService: StorageService) {}
+                private storageService: StorageService,
+                private alertController: AlertController) {}
 
     ionViewDidEnter() {
         if (this.dropboxService.hasRedirectedFromAuth()) {
@@ -65,17 +66,20 @@ export class HomePage {
     async uploadToDropbox() {
         this.showLoading();
         await this.dropboxService.getToken();
-        console.log('uploadToDropbox name', await this.storageService.get('name'));
-        console.log('uploadToDropbox mimeType', await this.storageService.get('mimeType'));
         const videoInfo = {
-            name: await this.storageService.get('name'), // window.sessionStorage.getItem('name'),
-            file: await this.storageService.get('file'), // window.sessionStorage.getItem('file'),
-            mimeType: await this.storageService.get('mimeType')// window.sessionStorage.getItem('mimeType')
+            name: await this.storageService.get('name'),
+            file: await this.storageService.get('file'),
+            mimeType: await this.storageService.get('mimeType')
         };
         const [uploadResult, uploadError] = await handlePromise(this.dropboxService.uploadVideoOrAudio(videoInfo));
         console.log('upload dropbox result', uploadResult);
-        // window.sessionStorage.clear();
+        await this.storageService.remove('name');
+        await this.storageService.remove('mimeType');
+        await this.storageService.remove('file');
         this.hideLoading();
+        if (uploadError) {
+            this.presentAlert({header: 'Upload audio | video to dropbox', message: 'Error uploading audio | video to dropbox'});
+        }
     }
 
     async downloadYoutubeVideo() {
@@ -110,14 +114,14 @@ export class HomePage {
             { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             if (this.videoInfo.format === FormatType.mp4) {
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: blob,
-                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                this.presentActionSheet({name: checkVideoData.title, file: blob,
+                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                // this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
-                // mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
+                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
         }
 
@@ -157,6 +161,9 @@ export class HomePage {
                     const [uploadResult, uploadError] = await handlePromise(this.driveService.uploadVideoOrAudio(videoInfo));
                     console.log('upload drive result', uploadResult);
                     this.hideLoading();
+                    if (uploadError) {
+                        this.presentAlert({header: 'Upload audio | video to google drive', message: 'Error uploading audio | video to google drive'});
+                    }
                 }
             },
             {
@@ -167,9 +174,6 @@ export class HomePage {
                     this.storageService.set('file', await convertAudioBlobToBase64(videoInfo.file));
                     this.storageService.set('mimeType', videoInfo.mimeType);
                     this.storageService.set('name', videoInfo.name);
-                    //window.sessionStorage.setItem('file', await convertAudioBlobToBase64(videoInfo.file));
-                    //window.sessionStorage.setItem('mimeType', videoInfo.mimeType);
-                    // window.sessionStorage.setItem('name', videoInfo.name);
                     await this.dropboxService.doAuth();
                 }
             },
@@ -204,6 +208,15 @@ export class HomePage {
 
     hideLoading() {
         this.loading.dismiss();
+    }
+
+    async presentAlert(alertData: {header: string, message: string}) {
+        const alert = await this.alertController.create({
+            header: alertData.header,
+            message: alertData.message,
+            buttons: ['OK']
+        });
+        await alert.present();
     }
 
 }
