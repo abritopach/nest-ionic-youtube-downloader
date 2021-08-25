@@ -16,11 +16,14 @@ export class YoutubeVideoDownloaderService {
       console.log(audioFormats);
       */
       const {
+        videoDetails: {
+          thumbnails
+        },
         player_response: {
           videoDetails: { title, author },
         },
       } = await ytdl.getBasicInfo(URL);
-      return { status: 'OK', message: 'Youtube video exists!', data: {title, author}};
+      return { status: 'OK', message: 'Youtube video exists!', data: {title, author, thumbnails}};
     } catch (error) {
       console.log('Error', error);
       return { status: 'KO', message: 'Error video does not exist :(', data: null};

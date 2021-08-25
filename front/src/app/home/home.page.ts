@@ -45,6 +45,8 @@ export class HomePage {
     isValidYouTubeVideoUrl = isValidYouTubeVideoUrl;
     isDownloadStarted = false;
     downloadingAnimation: Animation;
+    videoTitle: string = null;
+    thumbnailUrl: string = null;
 
     constructor(private apiService: ApiService,
                 private convertToMp3Service: ConvertToMp3Service,
@@ -90,6 +92,9 @@ export class HomePage {
         ));
         console.log('checkVideoResult', checkVideoResult);
         const checkVideoData = checkVideoResult.data as IVideoCheckResponse;
+
+        this.thumbnailUrl = checkVideoData.thumbnails[checkVideoData.thumbnails.length - 1].url;
+        this.videoTitle = checkVideoData.title;
 
         /*
         const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(

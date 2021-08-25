@@ -12,7 +12,11 @@
             <ion-col size-lg="8" offset-lg="2" size-md="10" offset-md="1">
                 <ion-card>
                     <ion-item lines="none">
-                        <img src="assets/logo.png" width="90" height="90" alt="Youtube downloader logo" />
+                        <img *ngIf="!thumbnailUrl" src="assets/logo.png" width="90" height="90" alt="Youtube downloader logo" />
+                        <img *ngIf="thumbnailUrl" [src]="thumbnailUrl">
+                    </ion-item>
+                    <ion-item *ngIf="thumbnailUrl" lines="none">
+                        <ion-label class="ion-text-center ion-text-wrap"> {{ videoTitle }} </ion-label>
                     </ion-item>
                     <ion-card-content>
                         <ion-toolbar>

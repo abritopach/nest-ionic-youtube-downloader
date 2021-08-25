@@ -16,6 +16,21 @@ export interface IVideoInfo {
 }
 
 /**
+ * Description [Interface to define video thumbnail.]
+ *
+ * @author abrito
+ * @version 0.0.1
+ *
+ * @interface
+ */
+
+interface IThumbnail {
+    width: number;
+    height: number;
+    url: string;
+}
+
+/**
  * Description [Interface to define video check response data.]
  *
  * @author abrito
@@ -27,6 +42,7 @@ export interface IVideoInfo {
 export interface IVideoCheckResponse {
     author: string;
     title: string;
+    thumbnails: IThumbnail[];
 }
 
 /**
