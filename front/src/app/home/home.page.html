@@ -23,7 +23,7 @@
                         <ion-row class="ion-align-items-center">
                             <ion-col size-lg="9" size-md="8" size-sm="12" size-xs="12">
                                 <!-- Searchbar with cancel button always shown -->
-                                <ion-searchbar [(ngModel)]="videoInfo.url" showCancelButton="focus"
+                                <ion-searchbar [(ngModel)]="videoInfo.url" showCancelButton="focus" (ionClear)="onClearSearchHandler()"
                                 placeholder="https://www.youtube.com/watch?v=LKwmdv39Rks"></ion-searchbar>
                                 <ion-item *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)" lines="none" class="error-message">
                                     <ion-label>{{ 'pages.home.validations.errorWrongYoutubeUrl' | transloco }}</ion-label>

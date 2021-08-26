@@ -224,4 +224,10 @@ export class HomePage {
         await alert.present();
     }
 
+    onClearSearchHandler() {
+        console.log('onClickSearchHandler');
+        this.thumbnailUrl = null;
+        this.videoTitle = null;
+    }
+
 }
