@@ -230,4 +230,8 @@ export class HomePage {
         this.videoTitle = null;
     }
 
+    onClickBuyMeCoffeeHandler() {
+        window.open('https://www.buymeacoffee.com/h6WVj4HcD', '_blank');
+    }
+
 }
