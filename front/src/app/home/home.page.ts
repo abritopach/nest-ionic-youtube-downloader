@@ -47,6 +47,7 @@ export class HomePage {
     downloadingAnimation: Animation;
     videoTitle: string = null;
     thumbnailUrl: string = null;
+    isShowInfoClicked = false;
 
     constructor(private apiService: ApiService,
                 private convertToMp3Service: ConvertToMp3Service,
