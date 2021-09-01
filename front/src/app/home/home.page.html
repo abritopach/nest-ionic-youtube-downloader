@@ -4,14 +4,12 @@
             {{ 'pages.home.title' | transloco }}
         </ion-title>
         <ion-buttons slot="end">
-            <ion-button fill="clear" (click)="isShowInfoClicked = !isShowInfoClicked">
+            <ion-button fill="clear" (click)="presentYoutubeDownloaderInfoModal()">
                 <ion-icon slot="icon-only" name="help-circle"></ion-icon>
             </ion-button>
-            <!--
             <ion-button fill="clear" (click)="onClickBuyMeCoffeeHandler()">
                 <img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="width:100px">
             </ion-button>
-            -->
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
@@ -66,7 +64,6 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-    <!--<app-youtube-downloader-info></app-youtube-downloader-info>-->
 </ion-content>
 
 <ion-footer>

@@ -2,7 +2,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 // Ionic
-import { ActionSheetController, AlertController, Animation, AnimationController, LoadingController } from '@ionic/angular';
+import { ActionSheetController, AlertController, Animation, AnimationController, LoadingController,
+    ModalController } from '@ionic/angular';
 
 // Rxjs
 import { firstValueFrom } from 'rxjs';
@@ -27,6 +28,9 @@ import { DropboxService } from '@services/dropbox/dropbox.service';
 import { convertAudioBlobToBase64, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 import { StorageService } from '@services/storage/storage.service';
 
+// Components
+import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
+
 @Component({
     selector: 'app-home',
     templateUrl: 'home.page.html',
@@ -47,7 +51,6 @@ export class HomePage {
     downloadingAnimation: Animation;
     videoTitle: string = null;
     thumbnailUrl: string = null;
-    isShowInfoClicked = false;
 
     constructor(private apiService: ApiService,
                 private convertToMp3Service: ConvertToMp3Service,
@@ -58,7 +61,8 @@ export class HomePage {
                 private loadingCtrl: LoadingController,
                 private dropboxService: DropboxService,
                 private storageService: StorageService,
-                private alertController: AlertController) {}
+                private alertController: AlertController,
+                private modalController: ModalController) {}
 
     ionViewDidEnter() {
         if (this.dropboxService.hasRedirectedFromAuth()) {
@@ -233,6 +237,14 @@ export class HomePage {
 
     onClickBuyMeCoffeeHandler() {
         window.open('https://www.buymeacoffee.com/h6WVj4HcD', '_blank');
+    }
+
+    async presentYoutubeDownloaderInfoModal() {
+        const modal = await this.modalController.create({
+            component: YoutubeDownloaderInfoComponent,
+        });
+        // modal.style.cssText = '--height: 600px;';
+        return await modal.present();
     }
 
 }
