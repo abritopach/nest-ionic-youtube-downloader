@@ -14,6 +14,27 @@
             "validations": {
                 "errorWrongYoutubeUrl": "Wrong youtube video url"
             }
+        },
+        "components": {
+            "info": {
+                "title": "Information about the Youtube Video Downloader",
+                "features": {
+                    "fastTitle": "Fast YouTube Video Downloader to MP3 | MP4 files",
+                    "fastParagraph": "Undoubtedly the fastest mp3 | mp4 video downloader you can find on the Internet.",
+                    "freeTitle": "Free and ad-free Youtube Video Downloader",
+                    "freeParagraph": "Free of charge and without annoying advertisements appearing with every download.",
+                    "noSoftwareTitle": "Download Youtube videos without the need to install any software",
+                    "noSoftwareParagraph": "No need to log in, no need to share your personal information,..."
+                },
+                "steps": {
+                    "selectVideoTitle": "Select a Youtube Video",
+                    "selectVideoParagraph": "Search for your video on Youtube and copy its URL link.",
+                    "pasteLinkTitle": "Paste the Youtube URL link",
+                    "pasteLinkParagraph": "Once you have copied the URL link, paste it into the search input of the downloader.",
+                    "downloadTitle": "Download Youtube video to MP3 | MP4 file",
+                    "downloadParagraph": "Click the download button to start downloading your video in mp3 | mp4 format."
+                }
+            }
         }
     }
 }

@@ -15,5 +15,26 @@
                 "errorWrongYoutubeUrl": "La URL del video de Youtube es incorrecta"
             }
         }
+    },
+    "components": {
+        "info": {
+            "title": "Información acerca del Descargador de Videos de Youtube",
+            "features": {
+                "fastTitle": "Descarga rápido vídeos de YouTube a ficheros MP3 | MP4",
+                "fastParagraph": "Sin duda, el descargador de vídeo mp3 | mp4 más rápido que puedes encontrar en Internet.",
+                "freeTitle": "Descargador de vídeos de Youtube gratuito y sin publicidad",
+                "freeParagraph": "De forma gratuita y sin molestos anuncios que aparecen con cada descarga.",
+                "noSoftwareTitle": "Descarga tu vídeo sin necesidad de instalar ningún software",
+                "noSoftwareParagraph": "Sin necesidad de iniciar sesión, sin necesidad de compartir tu información personal,..."
+            },
+            "steps": {
+                "selectVideoTitle": "Selecciona un video de Youtube",
+                "selectVideoParagraph": "Busca tu vídeo en Youtube y copia su enlace URL.",
+                "pasteLinkTitle": "Pegar el enlace URL de Youtube",
+                "pasteLinkParagraph": "Una vez que hayas copiado el enlace URL, pégalo en el campo de búsqueda del descargador.",
+                "downloadTitle": "Descarga un vídeo de Youtube a un fichero MP3 | MP4",
+                "downloadParagraph": "Haz clic en el botón de descarga para empezar a descargar tu vídeo en formato mp3 | mp4."
+            }
+        }
     }
 }
