@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 
 // Ionic
 import { ActionSheetController, AlertController, Animation, AnimationController, LoadingController,
-    ModalController } from '@ionic/angular';
+    ModalController, PopoverController} from '@ionic/angular';
 
 // Rxjs
 import { firstValueFrom } from 'rxjs';
@@ -30,6 +30,7 @@ import { StorageService } from '@services/storage/storage.service';
 
 // Components
 import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
+import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
 
 @Component({
     selector: 'app-home',
@@ -62,7 +63,8 @@ export class HomePage {
                 private dropboxService: DropboxService,
                 private storageService: StorageService,
                 private alertController: AlertController,
-                private modalController: ModalController) {}
+                private modalController: ModalController,
+                private popoverController: PopoverController) {}
 
     ionViewDidEnter() {
         if (this.dropboxService.hasRedirectedFromAuth()) {
@@ -245,6 +247,17 @@ export class HomePage {
         });
         // modal.style.cssText = '--height: 600px;';
         return await modal.present();
+    }
+
+    async presentMoreOptionsPopover(ev: any) {
+        const popover = await this.popoverController.create({
+            component: MoreOptionsComponent,
+            event: ev,
+            translucent: true
+        });
+        await popover.present();
+        const { data } = await popover.onDidDismiss();
+        console.log('onDidDismiss resolved with data', data);
     }
 
 }

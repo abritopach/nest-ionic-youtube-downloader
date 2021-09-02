@@ -9,6 +9,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { NtkmeButtonModule } from '@ctrl/ngx-github-buttons';
 import { TranslocoModule } from '@ngneat/transloco';
 import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
+import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -18,6 +19,6 @@ import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader
     NtkmeButtonModule,
     TranslocoModule
   ],
-  declarations: [HomePage, YoutubeDownloaderInfoComponent]
+  declarations: [HomePage, YoutubeDownloaderInfoComponent, MoreOptionsComponent]
 })
 export class HomePageModule {}
