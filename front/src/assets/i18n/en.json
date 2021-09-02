@@ -24,7 +24,9 @@
                     "freeTitle": "Free and ad-free Youtube Video Downloader",
                     "freeParagraph": "Free of charge and without annoying advertisements appearing with every download.",
                     "noSoftwareTitle": "Download Youtube videos without the need to install any software",
-                    "noSoftwareParagraph": "No need to log in, no need to share your personal information,..."
+                    "noSoftwareParagraph": "No need to log in, no need to share your personal information,...",
+                    "uploadTitle": "Upload your music or videos to cloud storage",
+                    "uploadParagraph": "Upload your mp3 or mp4 file to your favorite cloud storage service."
                 },
                 "steps": {
                     "selectVideoTitle": "Select a Youtube Video",
@@ -32,7 +34,9 @@
                     "pasteLinkTitle": "Paste the Youtube URL link",
                     "pasteLinkParagraph": "Once you have copied the URL link, paste it into the search input of the downloader.",
                     "downloadTitle": "Download Youtube video to MP3 | MP4 file",
-                    "downloadParagraph": "Click the download button to start downloading your video in mp3 | mp4 format."
+                    "downloadParagraph": "Click the download button to start downloading your video in mp3 | mp4 format.",
+                    "uploadTitle": "Your music and videos always with you",
+                    "uploadParagraph": "In the additional options, select cloud hosting and follow the steps below."
                 }
             }
         }

@@ -25,15 +25,19 @@
                 "freeTitle": "Descargador de vídeos de Youtube gratuito y sin publicidad",
                 "freeParagraph": "De forma gratuita y sin molestos anuncios que aparecen con cada descarga.",
                 "noSoftwareTitle": "Descarga tu vídeo sin necesidad de instalar ningún software",
-                "noSoftwareParagraph": "Sin necesidad de iniciar sesión, sin necesidad de compartir tu información personal,..."
+                "noSoftwareParagraph": "Sin necesidad de iniciar sesión, sin necesidad de compartir tu información personal,...",
+                "uploadTitle": "Sube tu música o vídeos a la nube en un instante",
+                "uploadParagraph": "Sube tu archivo mp3 o mp4 a tu servicio de almacenamiento en la nube favorito."
             },
             "steps": {
                 "selectVideoTitle": "Selecciona un video de Youtube",
                 "selectVideoParagraph": "Busca tu vídeo en Youtube y copia su enlace URL.",
                 "pasteLinkTitle": "Pegar el enlace URL de Youtube",
                 "pasteLinkParagraph": "Una vez que hayas copiado el enlace URL, pégalo en el campo de búsqueda del descargador.",
-                "downloadTitle": "Descarga un vídeo de Youtube a un fichero MP3 | MP4",
-                "downloadParagraph": "Haz clic en el botón de descarga para empezar a descargar tu vídeo en formato mp3 | mp4."
+                "downloadTitle": "Descarga tu vídeo a MP3 | MP4",
+                "downloadParagraph": "Haz clic en el botón de descarga para empezar a descargar tu vídeo en formato mp3 | mp4.",
+                "uploadTitle": "Tu música y tus vídeos siempre contigo",
+                "uploadParagraph": "En las opciones adicionales, seleccione el alojamiento en la nube y siga los siguientes pasos."
             }
         }
     }
