@@ -31,6 +31,7 @@ import { StorageService } from '@services/storage/storage.service';
 // Components
 import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
 import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
+import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
 
 @Component({
     selector: 'app-home',
@@ -250,10 +251,16 @@ export class HomePage {
     }
 
     async presentMoreOptionsPopover(ev: any) {
+        const options: MoreOptionsPopover = [
+            {text: this.translocoService.translate('components.moreOptions.copyrightClaims'), type: MoreOptions.COPYRIGHT_CLAIMS, icon: 'clipboard-outline', show: true}
+        ];
+
+        const componentProps = { popoverProps: { options } };
         const popover = await this.popoverController.create({
             component: MoreOptionsComponent,
             event: ev,
-            translucent: true
+            translucent: true,
+            componentProps
         });
         await popover.present();
         const { data } = await popover.onDidDismiss();

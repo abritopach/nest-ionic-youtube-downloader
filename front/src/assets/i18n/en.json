@@ -38,6 +38,9 @@
                     "uploadTitle": "Your music and videos always with you",
                     "uploadParagraph": "In the additional options, select cloud hosting and follow the steps below."
                 }
+            },
+            "moreOptions": {
+                "copyrightClaims": "Copyright claims"
             }
         }
     }

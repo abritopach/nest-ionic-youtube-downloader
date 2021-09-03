@@ -39,6 +39,9 @@
                 "uploadTitle": "Tu música y tus vídeos siempre contigo",
                 "uploadParagraph": "En las opciones adicionales, seleccione el alojamiento en la nube y siga los siguientes pasos."
             }
+        },
+        "moreOptions": {
+            "copyrightClaims": "Aviso de copyright"
         }
     }
 }
