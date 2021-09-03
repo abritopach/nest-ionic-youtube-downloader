@@ -42,6 +42,10 @@
         },
         "moreOptions": {
             "copyrightClaims": "Aviso de copyright"
+        },
+        "copyrightClaims": {
+            "title": "Reclamaciones de derechos de autor",
+            "information": "<p>Respetamos los derechos de propiedad intelectual de otros y le pedimos que haga lo mismo. No permitimos actividades que infrinjan los derechos de autor y suspenderemos de inmediato el contenido protegido por derechos de autor (servido a través de una dirección web / URL disponible públicamente) para que su plataforma no pueda convertirlo y descargarlo cuando se le notifique amablemente.</p><br><p>Si usted es un creador / propietario de contenido, propietario de derechos de autor o un agente de los mismos y desea deshabilitar el posible uso de nuestra web para convertir sus contenidos disponibles públicamente, envíenos una solicitud por correo electrónico con la información se indica a continuación y pondremos en la lista negra los contenidos en nuestro sistema dentro de las 48 horas.</p><ul><li> Las URL de los contenidos que desea que bloqueemos.</li><li> Una forma de evidencia electrónica o física que muestra que usted tiene los derechos sobre el | los contenidos.</li><li> Información de contacto (número de teléfono o una dirección de correo electrónico válida).</li></ul>"
         }
     }
 }

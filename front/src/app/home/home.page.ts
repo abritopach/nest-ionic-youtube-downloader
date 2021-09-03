@@ -32,6 +32,7 @@ import { StorageService } from '@services/storage/storage.service';
 import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
 import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
 import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
+import { CopyrightClaimsComponent } from '../components/copyright-claims/copyright-claims/copyright-claims.component';
 
 @Component({
     selector: 'app-home',
@@ -265,6 +266,17 @@ export class HomePage {
         await popover.present();
         const { data } = await popover.onDidDismiss();
         console.log('onDidDismiss resolved with data', data);
+
+        if (data?.option.value === MoreOptions.COPYRIGHT_CLAIMS) {
+            this.presentCopyrightClaimsModal();
+        }
+    }
+
+    async presentCopyrightClaimsModal() {
+        const modal = await this.modalController.create({
+            component: CopyrightClaimsComponent,
+        });
+        return await modal.present();
     }
 
 }

@@ -41,6 +41,10 @@
             },
             "moreOptions": {
                 "copyrightClaims": "Copyright claims"
+            },
+            "copyrightClaims": {
+                "title": "Copyright claims",
+                "information": "<p>We respect the intellectual property rights of others and ask you to do the same. We do not permit copyright infringing activities and will immediately suspend copyrighted content (served via a publicly available web address / URL) from being converted and downloaded by your platform when kindly notified. </p><br><p>If you are a content creator / owner, copyright owner or an agent thereof and wish to disable the possible use of our website to convert your publicly available content, please send us an email request with the information below and we will blacklist the content in our system within 48 hours. </p><ul><li> The URLs of the content you wish us to block.</li><li> A form of electronic or physical evidence showing that you have the rights to the content.</li><li> Contact information (phone number or a valid email address).</li></ul>"
             }
         }
     }

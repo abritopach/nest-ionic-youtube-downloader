@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-copyright-claims',
@@ -7,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CopyrightClaimsComponent implements OnInit {
 
-  constructor() { }
+  copyrightClaims = '';
 
-  ngOnInit() {}
+  constructor(private translocoService: TranslocoService) { }
+
+  ngOnInit() {
+    this.copyrightClaims = this.translocoService.translate('components.copyrightClaims.information')
+  }
 
 }
