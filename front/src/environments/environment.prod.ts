@@ -9,8 +9,8 @@ export const environment = {
     scope: 'https://www.googleapis.com/auth/drive'
   },
   dropbox: {
-    clientId: '',
+    clientId: '3yzmoowvh7mnmer',
     clientSecret: '',
-    redirectUri: 'http://localhost:8100'
+    redirectUri: 'https://youtube-video-downloader-kappa.vercel.app'
   }
 };
