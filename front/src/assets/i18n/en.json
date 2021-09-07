@@ -11,6 +11,12 @@
                 "optionUploadDropbox": "Upload to Dropbox",
                 "optionCancel": "Cancel"
             },
+            "alert": {
+                "excludedVideo": {
+                    "title": "Download Youtube Video",
+                    "message": "😓 Sorry, we do not have permission to download this video and it has been excluded from our service."
+                }
+            },
             "validations": {
                 "errorWrongYoutubeUrl": "Wrong youtube video url"
             }

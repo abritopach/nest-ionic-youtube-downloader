@@ -11,6 +11,12 @@
                 "optionUploadDropbox": "Subir a Dropbox",
                 "optionCancel": "Cancelar"
             },
+            "alert": {
+                "excludedVideo": {
+                    "title": "Descargar Video de Youtube",
+                    "message": "😓 Lo sentimos, no tenemos permiso para descargar este video y ha sido excluído de nuestro servicio."
+                }
+            },
             "validations": {
                 "errorWrongYoutubeUrl": "La URL del video de Youtube es incorrecta"
             }

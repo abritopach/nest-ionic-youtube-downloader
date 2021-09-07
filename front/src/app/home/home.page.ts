@@ -25,7 +25,7 @@ import { DriveService } from '@services/gapi/drive/drive.service';
 import { DropboxService } from '@services/dropbox/dropbox.service';
 
 // Utils
-import { convertAudioBlobToBase64, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
+import { convertAudioBlobToBase64, excludedYoutubeVideoUrls, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
 import { StorageService } from '@services/storage/storage.service';
 
 // Components
@@ -95,51 +95,57 @@ export class HomePage {
 
     async downloadYoutubeVideo() {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
+        const condition = (url: string) => url === this.videoInfo.url;
+        if (excludedYoutubeVideoUrls().some(condition)) {
+            this.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'), message: this.translocoService.translate('pages.home.alert.excludedVideo.message')});
+            this.stopDownloadingAnimation();
+        } else {
 
-        const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
-            this.apiService.checkVideo({url: this.videoInfo.url})
-        ));
-        console.log('checkVideoResult', checkVideoResult);
-        const checkVideoData = checkVideoResult.data as IVideoCheckResponse;
+            const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
+                this.apiService.checkVideo({url: this.videoInfo.url})
+            ));
+            console.log('checkVideoResult', checkVideoResult);
+            const checkVideoData = checkVideoResult.data as IVideoCheckResponse;
 
-        this.thumbnailUrl = checkVideoData.thumbnails[checkVideoData.thumbnails.length - 1].url;
-        this.videoTitle = checkVideoData.title;
+            this.thumbnailUrl = checkVideoData.thumbnails[checkVideoData.thumbnails.length - 1].url;
+            this.videoTitle = checkVideoData.title;
 
-        /*
-        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
-            this.apiService.downloadAndConvertVideo(this.videoInfo)
-        ));
-        console.log('downloadVideoResult', downloadVideoResult);
-        const { data: downloadVideoData} = downloadVideoResult;
-        if (downloadVideoData) {
-            const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
-            { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
-            saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-        }
-        */
-
-        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
-            this.apiService.downloadVideo(this.videoInfo)
-        ));
-        console.log('downloadVideoResult', downloadVideoResult);
-        const downloadVideoData = downloadVideoResult.data as IVideoDownloadedData;
-        if (downloadVideoData) {
-            const blob = new Blob([new Uint8Array(downloadVideoData.data)],
-            { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
-            if (this.videoInfo.format === FormatType.mp4) {
+            /*
+            const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
+                this.apiService.downloadAndConvertVideo(this.videoInfo)
+            ));
+            console.log('downloadVideoResult', downloadVideoResult);
+            const { data: downloadVideoData} = downloadVideoResult;
+            if (downloadVideoData) {
+                const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
+                { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
                 saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                this.presentActionSheet({name: checkVideoData.title, file: blob,
-                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
             }
-            else {
-                const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
-                saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
-                this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
-                mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
-            }
-        }
+            */
 
-        this.stopDownloadingAnimation();
+            const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
+                this.apiService.downloadVideo(this.videoInfo)
+            ));
+            console.log('downloadVideoResult', downloadVideoResult);
+            const downloadVideoData = downloadVideoResult.data as IVideoDownloadedData;
+            if (downloadVideoData) {
+                const blob = new Blob([new Uint8Array(downloadVideoData.data)],
+                { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                if (this.videoInfo.format === FormatType.mp4) {
+                    saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
+                    this.presentActionSheet({name: checkVideoData.title, file: blob,
+                    mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                }
+                else {
+                    const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
+                    saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
+                    this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
+                    mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                }
+            }
+
+            this.stopDownloadingAnimation();
+        }
     }
 
     videoFormatChanged(event: any) {

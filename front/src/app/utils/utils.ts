@@ -44,11 +44,13 @@ export const convertBase64ToBlob = (base64Image: string, type: string) => {
 };
 
 export const convertAudioBlobToBase64 = async (audioFile): Promise<string> => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onerror = reject;
-        reader.onload = (e) => {
-            console.log('onvertAudioBlobToBase64', e.target.result);
-            resolve(e.target.result as string);
-        };
-        reader.readAsDataURL(audioFile);
-    });
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = (e) => {
+        console.log('onvertAudioBlobToBase64', e.target.result);
+        resolve(e.target.result as string);
+    };
+    reader.readAsDataURL(audioFile);
+});
+
+export const excludedYoutubeVideoUrls = () => []
