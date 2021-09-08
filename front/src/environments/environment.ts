@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   apiUrlBase: 'http://localhost:3000',
   gapi: {
-    apiKey: '',
-    clientId: '',
+    apiKey: 'zPCc00rsESHzxfA1bQVL5D7N',
+    clientId: '917936509225-euhf9snt83grlbjm8a284g1542d4rk2k.apps.googleusercontent.com',
     discoveryDocs: 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
     scope: 'https://www.googleapis.com/auth/drive'
   },
