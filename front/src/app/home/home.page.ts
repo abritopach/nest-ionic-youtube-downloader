@@ -21,8 +21,8 @@ import { IVideoCheckResponse, IVideoDownloadedData, IVideoInfo } from '@models/v
 // Services
 import { ApiService } from '@services/api/api.service';
 import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
-import { DriveService } from '@services/gapi/drive/drive.service';
-import { DropboxService } from '@services/dropbox/dropbox.service';
+import { DriveService } from '@services/cloud/gapi/drive/drive.service';
+import { DropboxService } from '@services/cloud/dropbox/dropbox.service';
 
 // Utils
 import { convertAudioBlobToBase64, excludedYoutubeVideoUrls, handlePromise, isValidYouTubeVideoUrl } from '@utils/utils';
