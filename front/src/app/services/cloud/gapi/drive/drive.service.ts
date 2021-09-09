@@ -40,9 +40,13 @@ export class DriveService implements CloudStorageService {
                         //const authResponse = gAuth.currentUser.get().getAuthResponse();
                         //console.log('authResponse', authResponse);
                         resolve(oAuthUser.getAuthResponse().access_token);
+                    }).catch((err) => {
+                        console.log('DriveService::getToken error', err);
+                        reject(err);
                     });
                 });
             } catch (e) {
+                console.log('DriveService::getToken error', e);
                 reject(e);
             }
         });

@@ -180,6 +180,7 @@ export class HomePage {
                     await this.showLoading();
                     const [uploadResult, uploadError] = await handlePromise(this.driveService.uploadVideoOrAudio(videoInfo));
                     console.log('upload drive result', uploadResult);
+                    console.log('upload error', uploadError);
                     this.hideLoading();
                     if (uploadError) {
                         this.presentAlert({header: 'Upload audio | video to google drive', message: 'Error uploading audio | video to google drive'});
