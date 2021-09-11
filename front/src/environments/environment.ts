@@ -15,6 +15,13 @@ export const environment = {
     clientId: '3yzmoowvh7mnmer',
     clientSecret: '',
     redirectUri: 'http://localhost:8100'
+  },
+  onedrive: {
+    clientId: '',
+    client_secret: '',
+    redirectUri: 'http://localhost:8100',
+    grant_type: "refresh_token",
+    refresh_token: ''
   }
 };
 

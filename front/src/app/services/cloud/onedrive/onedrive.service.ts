@@ -6,10 +6,13 @@ import { CloudStorageService } from '@models/cloud-storage.model';
 })
 export class OnedriveService implements CloudStorageService {
 
+    private readonly ONEDRIVE_AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+
     constructor() { }
 
     async doAuth() {
-        // TODO: Implement this code.
+        console.log('OnedriveService::doAuth method called');
+
     }
 
     async getToken() {

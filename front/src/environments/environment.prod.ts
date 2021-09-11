@@ -12,5 +12,12 @@ export const environment = {
     clientId: '3yzmoowvh7mnmer',
     clientSecret: '',
     redirectUri: 'https://youtube-video-downloader-kappa.vercel.app'
+  },
+  onedrive: {
+    clientId: '',
+    client_secret: '',
+    redirectUri: 'http://localhost:8100',
+    grant_type: "refresh_token",
+    refresh_token: ''
   }
 };
