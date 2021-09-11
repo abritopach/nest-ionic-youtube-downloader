@@ -9,6 +9,7 @@
                 "header": "Opciones adicionales",
                 "optionUploadDrive": "Subir a Google Drive",
                 "optionUploadDropbox": "Subir a Dropbox",
+                "optionUploadOneDrive": "Subir a OneDrive",
                 "optionCancel": "Cancelar"
             },
             "alert": {

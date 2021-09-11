@@ -34,6 +34,7 @@ from '../components/youtube-downloader-info/youtube-downloader-info/youtube-down
 import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
 import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
 import { CopyrightClaimsComponent } from '../components/copyright-claims/copyright-claims/copyright-claims.component';
+import { OnedriveService } from '@services/cloud/onedrive/onedrive.service';
 
 @Component({
     selector: 'app-home',
@@ -67,7 +68,8 @@ export class HomePage {
                 private storageService: StorageService,
                 private alertController: AlertController,
                 private modalController: ModalController,
-                private popoverController: PopoverController) {}
+                private popoverController: PopoverController,
+                private onedriveService: OnedriveService) {}
 
     ionViewDidEnter() {
         if (this.dropboxService.hasRedirectedFromAuth()) {
@@ -174,7 +176,8 @@ export class HomePage {
     async presentActionSheet(videoInfo?: {name: string; file: Blob; mimeType: string}) {
         const actionSheet = await this.actionSheetController.create({
             header: this.translocoService.translate('pages.home.actionSheet.header'),
-            buttons: [{
+            buttons: [
+            {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDrive'),
                 icon: 'logo-google',
                 handler: async () => {
@@ -201,6 +204,16 @@ export class HomePage {
                     await this.dropboxService.doAuth();
                 }
             },
+            /*
+            {
+                text: this.translocoService.translate('pages.home.actionSheet.optionUploadOneDrive'),
+                icon: 'logo-microsoft',
+                handler: async () => {
+                    console.log('Upload to onedrive clicked', videoInfo);
+                    await this.onedriveService.doAuth();
+                }
+            },
+            */
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',
