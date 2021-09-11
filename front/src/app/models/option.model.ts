@@ -1,4 +1,5 @@
 export enum MoreOptions {
+    /* eslint-disable @typescript-eslint/naming-convention */
     COPYRIGHT_CLAIMS = 'copyright_claims',
 }
 

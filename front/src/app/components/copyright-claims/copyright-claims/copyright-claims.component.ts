@@ -13,7 +13,7 @@ export class CopyrightClaimsComponent implements OnInit {
   constructor(private translocoService: TranslocoService) { }
 
   ngOnInit() {
-    this.copyrightClaims = this.translocoService.translate('components.copyrightClaims.information')
+    this.copyrightClaims = this.translocoService.translate('components.copyrightClaims.information');
   }
 
 }

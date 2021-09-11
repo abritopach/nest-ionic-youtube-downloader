@@ -10,10 +10,6 @@ export class StorageService {
     this.init();
   }
 
-  private async init() {
-    await this.storage.create();
-  }
-
   public async set(key: string, value: string) {
     return this.storage.set(key, value);
   }
@@ -25,4 +21,9 @@ export class StorageService {
   public async remove(key: string) {
     return this.storage.remove(key);
   }
+
+  private async init() {
+    await this.storage.create();
+  }
+
 }

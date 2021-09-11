@@ -53,4 +53,4 @@ export const convertAudioBlobToBase64 = async (audioFile): Promise<string> => ne
     reader.readAsDataURL(audioFile);
 });
 
-export const excludedYoutubeVideoUrls = () => []
+export const excludedYoutubeVideoUrls = () => [];

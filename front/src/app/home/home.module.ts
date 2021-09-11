@@ -8,7 +8,8 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { NtkmeButtonModule } from '@ctrl/ngx-github-buttons';
 import { TranslocoModule } from '@ngneat/transloco';
-import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
+import { YoutubeDownloaderInfoComponent }
+from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
 import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
 import { CopyrightClaimsComponent } from '../components/copyright-claims/copyright-claims/copyright-claims.component';
 @NgModule({

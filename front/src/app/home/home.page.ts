@@ -29,7 +29,8 @@ import { convertAudioBlobToBase64, excludedYoutubeVideoUrls, handlePromise, isVa
 import { StorageService } from '@services/storage/storage.service';
 
 // Components
-import { YoutubeDownloaderInfoComponent } from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
+import { YoutubeDownloaderInfoComponent }
+from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
 import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
 import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
 import { CopyrightClaimsComponent } from '../components/copyright-claims/copyright-claims/copyright-claims.component';
@@ -97,7 +98,8 @@ export class HomePage {
         console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
         const condition = (url: string) => url === this.videoInfo.url;
         if (excludedYoutubeVideoUrls().some(condition)) {
-            this.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'), message: this.translocoService.translate('pages.home.alert.excludedVideo.message')});
+            this.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
+            message: this.translocoService.translate('pages.home.alert.excludedVideo.message')});
             this.stopDownloadingAnimation();
         } else {
 
@@ -183,7 +185,8 @@ export class HomePage {
                     console.log('upload error', uploadError);
                     this.hideLoading();
                     if (uploadError) {
-                        this.presentAlert({header: 'Upload audio | video to google drive', message: 'Error uploading audio | video to google drive'});
+                        this.presentAlert({header: 'Upload audio | video to google drive',
+                        message: 'Error uploading audio | video to google drive'});
                     }
                 }
             },
@@ -231,7 +234,7 @@ export class HomePage {
         this.loading.dismiss();
     }
 
-    async presentAlert(alertData: {header: string, message: string}) {
+    async presentAlert(alertData: {header: string; message: string}) {
         const alert = await this.alertController.create({
             header: alertData.header,
             message: alertData.message,
@@ -260,7 +263,8 @@ export class HomePage {
 
     async presentMoreOptionsPopover(ev: any) {
         const options: MoreOptionsPopover = [
-            {text: this.translocoService.translate('components.moreOptions.copyrightClaims'), type: MoreOptions.COPYRIGHT_CLAIMS, icon: 'clipboard-outline', show: true}
+            {text: this.translocoService.translate('components.moreOptions.copyrightClaims'),
+            type: MoreOptions.COPYRIGHT_CLAIMS, icon: 'clipboard-outline', show: true}
         ];
 
         const componentProps = { popoverProps: { options } };
