@@ -11,6 +11,8 @@ import { environment } from '@environments/environment';
 
 // Utils
 import { QueryStringUtils } from '@utils/querystring.utils';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { catchError, Observable, retry, throwError } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +21,7 @@ export class OnedriveService implements CloudStorageService {
 
     private readonly ONEDRIVE_BASE_AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0';
 
-    constructor() { }
+    constructor(private http: HttpClient) { }
 
     async doAuth() {
         console.log('OnedriveService::doAuth method called');
@@ -36,12 +38,58 @@ export class OnedriveService implements CloudStorageService {
         return !!QueryStringUtils.getCodeFromUrl();
     }
 
-    async getToken() {
-        // TODO: Implement this code.
+
+    getToken() {
+        console.log('OnedriveService::getToken method called');
+        if (this.hasRedirectedFromAuth()) {
+            const code = QueryStringUtils.getCodeFromUrl();
+            const payload = new HttpParams()
+                .set('client_id', environment.onedrive.clientId)
+                .set('scope', 'https://graph.microsoft.com/mail.read')
+                .set('redirect_uri', environment.onedrive.redirectUri)
+                .set('grant_type', 'authorization_code')
+                .set('client_secret', environment.onedrive.clientSecret)
+                .set('code', code);
+            return this.http
+            .post(`${this.ONEDRIVE_BASE_AUTH_URL}/token`, payload)
+            .pipe(
+                retry(3),
+                catchError(this.handleError),
+            );
+        }
     }
 
     uploadVideoOrAudio(videoInfo: {name: string; file: string; mimeType: string}) {
         // TODO: Implement this code.
         return Promise.resolve();
+    }
+
+    /**
+     * Description [This method handles api endpoints errors.]
+     *
+     * @author abrito
+     * @version 0.0.1
+     *
+     * @method
+     * @name handleError
+     * @param error - Api endpoint response error.
+     * @returns {Observable}.
+     */
+
+    handleError(error: HttpErrorResponse) {
+        let errorMessage = 'Unknown error!';
+        if (error.error instanceof ErrorEvent) {
+            // Client-side errors.
+            errorMessage = `Error: ${error.error.message}`;
+            console.log(`Error: ${error.error.message}`);
+        } else {
+            // Server-side errors.
+            // errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+            if (error) {
+                console.error( `Error Code: ${error?.status}\nMessage: ${error?.message}`);
+                errorMessage = `Error: ${error.error?.message}`;
+            }
+        }
+        return throwError(errorMessage);
     }
 }

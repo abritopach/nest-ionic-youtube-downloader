@@ -77,6 +77,7 @@ export class HomePage {
             this.uploadToDropbox();
         } else if (cloudService === 'onedrive' && this.onedriveService.hasRedirectedFromAuth()) {
             console.log('onedrive');
+            // this.onedriveService.getToken().subscribe(response => console.log(response));
         }
     }
 
@@ -208,7 +209,6 @@ export class HomePage {
                     await this.dropboxService.doAuth();
                 }
             },
-            /*
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadOneDrive'),
                 icon: 'logo-microsoft',
@@ -218,7 +218,6 @@ export class HomePage {
                     await this.onedriveService.doAuth();
                 }
             },
-            */
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',

@@ -18,10 +18,10 @@ export const environment = {
   },
   onedrive: {
     clientId: '280f9a20-5628-4370-b49f-bc04fd8e2d0a',
-    client_secret: '',
+    clientSecret: '',
     redirectUri: 'http://localhost:8100',
-    grant_type: "refresh_token",
-    refresh_token: ''
+    grantType: "refresh_token",
+    refreshToken: ''
   }
 };
 
