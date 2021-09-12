@@ -13,7 +13,7 @@ import { IDropboxTokenResonse } from '@models/dropbox.model';
 import { environment } from '@environments/environment';
 
 // Utils
-import { DropboxUtils } from '@utils/dropbox.utils';
+import { QueryStringUtils } from '@utils/querystring.utils';
 import { convertBase64ToBlob } from '@utils/utils';
 import { CloudStorageService } from '@models/cloud-storage.model';
 
@@ -52,7 +52,7 @@ export class DropboxService implements CloudStorageService {
     // If the user was just redirected from authenticating, the urls hash will
     // contain the access token.
     hasRedirectedFromAuth() {
-        return !!DropboxUtils.getCodeFromUrl();
+        return !!QueryStringUtils.getCodeFromUrl();
     }
 
     async getToken() {
@@ -60,7 +60,7 @@ export class DropboxService implements CloudStorageService {
         if (this.hasRedirectedFromAuth()) {
             this.dbxAuth.setCodeVerifier(window.sessionStorage.getItem('codeVerifier'));
             return this.dbxAuth.getAccessTokenFromCode(environment.dropbox.redirectUri,
-                DropboxUtils.getCodeFromUrl())
+                QueryStringUtils.getCodeFromUrl())
                 .then((response) => {
                     console.log('getAccessTokenFromCode response', response);
                     const tokenData = response.result as IDropboxTokenResonse;

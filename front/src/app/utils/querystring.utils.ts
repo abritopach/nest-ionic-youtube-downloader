@@ -1,9 +1,9 @@
 /* This functions below are from the Dropbox SDK examples to retreive the auth token from the query string */
-export class DropboxUtils {
+export class QueryStringUtils {
 
     // Parses the url and gets the access token if it is in the urls hash.
     public static getCodeFromUrl(): string {
-        return DropboxUtils.parseQueryString(window.location.search)['code']?.toString() ?? undefined;
+        return QueryStringUtils.parseQueryString(window.location.search)['code']?.toString() ?? undefined;
     }
 
     private static parseQueryString(str: string) {

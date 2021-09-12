@@ -71,9 +71,12 @@ export class HomePage {
                 private popoverController: PopoverController,
                 private onedriveService: OnedriveService) {}
 
-    ionViewDidEnter() {
-        if (this.dropboxService.hasRedirectedFromAuth()) {
+    async ionViewDidEnter() {
+        const cloudService = await this.storageService.get('cloudService');
+        if (cloudService === 'dropbox' && this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
+        } else if (cloudService === 'onedrive' && this.onedriveService.hasRedirectedFromAuth()) {
+            console.log('onedrive');
         }
     }
 
@@ -198,6 +201,7 @@ export class HomePage {
                 icon: 'logo-dropbox',
                 handler: async () => {
                     console.log('Upload to Dropbox clicked', videoInfo);
+                    this.storageService.set('cloudService', 'dropbox');
                     this.storageService.set('file', await convertAudioBlobToBase64(videoInfo.file));
                     this.storageService.set('mimeType', videoInfo.mimeType);
                     this.storageService.set('name', videoInfo.name);
@@ -210,6 +214,7 @@ export class HomePage {
                 icon: 'logo-microsoft',
                 handler: async () => {
                     console.log('Upload to onedrive clicked', videoInfo);
+                    this.storageService.set('cloudService', 'onedrive');
                     await this.onedriveService.doAuth();
                 }
             },
