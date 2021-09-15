@@ -72,12 +72,10 @@ export class HomePage {
                 private onedriveService: OnedriveService) {}
 
     async ionViewDidEnter() {
+        this.presentActionSheet();
         const cloudService = await this.storageService.get('cloudService');
         if (cloudService === 'dropbox' && this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
-        } else if (cloudService === 'onedrive' && this.onedriveService.hasRedirectedFromAuth()) {
-            console.log('onedrive');
-            // this.onedriveService.getToken().subscribe(response => console.log(response));
         }
     }
 

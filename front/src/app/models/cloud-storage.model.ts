@@ -10,10 +10,11 @@ import { Observable } from 'rxjs';
  */
 
 import { DropboxResponse, files } from 'dropbox';
+import { AuthOneDrive } from './onedrive.model';
 
 export interface CloudStorageService {
     doAuth(): Promise<void> | Promise<gapi.auth2.GoogleAuth>;
-    getToken(): Promise<void> | Promise<string> | Observable<any>;
+    getToken(): Promise<void> | Promise<string> | AuthOneDrive;
     uploadVideoOrAudio(videoInfo: {name: string; file: Blob | string; mimeType: string}):
     Promise<DropboxResponse<files.FileMetadata>> | Promise<any>;
 }
