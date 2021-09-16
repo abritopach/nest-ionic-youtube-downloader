@@ -1,9 +1,9 @@
 // Angular
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
 // Rxjs
-import { BehaviorSubject, catchError, retry, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, retry, throwError, firstValueFrom } from 'rxjs';
 
 // Third parties
 import { MsalService } from '@azure/msal-angular';
@@ -26,19 +26,13 @@ export class OnedriveService implements CloudStorageService {
 
     private readonly ONEDRIVE_BASE_AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0';
     private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive/root/createUploadSession';
+    private readonly ME_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
 
     constructor(private http: HttpClient, private authService: MsalService) { }
 
-    async doAuth() {
+    doAuth() {
         console.log('OnedriveService::doAuth method called');
-        this.authService.loginPopup()
-        .subscribe({
-            next: (result: AuthOneDrive) => {
-                console.log(result.accessToken);
-                this.authenticationState.next(result);
-            },
-            error: (error) => console.log(error)
-        });
+        return this.authService.loginPopup();
     }
 
 
@@ -47,18 +41,36 @@ export class OnedriveService implements CloudStorageService {
         return this.authenticationState.value;
     }
 
-    uploadVideoOrAudio(videoInfo: {name: string; file: string; mimeType: string}) {
+    async uploadVideoOrAudio(videoInfo: {name: string; file: Blob; mimeType: string}) {
 
-        this.http.post(this.ONEDRIVE_GRAPH_ENDPOINT, {
-            headers: {
-                'Authorization': `Bearer ${this.getToken().accessToken}`,
-                'Content-Type': 'application/json',
+        this.doAuth().subscribe({
+            next: (result: AuthOneDrive) => {
+                console.log(result.accessToken);
+                this.authenticationState.next(result);
+                this.me(result.accessToken);
+                const headers = new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${result.accessToken}`
+                });
+                const options = { headers: headers };
+                const payload = {item: {"@microsoft.graph.conflictBehavior": "rename", name: "video.mp4" }};
+
+                return firstValueFrom(this.http.post(this.ONEDRIVE_GRAPH_ENDPOINT, payload, options));
             },
-            body: '{"item": {"@microsoft.graph.conflictBehavior": "rename", "name": "' + videoInfo.name + '"}}'
+            error: (error) => console.log(error)
         });
+    }
 
-        // TODO: Implement this code.
-        return Promise.resolve();
+    me(accessToken: string) {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        });
+        const options = { headers: headers };
+        this.http.get(this.ME_GRAPH_ENDPOINT, options)
+        .subscribe(profile => {
+            console.log(profile);
+        });
     }
 
     /**

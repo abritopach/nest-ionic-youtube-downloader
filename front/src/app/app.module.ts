@@ -12,7 +12,7 @@ import { Storage } from '@ionic/storage';
 
 // Azure.
 import { MsalModule } from '@azure/msal-angular';
-import { PublicClientApplication } from '@azure/msal-browser';
+import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { environment } from '@environments/environment';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -36,7 +36,12 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
         cacheLocation: 'localStorage',
         storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
       }
-    }), null, null)
+    }), {
+      interactionType: InteractionType.Redirect,
+      authRequest: {
+        scopes: ['User.Read', 'Files.ReadWrite', 'Files.ReadWrite.All', 'Sites.ReadWrite.All']
+        }
+    }, null)
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Storage],
   bootstrap: [AppComponent],

@@ -72,7 +72,6 @@ export class HomePage {
                 private onedriveService: OnedriveService) {}
 
     async ionViewDidEnter() {
-        this.presentActionSheet();
         const cloudService = await this.storageService.get('cloudService');
         if (cloudService === 'dropbox' && this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
@@ -207,15 +206,17 @@ export class HomePage {
                     await this.dropboxService.doAuth();
                 }
             },
+            /*
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadOneDrive'),
                 icon: 'logo-microsoft',
                 handler: async () => {
                     console.log('Upload to onedrive clicked', videoInfo);
                     this.storageService.set('cloudService', 'onedrive');
-                    await this.onedriveService.doAuth();
+                    await this.onedriveService.uploadVideoOrAudio(videoInfo);
                 }
             },
+            */
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',
