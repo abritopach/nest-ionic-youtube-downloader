@@ -30,7 +30,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
       auth: {
         clientId: environment.onedrive.clientId,
         authority: environment.onedrive.authority,
-        redirectUri: environment.onedrive.redirectUri
+        redirectUri: environment.onedrive.redirectUri,
       },
       cache: {
         cacheLocation: 'localStorage',
@@ -39,9 +39,14 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     }), {
       interactionType: InteractionType.Redirect,
       authRequest: {
-        scopes: ['User.Read', 'Files.ReadWrite', 'Files.ReadWrite.All', 'Sites.ReadWrite.All']
+        scopes: ['user.read', 'files.readwrite', 'files.readwrite.all', 'sites.readwrite.all']
         }
-    }, null)
+    }, {
+      interactionType: InteractionType.Redirect, // MSAL Interceptor Configuration
+      protectedResourceMap: new Map([
+          ['https://graph.microsoft.com/v1.0/drive', ['files.readwrite', 'files.readwrite.all', 'sites.readwrite.all']]
+      ])
+    })
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Storage],
   bootstrap: [AppComponent],

@@ -25,7 +25,7 @@ export class OnedriveService implements CloudStorageService {
     authenticationState = new BehaviorSubject(<AuthOneDrive>{});
 
     private readonly ONEDRIVE_BASE_AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0';
-    private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive/root/createUploadSession';
+    private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive/root:/sampleFolder/file:/createUploadSession';
     private readonly ME_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
 
     constructor(private http: HttpClient, private authService: MsalService) { }
@@ -53,7 +53,7 @@ export class OnedriveService implements CloudStorageService {
                     'Authorization': `Bearer ${result.accessToken}`
                 });
                 const options = { headers: headers };
-                const payload = {item: {"@microsoft.graph.conflictBehavior": "rename", name: "video.mp4" }};
+                const payload = {"item": {"@microsoft.graph.conflictBehavior": "rename", name: "video.mp4" }};
 
                 return firstValueFrom(this.http.post(this.ONEDRIVE_GRAPH_ENDPOINT, payload, options));
             },
