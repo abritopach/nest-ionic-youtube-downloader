@@ -72,10 +72,21 @@ export class HomePage {
                 private onedriveService: OnedriveService) {}
 
     async ionViewDidEnter() {
+        this.presentActionSheet();
         const cloudService = await this.storageService.get('cloudService');
         if (cloudService === 'dropbox' && this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
         }
+        /*
+        if (cloudService === 'onedrive' && this.onedriveService.hasRedirectedFromAuth()) {
+            const videoInfo = {
+                name: '',
+                file: await this.storageService.get('file'),
+                mimeType: ''
+            };
+            this.onedriveService.uploadVideoOrAudio(videoInfo);
+        }
+        */
     }
 
     async uploadToDropbox() {
@@ -213,7 +224,8 @@ export class HomePage {
                 handler: async () => {
                     console.log('Upload to onedrive clicked', videoInfo);
                     this.storageService.set('cloudService', 'onedrive');
-                    await this.onedriveService.uploadVideoOrAudio(videoInfo);
+                    // await this.onedriveService.uploadVideoOrAudio(videoInfo);
+                    await this.onedriveService.doAuth();
                 }
             },
             */

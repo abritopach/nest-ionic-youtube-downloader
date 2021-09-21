@@ -14,7 +14,7 @@ import { AuthOneDrive } from './onedrive.model';
 
 export interface CloudStorageService {
     doAuth(): Promise<void> | Promise<gapi.auth2.GoogleAuth> | Observable<any>;
-    getToken(): Promise<void> | Promise<string> | AuthOneDrive;
+    getToken(): Promise<void> | Promise<string> | Promise<any> | AuthOneDrive;
     uploadVideoOrAudio(videoInfo: {name: string; file: Blob | string; mimeType: string}):
     Promise<DropboxResponse<files.FileMetadata>> | Promise<any>;
 }

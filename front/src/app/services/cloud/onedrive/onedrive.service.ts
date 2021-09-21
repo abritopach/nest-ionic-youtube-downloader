@@ -16,6 +16,7 @@ import { AuthOneDrive } from '@models/onedrive.model';
 
 // Environments.
 import { environment } from '@environments/environment';
+import { QueryStringUtils } from '@utils/querystring.utils';
 
 @Injectable({
     providedIn: 'root'
@@ -25,24 +26,65 @@ export class OnedriveService implements CloudStorageService {
     authenticationState = new BehaviorSubject(<AuthOneDrive>{});
 
     private readonly ONEDRIVE_BASE_AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0';
-    private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive/root:/sampleFolder/file:/createUploadSession';
+    private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive/root:/video.mp4:/createUploadSession';
     private readonly ME_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
 
     constructor(private http: HttpClient, private authService: MsalService) { }
 
-    doAuth() {
+    async doAuth() {
         console.log('OnedriveService::doAuth method called');
-        return this.authService.loginPopup();
+        // const scope = 'onedrive.readonly onedrive.readwrite onedrive.appfolder';
+        // const authUrl = `https://login.live.com/oauth20_authorize.srf?client_id=${environment.onedrive.clientId}&scope=${scope}&response_type=code&redirect_uri=${environment.onedrive.redirectUri}`;
+        const scope = 'files.readwrite files.readwrite.all sites.readwrite.all';
+        const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${environment.onedrive.clientId}&scope=${scope}&response_type=code&redirect_uri=${environment.onedrive.redirectUri}&state=12345&code_challenge=9qT4F-vJx-R2UATBzaT2AoQp7QiVKcn3FI1gs5KQVhc&code_challenge_method=S256`;
+        console.log('authUrl', authUrl);
+        window.location.href = authUrl.toString();
+        // return this.authService.loginPopup();
+    }
+
+    // If the user was just redirected from authenticating, the urls hash will
+    // contain the access token.
+    hasRedirectedFromAuth() {
+        return !!QueryStringUtils.getCodeFromUrl();
     }
 
 
-    getToken() {
+    async getToken() {
         console.log('OnedriveService::getToken method called');
-        return this.authenticationState.value;
+        if (this.hasRedirectedFromAuth()) {
+            const payload = new HttpParams()
+                .set('client_id', environment.onedrive.clientId)
+                .set('redirect_uri', environment.onedrive.redirectUri)
+                .set('scope', 'files.readwrite files.readwrite.all sites.readwrite.all')
+                //.set('client_secret', encodeURI(environment.onedrive.clientSecret))
+                .set('code', QueryStringUtils.getCodeFromUrl())
+                .set('grant_type', 'authorization_code')
+                .set('code_verifier', 'esto es una prueba');
+
+            // firstValueFrom(this.http.post('https://login.live.com/oauth20_token.srf', payload))
+            return firstValueFrom(this.http.post('https://login.microsoftonline.com/common/oauth2/v2.0/token', payload))
+        }
+        //return this.authenticationState.value;
     }
 
     async uploadVideoOrAudio(videoInfo: {name: string; file: Blob; mimeType: string}) {
 
+        const token = await this.getToken();
+
+        if (token) {
+            console.log('token', token);
+
+            const headers = new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token['access_token']}`
+            });
+            const options = { headers: headers };
+            const payload = {"item": {"@microsoft.graph.conflictBehavior": "rename", name: "video.mp4" }};
+
+            return firstValueFrom(this.http.post(this.ONEDRIVE_GRAPH_ENDPOINT, payload, options));
+        }
+
+        /*
         this.doAuth().subscribe({
             next: (result: AuthOneDrive) => {
                 console.log(result.accessToken);
@@ -59,6 +101,7 @@ export class OnedriveService implements CloudStorageService {
             },
             error: (error) => console.log(error)
         });
+        */
     }
 
     me(accessToken: string) {
