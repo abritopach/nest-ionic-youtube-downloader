@@ -10,13 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { TranslocoRootModule } from './transloco/transloco-root.module';
 import { Storage } from '@ionic/storage';
 
-// Azure.
-import { MsalModule } from '@azure/msal-angular';
-import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
-import { environment } from '@environments/environment';
-
-const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -25,28 +18,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    TranslocoRootModule,
-    MsalModule.forRoot( new PublicClientApplication({
-      auth: {
-        clientId: environment.onedrive.clientId,
-        authority: environment.onedrive.authority,
-        redirectUri: environment.onedrive.redirectUri,
-      },
-      cache: {
-        cacheLocation: 'localStorage',
-        storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
-      }
-    }), {
-      interactionType: InteractionType.Redirect,
-      authRequest: {
-        scopes: ['user.read', 'files.readwrite', 'files.readwrite.all', 'sites.readwrite.all']
-        }
-    }, {
-      interactionType: InteractionType.Redirect, // MSAL Interceptor Configuration
-      protectedResourceMap: new Map([
-          ['https://graph.microsoft.com/v1.0/drive', ['files.readwrite', 'files.readwrite.all', 'sites.readwrite.all']]
-      ])
-    })
+    TranslocoRootModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, Storage],
   bootstrap: [AppComponent],

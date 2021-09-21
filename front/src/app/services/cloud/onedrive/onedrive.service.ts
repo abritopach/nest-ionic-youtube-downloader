@@ -3,10 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 
 // Rxjs
-import { BehaviorSubject, catchError, retry, throwError, firstValueFrom } from 'rxjs';
-
-// Third parties
-import { MsalService } from '@azure/msal-angular';
+import { throwError, firstValueFrom } from 'rxjs';
 
 /* Project */
 
@@ -23,13 +20,11 @@ import { QueryStringUtils } from '@utils/querystring.utils';
 })
 export class OnedriveService implements CloudStorageService {
 
-    authenticationState = new BehaviorSubject(<AuthOneDrive>{});
-
     private readonly ONEDRIVE_BASE_AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0';
     private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive/root:/video.mp4:/createUploadSession';
     private readonly ME_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
 
-    constructor(private http: HttpClient, private authService: MsalService) { }
+    constructor(private http: HttpClient) { }
 
     async doAuth() {
         console.log('OnedriveService::doAuth method called');
@@ -39,7 +34,6 @@ export class OnedriveService implements CloudStorageService {
         const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${environment.onedrive.clientId}&scope=${scope}&response_type=code&redirect_uri=${environment.onedrive.redirectUri}&state=12345&code_challenge=9qT4F-vJx-R2UATBzaT2AoQp7QiVKcn3FI1gs5KQVhc&code_challenge_method=S256`;
         console.log('authUrl', authUrl);
         window.location.href = authUrl.toString();
-        // return this.authService.loginPopup();
     }
 
     // If the user was just redirected from authenticating, the urls hash will
@@ -64,7 +58,6 @@ export class OnedriveService implements CloudStorageService {
             // firstValueFrom(this.http.post('https://login.live.com/oauth20_token.srf', payload))
             return firstValueFrom(this.http.post('https://login.microsoftonline.com/common/oauth2/v2.0/token', payload))
         }
-        //return this.authenticationState.value;
     }
 
     async uploadVideoOrAudio(videoInfo: {name: string; file: Blob; mimeType: string}) {
@@ -83,25 +76,6 @@ export class OnedriveService implements CloudStorageService {
 
             return firstValueFrom(this.http.post(this.ONEDRIVE_GRAPH_ENDPOINT, payload, options));
         }
-
-        /*
-        this.doAuth().subscribe({
-            next: (result: AuthOneDrive) => {
-                console.log(result.accessToken);
-                this.authenticationState.next(result);
-                this.me(result.accessToken);
-                const headers = new HttpHeaders({
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${result.accessToken}`
-                });
-                const options = { headers: headers };
-                const payload = {"item": {"@microsoft.graph.conflictBehavior": "rename", name: "video.mp4" }};
-
-                return firstValueFrom(this.http.post(this.ONEDRIVE_GRAPH_ENDPOINT, payload, options));
-            },
-            error: (error) => console.log(error)
-        });
-        */
     }
 
     me(accessToken: string) {
