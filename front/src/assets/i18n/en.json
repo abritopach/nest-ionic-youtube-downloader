@@ -16,6 +16,10 @@
                 "excludedVideo": {
                     "title": "Download Youtube Video",
                     "message": "😓 Sorry, we do not have permission to download this video and it has been excluded from our service."
+                },
+                "uploadVideo": {
+                    "title": "Upload audio | video to {{service}}",
+                    "erroMessage": "Error uploading audio | video to {{service}}"
                 }
             },
             "validations": {

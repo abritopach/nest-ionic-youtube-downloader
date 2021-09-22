@@ -96,7 +96,8 @@ export class HomePage {
         await this.storageService.remove('file');
         this.hideLoading();
         if (uploadError) {
-            this.presentAlert({header: 'Upload audio | video to dropbox', message: 'Error uploading audio | video to dropbox'});
+            this.presentAlert({header: this.translocoService.translate('pages.home.alert.uploadVideo.title', { service: 'dropbox' }),
+            message:  this.translocoService.translate('pages.home.alert.uploadVideo.errorMessage', { service: 'dropbox' })});
         }
     }
 
@@ -114,7 +115,8 @@ export class HomePage {
         await this.storageService.remove('file');
         this.hideLoading();
         if (uploadError) {
-            this.presentAlert({header: 'Upload audio | video to onedrive', message: 'Error uploading audio | video to onedrive'});
+            this.presentAlert({header: this.translocoService.translate('pages.home.alert.uploadVideo.title', { service: 'onedrive' }),
+            message:  this.translocoService.translate('pages.home.alert.uploadVideo.errorMessage', { service: 'onedrive' })});
         }
     }
 
