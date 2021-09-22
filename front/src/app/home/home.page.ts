@@ -72,21 +72,13 @@ export class HomePage {
                 private onedriveService: OnedriveService) {}
 
     async ionViewDidEnter() {
-        this.presentActionSheet();
         const cloudService = await this.storageService.get('cloudService');
         if (cloudService === 'dropbox' && this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
         }
-        /*
         if (cloudService === 'onedrive' && this.onedriveService.hasRedirectedFromAuth()) {
-            const videoInfo = {
-                name: '',
-                file: await this.storageService.get('file'),
-                mimeType: ''
-            };
-            this.onedriveService.uploadVideoOrAudio(videoInfo);
+            this.uploadToOneDrive();
         }
-        */
     }
 
     async uploadToDropbox() {
@@ -105,6 +97,24 @@ export class HomePage {
         this.hideLoading();
         if (uploadError) {
             this.presentAlert({header: 'Upload audio | video to dropbox', message: 'Error uploading audio | video to dropbox'});
+        }
+    }
+
+    async uploadToOneDrive() {
+        this.showLoading();
+        const videoInfo = {
+            name: await this.storageService.get('name'),
+            file: await this.storageService.get('file'),
+            mimeType: await this.storageService.get('mimeType')
+        };
+        const [uploadResult, uploadError] = await handlePromise(this.onedriveService.uploadVideoOrAudio(videoInfo));
+        console.log('upload onedrive result', uploadResult);
+        await this.storageService.remove('name');
+        await this.storageService.remove('mimeType');
+        await this.storageService.remove('file');
+        this.hideLoading();
+        if (uploadError) {
+            this.presentAlert({header: 'Upload audio | video to onedrive', message: 'Error uploading audio | video to onedrive'});
         }
     }
 
@@ -217,18 +227,18 @@ export class HomePage {
                     await this.dropboxService.doAuth();
                 }
             },
-            /*
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadOneDrive'),
                 icon: 'logo-microsoft',
                 handler: async () => {
                     console.log('Upload to onedrive clicked', videoInfo);
                     this.storageService.set('cloudService', 'onedrive');
-                    // await this.onedriveService.uploadVideoOrAudio(videoInfo);
+                    this.storageService.set('file', await convertAudioBlobToBase64(videoInfo.file));
+                    this.storageService.set('mimeType', videoInfo.mimeType);
+                    this.storageService.set('name', videoInfo.name);
                     await this.onedriveService.doAuth();
                 }
             },
-            */
             {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',

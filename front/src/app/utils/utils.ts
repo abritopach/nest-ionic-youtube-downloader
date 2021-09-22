@@ -53,4 +53,14 @@ export const convertAudioBlobToBase64 = async (audioFile): Promise<string> => ne
     reader.readAsDataURL(audioFile);
 });
 
+export const convertBlobToArrayBuffer = async (blob: Blob): Promise<ArrayBuffer> => {
+    if ('arrayBuffer' in blob) return blob.arrayBuffer();
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as ArrayBuffer);
+        reader.onerror = () => reject;
+        reader.readAsArrayBuffer(blob);
+    });
+}
+
 export const excludedYoutubeVideoUrls = () => [];

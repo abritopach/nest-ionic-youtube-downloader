@@ -14,7 +14,7 @@ import { AuthOneDrive, UploadSessionOneDrive } from '@models/onedrive.model';
 // Environments.
 import { environment } from '@environments/environment';
 import { QueryStringUtils } from '@utils/querystring.utils';
-import { handlePromise } from '@utils/utils';
+import { convertBase64ToBlob, convertBlobToArrayBuffer, handlePromise } from '@utils/utils';
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +22,7 @@ import { handlePromise } from '@utils/utils';
 export class OnedriveService implements CloudStorageService {
 
     private readonly ONEDRIVE_BASE_AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0';
-    private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive/root:/video.mp4:/createUploadSession';
+    private readonly ONEDRIVE_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/drive';
     private readonly ME_GRAPH_ENDPOINT = 'https://graph.microsoft.com/v1.0/me';
 
     constructor(private http: HttpClient) { }
@@ -55,11 +55,18 @@ export class OnedriveService implements CloudStorageService {
         }
     }
 
-    async uploadVideoOrAudio(videoInfo: {name: string; file: Blob; mimeType: string}) {
+    async uploadVideoOrAudio(videoInfo: {name: string; file: string; mimeType: string}) {
         const [token, tokenError] = await handlePromise(this.getToken());
         if (token) {
             console.log('token', token);
-            return firstValueFrom(this.createUploadSession(token.access_token));
+            const [uploadSession, uploadSessionError] = await handlePromise(firstValueFrom(this.createUploadSession(token.access_token, videoInfo)));
+            console.log('uploadSession', uploadSession);
+
+            const blobFile = convertBase64ToBlob(videoInfo.file,videoInfo. mimeType);
+            const arrayBuffer = await convertBlobToArrayBuffer(blobFile);
+            console.log('arrayBuffer', arrayBuffer);
+
+            return firstValueFrom(this.uploadFile(uploadSession.uploadUrl, arrayBuffer));
         }
     }
 
@@ -84,17 +91,32 @@ export class OnedriveService implements CloudStorageService {
         );
     }
 
-    createUploadSession(token: string): Observable<UploadSessionOneDrive> {
+    createUploadSession(token: string, videoInfo: {name: string; file: string; mimeType: string}): Observable<UploadSessionOneDrive> {
 
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         });
         const options = { headers: headers };
-        const payload = {"item": {"@microsoft.graph.conflictBehavior": "rename", name: "video.mp4" }};
+        const payload = {"item": {"@microsoft.graph.conflictBehavior": "rename", name: `${videoInfo.name}.${videoInfo.mimeType.split('/').pop()}` }};
 
         return this.http
-        .post<UploadSessionOneDrive>(this.ONEDRIVE_GRAPH_ENDPOINT, payload, options)
+        .post<UploadSessionOneDrive>(`${this.ONEDRIVE_GRAPH_ENDPOINT}/root:/${videoInfo.name}.${videoInfo.mimeType.split('/').pop()}:/createUploadSession`, payload, options)
+        .pipe(
+            retry(3),
+            catchError(this.handleError),
+        );
+    }
+
+    uploadFile(uploadUrl: string, arrayBuffer: ArrayBuffer) {
+
+        const headers = new HttpHeaders({
+            'Content-Length': arrayBuffer.byteLength.toString(),
+        });
+        const options = { headers: headers };
+
+        return this.http
+        .put<any>(uploadUrl, arrayBuffer, options)
         .pipe(
             retry(3),
             catchError(this.handleError),
