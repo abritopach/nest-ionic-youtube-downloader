@@ -20,7 +20,8 @@ export const environment = {
     clientId: '280f9a20-5628-4370-b49f-bc04fd8e2d0a',
     clientSecret: '',
     redirectUri: 'http://localhost:8100',
-    authority: 'https://login.microsoftonline.com/common'
+    authority: 'https://login.microsoftonline.com/common',
+    scope: 'files.readwrite files.readwrite.all sites.readwrite.all'
   }
 };
 
