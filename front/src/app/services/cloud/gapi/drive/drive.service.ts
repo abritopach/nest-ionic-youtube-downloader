@@ -34,9 +34,7 @@ export class DriveService implements CloudStorageService {
         return new Promise((resolve, reject) => {
             try {
                 this.doAuth().then(gAuth => {
-                    console.log('gAuth', gAuth);
                     gAuth.signIn({prompt: 'consent'}).then(oAuthUser => {
-                        console.log('user basic profile', oAuthUser.getBasicProfile());
                         //const authResponse = gAuth.currentUser.get().getAuthResponse();
                         //console.log('authResponse', authResponse);
                         resolve(oAuthUser.getAuthResponse().access_token);
@@ -78,8 +76,6 @@ export class DriveService implements CloudStorageService {
         const token = await this.getToken();
 
         if (token) {
-            console.log('token', token);
-
             const metadata = {
                 name: `${videoInfo.name}.${videoInfo.mimeType.split('/').pop()}`, // Filename at Google Drive
                 mimeType: videoInfo.mimeType, // mimeType at Google Drive

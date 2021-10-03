@@ -21,7 +21,6 @@ export class ConvertToMp3Service {
 
             // Convert array buffer into audio buffer.
             audioContext.decodeAudioData(arrayBuffer, (audioBuffer) => {
-                console.log(audioBuffer);
                 const mp3Blob = this.audioBufferToWav(audioBuffer);
                 resolve(mp3Blob);
             });

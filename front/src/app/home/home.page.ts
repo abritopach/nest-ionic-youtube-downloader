@@ -90,7 +90,6 @@ export class HomePage {
             mimeType: await this.storageService.get('mimeType')
         };
         const [uploadResult, uploadError] = await handlePromise(this.dropboxService.uploadVideoOrAudio(videoInfo));
-        console.log('upload dropbox result', uploadResult);
         await this.storageService.remove('name');
         await this.storageService.remove('mimeType');
         await this.storageService.remove('file');
@@ -109,7 +108,6 @@ export class HomePage {
             mimeType: await this.storageService.get('mimeType')
         };
         const [uploadResult, uploadError] = await handlePromise(this.onedriveService.uploadVideoOrAudio(videoInfo));
-        console.log('upload onedrive result', uploadResult);
         await this.storageService.remove('name');
         await this.storageService.remove('mimeType');
         await this.storageService.remove('file');
@@ -121,7 +119,6 @@ export class HomePage {
     }
 
     async downloadYoutubeVideo() {
-        console.log('HomePage::downloadYoutubeVideo method called', this.videoInfo);
         const condition = (url: string) => url === this.videoInfo.url;
         if (excludedYoutubeVideoUrls().some(condition)) {
             this.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
@@ -132,7 +129,6 @@ export class HomePage {
             const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
                 this.apiService.checkVideo({url: this.videoInfo.url})
             ));
-            console.log('checkVideoResult', checkVideoResult);
             const checkVideoData = checkVideoResult.data as IVideoCheckResponse;
 
             this.thumbnailUrl = checkVideoData.thumbnails[checkVideoData.thumbnails.length - 1].url;
@@ -142,7 +138,6 @@ export class HomePage {
             const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
                 this.apiService.downloadAndConvertVideo(this.videoInfo)
             ));
-            console.log('downloadVideoResult', downloadVideoResult);
             const { data: downloadVideoData} = downloadVideoResult;
             if (downloadVideoData) {
                 const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
@@ -154,7 +149,6 @@ export class HomePage {
             const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
                 this.apiService.downloadVideo(this.videoInfo)
             ));
-            console.log('downloadVideoResult', downloadVideoResult);
             const downloadVideoData = downloadVideoResult.data as IVideoDownloadedData;
             if (downloadVideoData) {
                 const blob = new Blob([new Uint8Array(downloadVideoData.data)],
@@ -177,7 +171,6 @@ export class HomePage {
     }
 
     videoFormatChanged(event: any) {
-        console.log('HomePage::videoFormatChanged method called', event.detail.value);
         this.videoInfo.format = event.detail.value;
     }
 
@@ -205,11 +198,8 @@ export class HomePage {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDrive'),
                 icon: 'logo-google',
                 handler: async () => {
-                    console.log('Upload to Google Drive clicked', videoInfo);
                     await this.showLoading();
                     const [uploadResult, uploadError] = await handlePromise(this.driveService.uploadVideoOrAudio(videoInfo));
-                    console.log('upload drive result', uploadResult);
-                    console.log('upload error', uploadError);
                     this.hideLoading();
                     if (uploadError) {
                         this.presentAlert({header: 'Upload audio | video to google drive',
@@ -221,7 +211,6 @@ export class HomePage {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadDropbox'),
                 icon: 'logo-dropbox',
                 handler: async () => {
-                    console.log('Upload to Dropbox clicked', videoInfo);
                     this.storageService.set('cloudService', 'dropbox');
                     this.storageService.set('file', await convertAudioBlobToBase64(videoInfo.file));
                     this.storageService.set('mimeType', videoInfo.mimeType);
@@ -233,7 +222,6 @@ export class HomePage {
                 text: this.translocoService.translate('pages.home.actionSheet.optionUploadOneDrive'),
                 icon: 'logo-microsoft',
                 handler: async () => {
-                    console.log('Upload to onedrive clicked', videoInfo);
                     this.storageService.set('cloudService', 'onedrive');
                     this.storageService.set('file', await convertAudioBlobToBase64(videoInfo.file));
                     this.storageService.set('mimeType', videoInfo.mimeType);
@@ -245,15 +233,12 @@ export class HomePage {
                 text: this.translocoService.translate('pages.home.actionSheet.optionCancel'),
                 icon: 'close',
                 role: 'cancel',
-                handler: () => {
-                    console.log('Cancel clicked');
-                }
+                handler: () => {}
             }]
             });
         await actionSheet.present();
 
         const { role } = await actionSheet.onDidDismiss();
-        console.log('onDidDismiss resolved with role', role);
     }
 
     async showLoading() {
@@ -284,7 +269,6 @@ export class HomePage {
     }
 
     onClearSearchHandler() {
-        console.log('onClickSearchHandler');
         this.thumbnailUrl = null;
         this.videoTitle = null;
     }
@@ -316,7 +300,6 @@ export class HomePage {
         });
         await popover.present();
         const { data } = await popover.onDidDismiss();
-        console.log('onDidDismiss resolved with data', data);
 
         if (data?.option.value === MoreOptions.COPYRIGHT_CLAIMS) {
             this.presentCopyrightClaimsModal();

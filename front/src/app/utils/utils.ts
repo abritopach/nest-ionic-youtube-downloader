@@ -20,7 +20,6 @@ export const sha256 = async (message: string) => {
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     // convert bytes to hex string
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    console.log('hashHex', hashHex);
     return hashHex;
 };
 
@@ -47,7 +46,6 @@ export const convertAudioBlobToBase64 = async (audioFile): Promise<string> => ne
     const reader = new FileReader();
     reader.onerror = reject;
     reader.onload = (e) => {
-        console.log('onvertAudioBlobToBase64', e.target.result);
         resolve(e.target.result as string);
     };
     reader.readAsDataURL(audioFile);

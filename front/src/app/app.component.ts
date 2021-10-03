@@ -9,8 +9,6 @@ import { getBrowserLang, TranslocoService } from '@ngneat/transloco';
 export class AppComponent {
   constructor(private translocoService: TranslocoService) {
     let currentLanguage = getBrowserLang();
-    console.log('currentLanguage', currentLanguage);
-    console.log(this.translocoService.getAvailableLangs());
     const availableLangs = this.translocoService.getAvailableLangs() as string[];
     if (!availableLangs.includes(currentLanguage)) {
       currentLanguage = 'en';
