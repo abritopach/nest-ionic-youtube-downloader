@@ -28,7 +28,7 @@
     "crypto-browserify": "^3.12.0",
     "dropbox": "^10.28.0",
     "file-saver": "^2.0.5",
-    "lamejs": "^1.2.1",
+    "lamejs": "git+https://github.com/abritopach/lamejs.git",
     "rxjs": "^7.5.5",
     "stream-browserify": "^3.0.0",
     "tslib": "^2.4.0",

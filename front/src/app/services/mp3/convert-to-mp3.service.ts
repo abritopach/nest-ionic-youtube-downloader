@@ -7,8 +7,6 @@ import * as lamejs from 'lamejs';
 })
 export class ConvertToMp3Service {
 
-    constructor() { }
-
     convertToMP3(blob: Blob): Promise<Blob> {
 
         return new Promise((resolve, reject) => {
