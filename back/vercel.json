@@ -1,5 +1,6 @@
 {
     "version": 2,
+    "name": "nest-youtube-downloader",
     "builds": [
         {
             "src": "src/main.ts",
