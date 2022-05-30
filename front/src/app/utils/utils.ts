@@ -11,6 +11,12 @@ export const isValidYouTubeVideoUrl = (url: string) => {
     return url.match(youtubeRegExp);
 };
 
+export const isAYoutubePlaylistUrl = (url: string) => {
+    const youtubePlaylistRegExp =
+    /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com)\/.*\?.*\blist=.*$/;
+    return url.match(youtubePlaylistRegExp);
+}
+
 export const sha256 = async (message: string) => {
     // encode as UTF-8
     const msgBuffer = new TextEncoder().encode(message);

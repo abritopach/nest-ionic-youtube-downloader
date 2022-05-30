@@ -41,10 +41,10 @@
                                 </ion-item>
                             </ion-col>
                             <ion-col size-lg="3" size-md="4" size-sm="12" size-xs="12">
-                                <ion-button expand="block" [color]="isDownloadStarted ? 'tertiary' : 'secondary'" size="small"
+                                <ion-button class="ion-text-wrap" expand="block" [color]="isDownloadStarted ? 'tertiary' : 'secondary'" size="small"
                                 (click)="startDownloadingAnimation(); downloadYoutubeVideo()" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url) || isDownloadStarted">
                                     <ion-icon #downloadingIcon slot="start" [name]="isDownloadStarted ? 'reload' : 'cloud-download'"></ion-icon>
-                                    {{ 'pages.home.buttonDownload' | transloco }}
+                                    {{ isYoutubePlaylistUrl(videoInfo.url) ? ('pages.home.buttonDownloadPlaylist' | transloco) : ('pages.home.buttonDownload' | transloco) }}
                                 </ion-button>
                                 <ion-item lines="none" *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)"></ion-item>
                             </ion-col>
