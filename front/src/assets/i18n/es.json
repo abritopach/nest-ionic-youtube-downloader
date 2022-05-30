@@ -3,6 +3,7 @@
         "home": {
             "title": "Youtube Video Downloader",
             "buttonDownload": "Descargar",
+            "buttonDownloadPlaylist": "Descargar playlist",
             "labelMp3": "MP3",
             "labelMp4": "MP4",
             "actionSheet": {
