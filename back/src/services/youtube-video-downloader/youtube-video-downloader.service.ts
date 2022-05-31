@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { VideoInfoDto } from '../../dtos/video-info.dto';
 import ytdl = require('ytdl-core');
 import ffmpeg = require('fluent-ffmpeg');
+import ytpl = require('ytpl');
 
 @Injectable()
 export class YoutubeVideoDownloaderService {
@@ -55,6 +56,17 @@ export class YoutubeVideoDownloaderService {
         reject({ status: 'KO', message: error.message, data: null});
       }
     })
+  }
+
+  async downloadYoutubePlaylist(videoInfoDto: VideoInfoDto) {
+    console.log('YoutubeVideoDownloaderService::downloadYoutubePlaylist method called');
+    try {
+      const playlist = await ytpl('UU_aEa8K-EOJ3D6gOs7HcyNg');
+      return { status: 'OK', message: 'Youtube playlist exists!', data: {playlist}};
+    } catch (error) {
+      console.log('Error', error);
+      return { status: 'KO', message: 'Error playlist does not exist :(', data: null};
+    }
   }
 
   async downloadConvertYoutubeVideo(videoInfoDto: VideoInfoDto) {

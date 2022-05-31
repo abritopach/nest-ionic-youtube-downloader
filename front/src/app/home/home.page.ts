@@ -171,6 +171,20 @@ export class HomePage {
         }
     }
 
+    async downloadYoutubePlaylist() {
+        const [downloadPlaylistResult, downloadPlaylistError] = await handlePromise(firstValueFrom(
+            this.apiService.downloadPlaylist(this.videoInfo)
+        ));
+        console.log('downloadYoutubePlaylist downloadPlaylistResult', downloadPlaylistResult);
+        console.log('downloadYoutubePlaylist downloadPlaylistError', downloadPlaylistError);
+
+        const playlistData = downloadPlaylistResult.data['playlist'] as IVideoCheckResponse;
+
+        this.thumbnailUrl = playlistData.thumbnails[playlistData.thumbnails.length - 1].url;
+        this.videoTitle = playlistData.title;
+        this.stopDownloadingAnimation();
+    }
+
     videoFormatChanged(event: any) {
         this.videoInfo.format = event.detail.value;
     }
