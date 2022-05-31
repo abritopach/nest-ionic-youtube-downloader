@@ -14,6 +14,14 @@ export class YoutubeVideoDownloaderController {
     return this.youtubeVideoDownloaderService.checkYoutubeVideo(URL);
   }
 
+  @Post('download-playlist')
+  async downloadYoutubePlaylist(@Body() videoInfoDto: VideoInfoDto) {
+    console.log('videoInfo', videoInfoDto);
+    return await this.youtubeVideoDownloaderService.downloadYoutubePlaylist(
+      videoInfoDto,
+    );
+  }
+
   @Post('download')
   async downloadYoutubeVideo(@Body() videoInfoDto: VideoInfoDto) {
     console.log('videoInfo', videoInfoDto);

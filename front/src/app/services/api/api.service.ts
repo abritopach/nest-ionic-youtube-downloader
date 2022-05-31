@@ -58,6 +58,27 @@ export class ApiService {
     }
 
     /**
+     * Description [This method call download playlist api endpoint.]
+     *
+     * @author abrito
+     * @version 0.0.1
+     *
+     * @method
+     * @name downloadVideo
+     * @param
+     * @returns {Observable}.
+     */
+
+    downloadPlaylist(payload: IVideoInfo): Observable<IAPIResponse> {
+        return this.http
+        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/download-playlist`, payload)
+        .pipe(
+            retry(3),
+            catchError(this.handleError),
+        );
+    }
+
+    /**
      * Description [This method call download and convert video api endpoint.]
      *
      * @author abrito
