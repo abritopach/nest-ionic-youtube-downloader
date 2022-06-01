@@ -21,6 +21,10 @@
                 "uploadVideo": {
                     "title": "Upload audio | video to {{service}}",
                     "erroMessage": "Error uploading audio | video to {{service}}"
+                },
+                "downloadPlaylist": {
+                    "title": "Download Youtube Playlist",
+                    "message": "Are you sure you have downloaded all the items in the playlist? This task can be time-consuming ⌛"
                 }
             },
             "validations": {
