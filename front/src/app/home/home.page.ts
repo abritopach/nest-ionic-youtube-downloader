@@ -16,7 +16,7 @@ import { TranslocoService } from '@ngneat/transloco';
 
 // Models
 import { ACCEPT_MIME_TYPES, FormatType } from '@models/format.model';
-import { IVideoCheckResponse, IVideoDownloadedData, IVideoInfo } from '@models/video.model';
+import { IVideoCheckResponse, IVideoDownloadedData, IVideoInfo, YoutubePlaylistResponse } from '@models/video.model';
 
 // Services
 import { ApiService } from '@services/api/api.service';
@@ -119,8 +119,8 @@ export class HomePage {
         }
     }
 
-    async downloadYoutubeVideo() {
-        const condition = (url: string) => url === this.videoInfo.url;
+    async downloadYoutubeVideo(videoInfo: IVideoInfo) {
+        const condition = (url: string) => url === videoInfo.url;
         if (excludedYoutubeVideoUrls().some(condition)) {
             this.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
             message: this.translocoService.translate('pages.home.alert.excludedVideo.message')});
@@ -128,7 +128,7 @@ export class HomePage {
         } else {
 
             const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
-                this.apiService.checkVideo({url: this.videoInfo.url})
+                this.apiService.checkVideo({url: videoInfo.url})
             ));
             const checkVideoData = checkVideoResult.data as IVideoCheckResponse;
 
@@ -137,33 +137,33 @@ export class HomePage {
 
             /*
             const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
-                this.apiService.downloadAndConvertVideo(this.videoInfo)
+                this.apiService.downloadAndConvertVideo(videoInfo)
             ));
             const { data: downloadVideoData} = downloadVideoResult;
             if (downloadVideoData) {
                 const blob = new Blob([new Uint8Array(downloadVideoData['data'])],
-                { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
-                saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
+                { type: ACCEPT_MIME_TYPES.get(videoInfo.format)});
+                saveAs(blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
             }
             */
 
             const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
-                this.apiService.downloadVideo(this.videoInfo)
+                this.apiService.downloadVideo(videoInfo)
             ));
             const downloadVideoData = downloadVideoResult.data as IVideoDownloadedData;
             if (downloadVideoData) {
                 const blob = new Blob([new Uint8Array(downloadVideoData.data)],
-                { type: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
-                if (this.videoInfo.format === FormatType.mp4) {
-                    saveAs(blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
+                { type: ACCEPT_MIME_TYPES.get(videoInfo.format)});
+                if (videoInfo.format === FormatType.mp4) {
+                    saveAs(blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
                     this.presentActionSheet({name: checkVideoData.title, file: blob,
-                    mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                    mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
                 }
                 else {
                     const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
-                    saveAs(mp3Blob, `${checkVideoData.title}.${this.videoInfo.format.toLocaleLowerCase()}`);
+                    saveAs(mp3Blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
                     this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
-                    mimeType: ACCEPT_MIME_TYPES.get(this.videoInfo.format)});
+                    mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
                 }
             }
 
@@ -171,17 +171,31 @@ export class HomePage {
         }
     }
 
-    async downloadYoutubePlaylist() {
+    async downloadYoutubePlaylist(videoInfo: IVideoInfo) {
         const [downloadPlaylistResult, downloadPlaylistError] = await handlePromise(firstValueFrom(
-            this.apiService.downloadPlaylist(this.videoInfo)
+            this.apiService.downloadPlaylist(videoInfo)
         ));
         console.log('downloadYoutubePlaylist downloadPlaylistResult', downloadPlaylistResult);
         console.log('downloadYoutubePlaylist downloadPlaylistError', downloadPlaylistError);
 
-        const playlistData = downloadPlaylistResult.data['playlist'] as IVideoCheckResponse;
+        const playlistData = downloadPlaylistResult.data as YoutubePlaylistResponse;
 
-        this.thumbnailUrl = playlistData.thumbnails[playlistData.thumbnails.length - 1].url;
-        this.videoTitle = playlistData.title;
+        this.thumbnailUrl = playlistData.playlist.thumbnails[playlistData.playlist.thumbnails.length - 1].url;
+        this.videoTitle = playlistData.playlist.title;
+
+        this.presentAlert({header: this.translocoService.translate('pages.home.alert.downloadPlaylist.title'),
+        message:  this.translocoService.translate('pages.home.alert.downloadPlaylist.message')});
+
+        /*
+        playlistData.playlist.items.forEach(async (item) => {
+            const videoInfo: IVideoInfo = {
+                url: item.shortUrl,
+                format: FormatType.mp3
+            };
+            await this.downloadYoutubeVideo(videoInfo);
+        });
+        */
+
         this.stopDownloadingAnimation();
     }
 

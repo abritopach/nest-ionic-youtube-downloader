@@ -61,7 +61,8 @@ export class YoutubeVideoDownloaderService {
   async downloadYoutubePlaylist(videoInfoDto: VideoInfoDto) {
     console.log('YoutubeVideoDownloaderService::downloadYoutubePlaylist method called');
     try {
-      const playlist = await ytpl('UU_aEa8K-EOJ3D6gOs7HcyNg');
+      const urlParams = new URLSearchParams(videoInfoDto.url);
+      const playlist = await ytpl(urlParams.get('list'));
       return { status: 'OK', message: 'Youtube playlist exists!', data: {playlist}};
     } catch (error) {
       console.log('Error', error);

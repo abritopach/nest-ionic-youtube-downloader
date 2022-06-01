@@ -42,7 +42,7 @@
                             </ion-col>
                             <ion-col size-lg="3" size-md="4" size-sm="12" size-xs="12">
                                 <ion-button class="ion-text-wrap" expand="block" [color]="isDownloadStarted ? 'tertiary' : 'secondary'" size="small"
-                                (click)="startDownloadingAnimation(); isYoutubePlaylistUrl(videoInfo.url) ? downloadYoutubePlaylist() : downloadYoutubeVideo()" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url) || isDownloadStarted">
+                                (click)="startDownloadingAnimation(); isYoutubePlaylistUrl(videoInfo.url) ? downloadYoutubePlaylist(videoInfo) : downloadYoutubeVideo(videoInfo)" [disabled]="videoInfo.url === '' || !isValidYouTubeVideoUrl(videoInfo.url) || isDownloadStarted">
                                     <ion-icon #downloadingIcon slot="start" [name]="isDownloadStarted ? 'reload' : 'cloud-download'"></ion-icon>
                                     {{ isYoutubePlaylistUrl(videoInfo.url) ? ('pages.home.buttonDownloadPlaylist' | transloco) : ('pages.home.buttonDownload' | transloco) }}
                                 </ion-button>
