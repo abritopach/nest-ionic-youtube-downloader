@@ -21,6 +21,10 @@
                 "uploadVideo": {
                     "title": "Subir audio | video a {{service}}",
                     "erroMessage": "😓 Error subiendo audio | video a {{service}}"
+                },
+                "downloadPlaylist": {
+                    "title": "Descargar Playlist de Youtube",
+                    "message": "¿Estás seguro de descargar todos los elementos de la playlist? Esta tarea puede requerir tiempo ⌛"
                 }
             },
             "validations": {
