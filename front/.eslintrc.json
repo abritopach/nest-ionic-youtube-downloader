@@ -1,11 +1,15 @@
 {
   "root": true,
   "ignorePatterns": ["projects/**/*"],
+  "globals": {
+    "__dirname": true
+  },
   "overrides": [
     {
       "files": ["*.ts"],
       "parserOptions": {
         "project": ["tsconfig.json", "e2e/tsconfig.json"],
+        "tsconfigRootDir": "front",
         "createDefaultProgram": true
       },
       "extends": [

@@ -1,13 +1,19 @@
 export interface AuthOneDrive {
-    token_type: "Bearer";
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    token_type: 'Bearer';
     scope: string;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     expires_in: number;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     ext_expires_in: number;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     access_token: string;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     refresh_token: string;
 }
 
 export interface UploadSessionOneDrive {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     '@odata.context': string;
     expirationDateTime: Date;
     nextExpectedRanges: string[];
