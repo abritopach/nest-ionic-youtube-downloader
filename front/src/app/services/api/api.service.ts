@@ -2,8 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { IAPIResponse } from '@models/apiResponse.model';
-import { IVideoInfo } from '@models/video.model';
+import { ApiResponse } from '@models/apiResponse.model';
+import { VideoInfo } from '@models/video.model';
 import { environment } from '@environments/environment';
 
 @Injectable({
@@ -27,9 +27,9 @@ export class ApiService {
      * @returns {Observable}.
      */
 
-    checkVideo(payload: {url: string}): Observable<IAPIResponse> {
+    checkVideo(payload: {url: string}): Observable<ApiResponse> {
         return this.http
-        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/check-video`, payload)
+        .post<ApiResponse>(`${this.apiUrlBase}/youtube-video-downloader/check-video`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
@@ -48,9 +48,9 @@ export class ApiService {
      * @returns {Observable}.
      */
 
-    downloadVideo(payload: IVideoInfo): Observable<IAPIResponse> {
+    downloadVideo(payload: VideoInfo): Observable<ApiResponse> {
         return this.http
-        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/download`, payload)
+        .post<ApiResponse>(`${this.apiUrlBase}/youtube-video-downloader/download`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
@@ -69,9 +69,9 @@ export class ApiService {
      * @returns {Observable}.
      */
 
-    downloadPlaylist(payload: IVideoInfo): Observable<IAPIResponse> {
+    downloadPlaylist(payload: VideoInfo): Observable<ApiResponse> {
         return this.http
-        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/download-playlist`, payload)
+        .post<ApiResponse>(`${this.apiUrlBase}/youtube-video-downloader/download-playlist`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
@@ -90,9 +90,9 @@ export class ApiService {
      * @returns {Observable}.
      */
 
-    downloadAndConvertVideo(payload: IVideoInfo): Observable<IAPIResponse> {
+    downloadAndConvertVideo(payload: VideoInfo): Observable<ApiResponse> {
         return this.http
-        .post<IAPIResponse>(`${this.apiUrlBase}/youtube-video-downloader/downloadAndConvert`, payload)
+        .post<ApiResponse>(`${this.apiUrlBase}/youtube-video-downloader/downloadAndConvert`, payload)
         .pipe(
             retry(3),
             catchError(this.handleError),
