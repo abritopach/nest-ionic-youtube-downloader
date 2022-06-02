@@ -16,7 +16,7 @@ import { TranslocoService } from '@ngneat/transloco';
 
 // Models
 import { ACCEPT_MIME_TYPES, FormatType } from '@models/format.model';
-import { IVideoCheckResponse, IVideoDownloadedData, IVideoInfo, YoutubePlaylistResponse } from '@models/video.model';
+import { VideoCheckResponse, VideoDownloadedData, VideoInfo, YoutubePlaylistResponse } from '@models/video.model';
 
 // Services
 import { ApiService } from '@services/api/api.service';
@@ -46,7 +46,7 @@ export class HomePage {
     @ViewChild('downloadingIcon', { read: ElementRef }) downloadingIcon: ElementRef;
     currentYear = new Date().getFullYear();
     format = FormatType;
-    videoInfo: IVideoInfo = {
+    videoInfo: VideoInfo = {
         url: '',
         format: FormatType.mp3
     };
@@ -119,7 +119,7 @@ export class HomePage {
         }
     }
 
-    async downloadYoutubeVideo(videoInfo: IVideoInfo) {
+    async downloadYoutubeVideo(videoInfo: VideoInfo) {
         const condition = (url: string) => url === videoInfo.url;
         if (excludedYoutubeVideoUrls().some(condition)) {
             this.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
@@ -130,7 +130,7 @@ export class HomePage {
             const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
                 this.apiService.checkVideo({url: videoInfo.url})
             ));
-            const checkVideoData = checkVideoResult.data as IVideoCheckResponse;
+            const checkVideoData = checkVideoResult.data as VideoCheckResponse;
 
             this.thumbnailUrl = checkVideoData.thumbnails[checkVideoData.thumbnails.length - 1].url;
             this.videoTitle = checkVideoData.title;
@@ -150,7 +150,7 @@ export class HomePage {
             const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
                 this.apiService.downloadVideo(videoInfo)
             ));
-            const downloadVideoData = downloadVideoResult.data as IVideoDownloadedData;
+            const downloadVideoData = downloadVideoResult.data as VideoDownloadedData;
             if (downloadVideoData) {
                 const blob = new Blob([new Uint8Array(downloadVideoData.data)],
                 { type: ACCEPT_MIME_TYPES.get(videoInfo.format)});
@@ -171,7 +171,7 @@ export class HomePage {
         }
     }
 
-    async downloadYoutubePlaylist(videoInfo: IVideoInfo) {
+    async downloadYoutubePlaylist(videoInfo: VideoInfo) {
         const [downloadPlaylistResult, downloadPlaylistError] = await handlePromise(firstValueFrom(
             this.apiService.downloadPlaylist(videoInfo)
         ));

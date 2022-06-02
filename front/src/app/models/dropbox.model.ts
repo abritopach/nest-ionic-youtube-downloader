@@ -6,7 +6,7 @@
  * @version 0.0.1
  */
 
-export interface IDropboxTokenResonse {
+export interface DropboxTokenResonse {
     /* eslint-disable @typescript-eslint/naming-convention */
     access_token: string;
     account_id: string;

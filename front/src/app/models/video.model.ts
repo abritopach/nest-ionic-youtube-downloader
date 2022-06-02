@@ -9,7 +9,7 @@ import { FormatType } from './format.model';
  * @interface
  */
 
-export interface IVideoInfo {
+export interface VideoInfo {
     url: string;
     format: FormatType;
     quality?: string;
@@ -24,7 +24,7 @@ export interface IVideoInfo {
  * @interface
  */
 
-interface IThumbnail {
+interface Thumbnail {
     width: number;
     height: number;
     url: string;
@@ -39,10 +39,10 @@ interface IThumbnail {
  * @interface
  */
 
-export interface IVideoCheckResponse {
+export interface VideoCheckResponse {
     author: string;
     title: string;
-    thumbnails: IThumbnail[];
+    thumbnails: Thumbnail[];
 }
 
 /**
@@ -54,7 +54,7 @@ export interface IVideoCheckResponse {
  * @interface
  */
 
-export interface IVideoDownloadedData {
+export interface VideoDownloadedData {
     type: 'Buffer';
     data: number[];
 }
@@ -70,12 +70,6 @@ export interface IVideoDownloadedData {
 
 export interface YoutubePlaylistResponse {
     playlist: Playlist;
-}
-
-export interface Thumbnail {
-    url: string;
-    width: number;
-    height: number;
 }
 
 export interface BestThumbnail {

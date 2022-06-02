@@ -11,11 +11,11 @@ export enum MoreOptions {
  *
  */
 
-export interface IOption {
+export interface Option {
     text: string;
     type: MoreOptions;
     icon: string;
     show: boolean;
 }
 
-export type MoreOptionsPopover = IOption[];
+export type MoreOptionsPopover = Option[];

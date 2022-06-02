@@ -7,7 +7,7 @@ import { Dropbox, DropboxAuth } from 'dropbox';
 /* Project */
 
 // Models
-import { IDropboxTokenResonse } from '@models/dropbox.model';
+import { DropboxTokenResonse } from '@models/dropbox.model';
 
 // Environments
 import { environment } from '@environments/environment';
@@ -54,7 +54,7 @@ export class DropboxService implements CloudStorageService {
             return this.dbxAuth.getAccessTokenFromCode(environment.dropbox.redirectUri,
                 QueryStringUtils.getCodeFromUrl())
                 .then((response) => {
-                    const tokenData = response.result as IDropboxTokenResonse;
+                    const tokenData = response.result as DropboxTokenResonse;
                     this.dbxAuth.setAccessToken(tokenData.access_token);
                 })
                 .catch((error) => {
