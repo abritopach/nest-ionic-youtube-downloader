@@ -25,7 +25,8 @@ import { DriveService } from '@services/cloud/gapi/drive/drive.service';
 import { DropboxService } from '@services/cloud/dropbox/dropbox.service';
 
 // Utils
-import { convertAudioBlobToBase64, excludedYoutubeVideoUrls, handlePromise, isAYoutubePlaylistUrl, isValidYouTubeVideoUrl } from '@utils/utils';
+import { convertAudioBlobToBase64, excludedYoutubeVideoUrls, handlePromise,
+    isAYoutubePlaylistUrl, isValidYouTubeVideoUrl } from '@utils/utils';
 import { StorageService } from '@services/storage/storage.service';
 
 // Components
