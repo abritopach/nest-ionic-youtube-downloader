@@ -13,7 +13,7 @@ BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules 
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2020",
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "paths": {
