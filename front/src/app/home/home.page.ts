@@ -36,6 +36,7 @@ import { MoreOptionsComponent } from '../components/more-options/more-options/mo
 import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
 import { CopyrightClaimsComponent } from '../components/copyright-claims/copyright-claims/copyright-claims.component';
 import { OnedriveService } from '@services/cloud/onedrive/onedrive.service';
+import { AlertService } from '@services/alert/alert.service';
 
 @Component({
     selector: 'app-home',
@@ -68,10 +69,10 @@ export class HomePage {
                 private loadingCtrl: LoadingController,
                 private dropboxService: DropboxService,
                 private storageService: StorageService,
-                private alertController: AlertController,
                 private modalController: ModalController,
                 private popoverController: PopoverController,
-                private onedriveService: OnedriveService) {}
+                private onedriveService: OnedriveService,
+                private alertService: AlertService) {}
 
     async ionViewDidEnter() {
         const cloudService = await this.storageService.get('cloudService');
@@ -97,7 +98,8 @@ export class HomePage {
         await this.storageService.remove('file');
         this.hideLoading();
         if (uploadError) {
-            this.presentAlert({header: this.translocoService.translate('pages.home.alert.uploadVideo.title', { service: 'dropbox' }),
+            this.alertService.presentAlert(
+                {header: this.translocoService.translate('pages.home.alert.uploadVideo.title', { service: 'dropbox' }),
             message:  this.translocoService.translate('pages.home.alert.uploadVideo.errorMessage', { service: 'dropbox' })});
         }
     }
@@ -115,7 +117,8 @@ export class HomePage {
         await this.storageService.remove('file');
         this.hideLoading();
         if (uploadError) {
-            this.presentAlert({header: this.translocoService.translate('pages.home.alert.uploadVideo.title', { service: 'onedrive' }),
+            this.alertService.presentAlert(
+                {header: this.translocoService.translate('pages.home.alert.uploadVideo.title', { service: 'onedrive' }),
             message:  this.translocoService.translate('pages.home.alert.uploadVideo.errorMessage', { service: 'onedrive' })});
         }
     }
@@ -123,7 +126,7 @@ export class HomePage {
     async downloadYoutubeVideo(videoInfo: VideoInfo) {
         const condition = (url: string) => url === videoInfo.url;
         if (excludedYoutubeVideoUrls().some(condition)) {
-            this.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
+            this.alertService.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
             message: this.translocoService.translate('pages.home.alert.excludedVideo.message')});
             this.stopDownloadingAnimation();
         } else {
@@ -184,9 +187,15 @@ export class HomePage {
         this.thumbnailUrl = playlistData.playlist.thumbnails[playlistData.playlist.thumbnails.length - 1].url;
         this.videoTitle = playlistData.playlist.title;
 
-        this.presentAlert({header: this.translocoService.translate('pages.home.alert.downloadPlaylist.title'),
-        message:  this.translocoService.translate('pages.home.alert.downloadPlaylist.message')});
+        await this.alertService.presentAlertConfirm(
+            {header: this.translocoService.translate('pages.home.alert.downloadPlaylist.title'),
+        message:  this.translocoService.translate('pages.home.alert.downloadPlaylist.message')},
+        this,
+        this.downloadAllVideosFromPlaylist);
+    }
 
+    downloadAllVideosFromPlaylist() {
+        console.log('downloadAllVideosFromPaylist');
         /*
         playlistData.playlist.items.forEach(async (item) => {
             const videoInfo: IVideoInfo = {
@@ -232,7 +241,7 @@ export class HomePage {
                     const [uploadResult, uploadError] = await handlePromise(this.driveService.uploadVideoOrAudio(videoInfo));
                     this.hideLoading();
                     if (uploadError) {
-                        this.presentAlert({header: 'Upload audio | video to google drive',
+                        this.alertService.presentAlert({header: 'Upload audio | video to google drive',
                         message: 'Error uploading audio | video to google drive'});
                     }
                 }
@@ -287,15 +296,6 @@ export class HomePage {
 
     hideLoading() {
         this.loading.dismiss();
-    }
-
-    async presentAlert(alertData: {header: string; message: string}) {
-        const alert = await this.alertController.create({
-            header: alertData.header,
-            message: alertData.message,
-            buttons: ['OK']
-        });
-        await alert.present();
     }
 
     onClearSearchHandler() {
