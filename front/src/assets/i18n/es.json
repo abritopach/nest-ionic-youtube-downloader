@@ -24,7 +24,7 @@
                 },
                 "downloadPlaylist": {
                     "title": "Descargar Playlist de Youtube",
-                    "message": "¿Estás seguro de descargar todos los elementos de la playlist? Esta tarea puede requerir tiempo ⌛"
+                    "message": "¿Estás seguro de descargar los {{items}} elementos de esta playlist? Esta tarea puede requerir tiempo ⌛"
                 }
             },
             "validations": {

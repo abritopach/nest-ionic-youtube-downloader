@@ -189,7 +189,8 @@ export class HomePage {
 
         await this.alertService.presentAlertConfirm(
             {header: this.translocoService.translate('pages.home.alert.downloadPlaylist.title'),
-        message:  this.translocoService.translate('pages.home.alert.downloadPlaylist.message')},
+        message:  this.translocoService.translate('pages.home.alert.downloadPlaylist.message',
+        { items: playlistData.playlist.items.length })},
         this,
         this.downloadAllVideosFromPlaylist);
     }
