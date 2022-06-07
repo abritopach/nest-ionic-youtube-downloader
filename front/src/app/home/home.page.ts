@@ -59,6 +59,7 @@ export class HomePage {
     downloadingAnimation: Animation;
     videoTitle: string = null;
     thumbnailUrl: string = null;
+    playlistData: YoutubePlaylistResponse;
 
     constructor(private apiService: ApiService,
                 private convertToMp3Service: ConvertToMp3Service,
@@ -182,30 +183,27 @@ export class HomePage {
         console.log('downloadYoutubePlaylist downloadPlaylistResult', downloadPlaylistResult);
         console.log('downloadYoutubePlaylist downloadPlaylistError', downloadPlaylistError);
 
-        const playlistData = downloadPlaylistResult.data as YoutubePlaylistResponse;
+        this.playlistData = downloadPlaylistResult.data as YoutubePlaylistResponse;
 
-        this.thumbnailUrl = playlistData.playlist.thumbnails[playlistData.playlist.thumbnails.length - 1].url;
-        this.videoTitle = playlistData.playlist.title;
+        this.thumbnailUrl = this.playlistData.playlist.thumbnails[this.playlistData.playlist.thumbnails.length - 1].url;
+        this.videoTitle = this.playlistData.playlist.title;
 
         await this.alertService.presentAlertConfirm(
             {header: this.translocoService.translate('pages.home.alert.downloadPlaylist.title'),
         message:  this.translocoService.translate('pages.home.alert.downloadPlaylist.message',
-        { items: playlistData.playlist.items.length })},
+        { items: this.playlistData.playlist.items.length })},
         this,
         this.downloadAllVideosFromPlaylist);
     }
 
     downloadAllVideosFromPlaylist() {
-        console.log('downloadAllVideosFromPaylist');
-        /*
-        playlistData.playlist.items.forEach(async (item) => {
-            const videoInfo: IVideoInfo = {
+        this.playlistData.playlist.items.forEach(async (item) => {
+            const videoInfo: VideoInfo = {
                 url: item.shortUrl,
                 format: FormatType.mp3
             };
             await this.downloadYoutubeVideo(videoInfo);
         });
-        */
 
         this.stopDownloadingAnimation();
     }
