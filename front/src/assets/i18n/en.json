@@ -24,7 +24,7 @@
                 },
                 "downloadPlaylist": {
                     "title": "Download Youtube Playlist",
-                    "message": "Are you sure you have downloaded all the items in the playlist? This task can be time-consuming ⌛"
+                    "message": "Are you sure you have downloaded the {{items}} items in this playlist? This task can be time-consuming ⌛"
                 }
             },
             "validations": {
