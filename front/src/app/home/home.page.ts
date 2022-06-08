@@ -167,12 +167,16 @@ export class HomePage {
                 else {
                     const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                     saveAs(mp3Blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
-                    this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
-                    mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
+                    if (!this.isYoutubePlaylistUrl(this.videoInfo.url)) {
+                        this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
+                        mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
+                    }
                 }
             }
 
-            this.stopDownloadingAnimation();
+            if (!this.isYoutubePlaylistUrl(this.videoInfo.url)) {
+                this.stopDownloadingAnimation();
+            }
         }
     }
 
@@ -197,15 +201,19 @@ export class HomePage {
     }
 
     downloadAllVideosFromPlaylist() {
-        this.playlistData.playlist.items.forEach(async (item) => {
+        const playlistPromises = [];
+        this.playlistData.playlist.items.forEach((item) => {
             const videoInfo: VideoInfo = {
                 url: item.shortUrl,
                 format: FormatType.mp3
             };
-            await this.downloadYoutubeVideo(videoInfo);
+            playlistPromises.push(this.downloadYoutubeVideo(videoInfo));
         });
 
-        this.stopDownloadingAnimation();
+        Promise.all(playlistPromises)
+        .then(() => {
+            this.stopDownloadingAnimation();
+        });
     }
 
     videoFormatChanged(event: any) {
