@@ -124,23 +124,15 @@ export class HomePage {
         }
     }
 
-    async downloadYoutubeVideo(videoInfo: VideoInfo) {
-        const condition = (url: string) => url === videoInfo.url;
-        if (excludedYoutubeVideoUrls().some(condition)) {
-            this.alertService.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
-            message: this.translocoService.translate('pages.home.alert.excludedVideo.message')});
-            this.stopDownloadingAnimation();
-        } else {
+    async checkVideo(videoInfo: VideoInfo) {
+        const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
+            this.apiService.checkVideo({url: videoInfo.url})
+        ));
+        return checkVideoResult.data as VideoCheckResponse;
+    }
 
-            const [checkVideoResult, checkVideoError] = await handlePromise(firstValueFrom(
-                this.apiService.checkVideo({url: videoInfo.url})
-            ));
-            const checkVideoData = checkVideoResult.data as VideoCheckResponse;
-
-            this.thumbnailUrl = checkVideoData.thumbnails[checkVideoData.thumbnails.length - 1].url;
-            this.videoTitle = checkVideoData.title;
-
-            /*
+    async downloadVideo(videoInfo: VideoInfo, checkVideoData: VideoCheckResponse) {
+        /*
             const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
                 this.apiService.downloadAndConvertVideo(videoInfo)
             ));
@@ -151,28 +143,40 @@ export class HomePage {
                 saveAs(blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
             }
             */
-
-            const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
-                this.apiService.downloadVideo(videoInfo)
-            ));
-            const downloadVideoData = downloadVideoResult.data as VideoDownloadedData;
-            if (downloadVideoData) {
-                const blob = new Blob([new Uint8Array(downloadVideoData.data)],
-                { type: ACCEPT_MIME_TYPES.get(videoInfo.format)});
-                if (videoInfo.format === FormatType.mp4) {
-                    saveAs(blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
-                    this.presentActionSheet({name: checkVideoData.title, file: blob,
+        const [downloadVideoResult, downloadVideoError] = await handlePromise(firstValueFrom(
+            this.apiService.downloadVideo(videoInfo)
+        ));
+        const downloadVideoData = downloadVideoResult.data as VideoDownloadedData;
+        if (downloadVideoData) {
+            const blob = new Blob([new Uint8Array(downloadVideoData.data)],
+            { type: ACCEPT_MIME_TYPES.get(videoInfo.format)});
+            if (videoInfo.format === FormatType.mp4) {
+                saveAs(blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
+                this.presentActionSheet({name: checkVideoData.title, file: blob,
+                mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
+            }
+            else {
+                const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
+                saveAs(mp3Blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
+                if (!this.isYoutubePlaylistUrl(this.videoInfo.url)) {
+                    this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
                     mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
                 }
-                else {
-                    const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
-                    saveAs(mp3Blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
-                    if (!this.isYoutubePlaylistUrl(this.videoInfo.url)) {
-                        this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
-                        mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
-                    }
-                }
             }
+        }
+    }
+
+    async downloadYoutubeVideo(videoInfo: VideoInfo) {
+        const condition = (url: string) => url === videoInfo.url;
+        if (excludedYoutubeVideoUrls().some(condition)) {
+            this.alertService.presentAlert({header: this.translocoService.translate('pages.home.alert.excludedVideo.title'),
+            message: this.translocoService.translate('pages.home.alert.excludedVideo.message')});
+            this.stopDownloadingAnimation();
+        } else {
+            const checkVideoData = await this.checkVideo(videoInfo);
+            this.thumbnailUrl = checkVideoData.thumbnails[checkVideoData.thumbnails.length - 1].url;
+            this.videoTitle = checkVideoData.title;
+            await this.downloadVideo(videoInfo, checkVideoData);
 
             if (!this.isYoutubePlaylistUrl(this.videoInfo.url)) {
                 this.stopDownloadingAnimation();
