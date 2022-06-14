@@ -13,7 +13,7 @@ export const isValidYouTubeVideoUrl = (url: string) => {
 
 export const isAYoutubePlaylistUrl = (url: string) => {
     const youtubePlaylistRegExp =
-    /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com)\/.*\?.*\blist=.*$/;
+    /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com)\/(?:playlist|watch)(.*)\?.*\blist=.*$/;
     return url.match(youtubePlaylistRegExp);
 };
 
