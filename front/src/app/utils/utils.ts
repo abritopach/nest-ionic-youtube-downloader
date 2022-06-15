@@ -8,12 +8,13 @@ export const handlePromise = async <T>(
 export const isValidYouTubeVideoUrl = (url: string) => {
     const youtubeRegExp =
     /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
-    return url.match(youtubeRegExp);
+    const youtubePlaylistRegExp = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
+    return url.includes('playlist') ? url.match(youtubePlaylistRegExp) : url.match(youtubeRegExp);
 };
 
 export const isAYoutubePlaylistUrl = (url: string) => {
     const youtubePlaylistRegExp =
-    /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com)\/.*\?.*\blist=.*$/;
+    /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com)\/(?:playlist|watch)(.*)\?.*\blist=.*$/;
     return url.match(youtubePlaylistRegExp);
 };
 
