@@ -17,7 +17,7 @@ export class YoutubeVideoDownloaderController {
   @Post('download-playlist')
   async downloadYoutubePlaylist(@Body() videoInfoDto: VideoInfoDto) {
     console.log('videoInfo', videoInfoDto);
-    return await this.youtubeVideoDownloaderService.downloadYoutubePlaylist(
+    return this.youtubeVideoDownloaderService.downloadYoutubePlaylist(
       videoInfoDto,
     );
   }
@@ -25,7 +25,7 @@ export class YoutubeVideoDownloaderController {
   @Post('download')
   async downloadYoutubeVideo(@Body() videoInfoDto: VideoInfoDto) {
     console.log('videoInfo', videoInfoDto);
-    return await this.youtubeVideoDownloaderService.downloadYoutubeVideo(
+    return this.youtubeVideoDownloaderService.downloadYoutubeVideo(
       videoInfoDto,
     );
   }
@@ -33,7 +33,7 @@ export class YoutubeVideoDownloaderController {
   @Post('downloadAndConvert')
   async downloadConvertYoutubeVideo(@Body() videoInfoDto: VideoInfoDto) {
     console.log('videoInfo', videoInfoDto);
-    return await this.youtubeVideoDownloaderService.downloadConvertYoutubeVideo(
+    return this.youtubeVideoDownloaderService.downloadConvertYoutubeVideo(
       videoInfoDto,
     );
   }
