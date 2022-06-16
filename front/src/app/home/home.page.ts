@@ -37,6 +37,7 @@ import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
 import { CopyrightClaimsComponent } from '../components/copyright-claims/copyright-claims/copyright-claims.component';
 import { OnedriveService } from '@services/cloud/onedrive/onedrive.service';
 import { AlertService } from '@services/alert/alert.service';
+import { VideoDownloaderWorkerService } from '../workers/video-downloader-worker.service';
 
 @Component({
     selector: 'app-home',
@@ -73,9 +74,11 @@ export class HomePage {
                 private modalController: ModalController,
                 private popoverController: PopoverController,
                 private onedriveService: OnedriveService,
-                private alertService: AlertService) {}
+                private alertService: AlertService,
+                private videoDownloaderWorkerService: VideoDownloaderWorkerService) {}
 
     async ionViewDidEnter() {
+        this.videoDownloaderWorkerService.createWorker();
         const cloudService = await this.storageService.get('cloudService');
         if (cloudService === 'dropbox' && this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
