@@ -78,7 +78,6 @@ export class HomePage {
                 private videoDownloaderWorkerService: VideoDownloaderWorkerService) {}
 
     async ionViewDidEnter() {
-        this.videoDownloaderWorkerService.createWorker();
         const cloudService = await this.storageService.get('cloudService');
         if (cloudService === 'dropbox' && this.dropboxService.hasRedirectedFromAuth()) {
             this.uploadToDropbox();
@@ -161,6 +160,7 @@ export class HomePage {
             else {
                 const mp3Blob = await this.convertToMp3Service.convertToMP3(blob);
                 saveAs(mp3Blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
+                this.videoDownloaderWorkerService.createWorker(blob, `${checkVideoData.title}.${videoInfo.format.toLocaleLowerCase()}`);
                 if (!this.isYoutubePlaylistUrl(this.videoInfo.url)) {
                     this.presentActionSheet({name: checkVideoData.title, file: mp3Blob,
                     mimeType: ACCEPT_MIME_TYPES.get(videoInfo.format)});
