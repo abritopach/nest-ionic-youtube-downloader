@@ -15,6 +15,10 @@ BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules 
     "importHelpers": true,
     "target": "ES2022",
     "module": "es2020",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": ["gapi", "gapi.auth2"],
     "lib": [
       "es2018",
       "dom"
