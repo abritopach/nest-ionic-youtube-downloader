@@ -4,8 +4,6 @@ import { environment } from '@environments/environment';
 import { CloudStorageService } from '@models/cloud-storage.model';
 import { firstValueFrom } from 'rxjs';
 
-/// <reference types="gapi.auth2" />
-
 declare let gapi: any;
 
 @Injectable({
