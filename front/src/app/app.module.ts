@@ -13,7 +13,7 @@ import { Storage } from '@ionic/storage';
 @NgModule({
     declarations: [AppComponent],
     imports: [
-        BrowserModule,
+        BrowserModule.withServerTransition({ appId: 'serverApp' }),
         IonicModule.forRoot(),
         AppRoutingModule,
         HttpClientModule,
