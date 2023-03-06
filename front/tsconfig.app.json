@@ -4,7 +4,10 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "skipLibCheck": true,
-    "types": ["gapi.auth2"]
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": ["gapi", "gapi.auth2"]
   },
   "files": [
     "src/main.ts",
