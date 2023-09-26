@@ -24,6 +24,9 @@ BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules 
       "dom"
     ],
     "paths": {
+      "@components/*": [
+        "src/app/components/*"
+      ],
       "@environments/*": [
         "src/environments/*"
       ],

@@ -2,7 +2,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 // Ionic
-import { ActionSheetController, AlertController, Animation, AnimationController, LoadingController,
+import { ActionSheetController, Animation, AnimationController, LoadingController,
     ModalController, PopoverController} from '@ionic/angular';
 
 // Rxjs
@@ -17,12 +17,15 @@ import { TranslocoService } from '@ngneat/transloco';
 // Models
 import { ACCEPT_MIME_TYPES, FormatType } from '@models/format.model';
 import { VideoCheckResponse, VideoDownloadedData, VideoInfo, YoutubePlaylistResponse } from '@models/video.model';
+import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
 
 // Services
 import { ApiService } from '@services/api/api.service';
 import { ConvertToMp3Service } from '@services/mp3/convert-to-mp3.service';
 import { DriveService } from '@services/cloud/gapi/drive/drive.service';
 import { DropboxService } from '@services/cloud/dropbox/dropbox.service';
+import { OnedriveService } from '@services/cloud/onedrive/onedrive.service';
+import { AlertService } from '@services/alert/alert.service';
 
 // Utils
 import { convertAudioBlobToBase64, excludedYoutubeVideoUrls, handlePromise,
@@ -31,12 +34,9 @@ import { StorageService } from '@services/storage/storage.service';
 
 // Components
 import { YoutubeDownloaderInfoComponent }
-from '../components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
-import { MoreOptionsComponent } from '../components/more-options/more-options/more-options.component';
-import { MoreOptions, MoreOptionsPopover } from '@models/option.model';
-import { CopyrightClaimsComponent } from '../components/copyright-claims/copyright-claims/copyright-claims.component';
-import { OnedriveService } from '@services/cloud/onedrive/onedrive.service';
-import { AlertService } from '@services/alert/alert.service';
+from '@components/youtube-downloader-info/youtube-downloader-info/youtube-downloader-info.component';
+import { MoreOptionsComponent } from '@components/more-options/more-options/more-options.component';
+import { CopyrightClaimsComponent } from '@components/copyright-claims/copyright-claims/copyright-claims.component';
 
 @Component({
     selector: 'app-home',
