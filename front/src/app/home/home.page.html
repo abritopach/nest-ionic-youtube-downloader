@@ -22,13 +22,18 @@
         <ion-row class="ion-align-items-center" style="height: 90vh;">
             <ion-col size-lg="8" offset-lg="2" size-md="10" offset-md="1">
                 <ion-card>
-                    <ion-item lines="none">
-                        <img *ngIf="!thumbnailUrl" src="assets/logo.png" width="90" height="90" alt="Youtube downloader logo" />
-                        <img *ngIf="thumbnailUrl" [src]="thumbnailUrl">
-                    </ion-item>
-                    <ion-item *ngIf="thumbnailUrl" lines="none">
-                        <ion-label class="ion-text-center ion-text-wrap"> {{ videoTitle }} </ion-label>
-                    </ion-item>
+                    @if (thumbnailUrl) {
+                        <ion-item lines="none">
+                            <img [src]="thumbnailUrl">
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-label class="ion-text-center ion-text-wrap"> {{ videoTitle }} </ion-label>
+                        </ion-item>
+                    } @else {
+                        <ion-item lines="none">
+                            <img src="assets/logo.png" width="90" height="90" alt="Youtube downloader logo" />
+                        </ion-item>
+                    }
                     <ion-card-content>
                         <ion-toolbar>
                         <ion-row class="ion-align-items-center">
@@ -36,9 +41,11 @@
                                 <!-- Searchbar with cancel button always shown -->
                                 <ion-searchbar [(ngModel)]="videoInfo.url" showCancelButton="focus" (ionClear)="onClearSearchHandler()"
                                 placeholder="https://www.youtube.com/watch?v=LKwmdv39Rks"></ion-searchbar>
-                                <ion-item *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)" lines="none" class="error-message">
-                                    <ion-label>{{ 'pages.home.validations.errorWrongYoutubeUrl' | transloco }}</ion-label>
-                                </ion-item>
+                                @if (videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)) {
+                                    <ion-item lines="none" class="error-message">
+                                        <ion-label>{{ 'pages.home.validations.errorWrongYoutubeUrl' | transloco }}</ion-label>
+                                    </ion-item>
+                                }
                             </ion-col>
                             <ion-col size-lg="3" size-md="4" size-sm="12" size-xs="12">
                                 <ion-button class="ion-text-wrap" expand="block" [color]="isDownloadStarted ? 'tertiary' : 'secondary'" size="small"
@@ -46,7 +53,9 @@
                                     <ion-icon #downloadingIcon slot="start" [name]="isDownloadStarted ? 'reload' : 'cloud-download'"></ion-icon>
                                     {{ isYoutubePlaylistUrl(videoInfo.url) ? ('pages.home.buttonDownloadPlaylist' | transloco) : ('pages.home.buttonDownload' | transloco) }}
                                 </ion-button>
-                                <ion-item lines="none" *ngIf="videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)"></ion-item>
+                                @if (videoInfo.url !== '' && !isValidYouTubeVideoUrl(videoInfo.url)) {
+                                    <ion-item lines="none"></ion-item>
+                                }
                             </ion-col>
                         </ion-row>
                     </ion-toolbar>
